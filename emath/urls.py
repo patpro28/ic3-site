@@ -14,8 +14,35 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from backend.views import UserPage, ProfileMarkdownPreviewView
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
+    path('martor/', include('martor.urls')),
 ]
+
+urlpatterns += [
+    # path('users', )
+    path('user', UserPage.as_view(), name='user_page'),
+    path('user/<slug:user>', include([
+        path('', UserPage.as_view(), name='user_page'),
+    ]))
+]
+
+preview_patterns = [
+    path('profile', ProfileMarkdownPreviewView.as_view(), name='profile_preview'),
+]
+
+urlpatterns += [
+    path('widgets/', include([
+        path('preview/', include(preview_patterns)),
+    ]))
+]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

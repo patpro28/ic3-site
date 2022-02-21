@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,17 +27,27 @@ SECRET_KEY = 'django-insecure-=)!t4(@as1ijb(bmnsu*jlwnch3!t)-#mkd%r1&a%jm=4u2l5u
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SSL = 0
 
+EMATH_EMAIL_THROTTLING = (10, 60)
+DEFAULT_USER_TIME_ZONE = 'Asia/Saigon'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'grappelli',
     'django.contrib.admin',
+    'backend',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mptt',
+    'compressor',
+    'martor',
+    'sortedm2m',
+    'django_jinja'
 ]
 
 MIDDLEWARE = [
@@ -54,14 +65,19 @@ ROOT_URLCONF = 'emath.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.request',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'backend.template_context.get_resources',
+                'backend.template_context.math_setting',
             ],
         },
     },
@@ -80,23 +96,25 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'backend.Profile'
+# USER_FIELDS = ['username', 'fullname', 'password']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 
@@ -111,13 +129,128 @@ USE_I18N = True
 
 USE_TZ = True
 
+CSRF_COOKIE_HTTPONLY = False
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'resources'),
+]
 STATIC_URL = 'static/'
+
+PYGMENT_THEME = 'pygment-github.css'
+INLINE_JQUERY = True
+INLINE_FONTAWESOME = True
+JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+MATERIAL_ICONS = '//fonts.googleapis.com/icon?family=Material+Icons'
+DMOJ_CANONICAL = ''
+
+
+MARKDOWN_STYLES = {}
+MARKDOWN_DEFAULT_STYLE = {}
+
+#martor
+# Choices are: "semantic", "bootstrap"
+MARTOR_THEME = 'bootstrap'
+
+# Global martor settings
+# Input: string boolean, `true/false`
+MARTOR_ENABLE_CONFIGS = {
+    'emoji': 'true',        # to enable/disable emoji icons.
+    'imgur': 'true',        # to enable/disable imgur/custom uploader.
+    'mention': 'false',     # to enable/disable mention
+    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
+    'living': 'false',      # to enable/disable live updates in preview
+    'spellcheck': 'false',  # to enable/disable spellcheck in form textareas
+    'hljs': 'true',         # to enable/disable hljs highlighting in preview
+}
+
+# To show the toolbar buttons
+MARTOR_TOOLBAR_BUTTONS = [
+    'bold', 'italic', 'horizontal', 'heading', 'pre-code',
+    'blockquote', 'unordered-list', 'ordered-list',
+    'link', 'image-link', 'image-upload', 'emoji',
+    'direct-mention', 'toggle-maximize', 'help'
+]
+
+# To setup the martor editor with title label or not (default is False)
+MARTOR_ENABLE_LABEL = False
+
+# # Imgur API Keys
+# MARTOR_IMGUR_CLIENT_ID = 'your-client-id'
+# MARTOR_IMGUR_API_KEY   = 'your-api-key'
+
+# Markdownify
+MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default
+MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/' # default
+
+# Markdown extensions (default)
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.mention',      # to parse markdown mention
+    'martor.extensions.emoji',        # to parse markdown emoji
+    'martor.extensions.mdx_video',    # to parse embed/iframe video
+    'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
+]
+
+# Markdown Extensions Configs
+MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
+
+# Markdown urls
+MARTOR_UPLOAD_URL = '/martor/uploader/' # default
+MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
+
+# Markdown Extensions
+# MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
+MARTOR_MARKDOWN_BASE_EMOJI_URL = '//github.githubassets.com/images/icons/emoji/'                  # default from github
+MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://tmath.vn'                                      # please change this to your domain
+
+# If you need to use your own themed "bootstrap" or "semantic ui" dependency
+# replace the values with the file in your static files dir
+MARTOR_ALTERNATIVE_JS_FILE_THEME = "semantic-themed/semantic.min.js"   # default None
+MARTOR_ALTERNATIVE_CSS_FILE_THEME = "semantic-themed/semantic.min.css" # default None
+MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "jquery/dist/jquery.min.js"        # default None
+
+# URL schemes that are allowed within links
+ALLOWED_URL_SCHEMES = [
+    "file", "ftp", "ftps", "http", "https", "irc", "mailto",
+    "sftp", "ssh", "tel", "telnet", "tftp", "vnc", "xmpp",
+]
+
+MATHOID_URL = False
+MATHOID_GZIP = False
+MATHOID_MML_CACHE = None
+MATHOID_CSS_CACHE = 'default'
+MATHOID_DEFAULT_TYPE = 'auto'
+MATHOID_MML_CACHE_TTL = 86400
+MATHOID_CACHE_ROOT = ''
+MATHOID_CACHE_URL = False
+
+#grappelli settings
+GRAPPELLI_ADMIN_TITLE = 'Emath'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+try:
+    with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
+        exec(f.read(), globals())
+except IOError:
+    pass
