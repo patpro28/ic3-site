@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+from jinja2 import select_autoescape
+from django_jinja.builtins import DEFAULT_EXTENSIONS
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,23 +34,41 @@ SSL = 0
 
 EMATH_EMAIL_THROTTLING = (10, 60)
 DEFAULT_USER_TIME_ZONE = 'Asia/Saigon'
+NOFOLLOW_EXCLUDED = set()
+
+MATHOID_URL = False
+MATHOID_GZIP = False
+MATHOID_MML_CACHE = None
+MATHOID_CSS_CACHE = 'default'
+MATHOID_DEFAULT_TYPE = 'auto'
+MATHOID_MML_CACHE_TTL = 86400
+MATHOID_CACHE_ROOT = ''
+MATHOID_CACHE_URL = False
+
+TEXOID_GZIP = False
+TEXOID_META_CACHE = 'default'
+TEXOID_META_CACHE_TTL = 86400
 
 # Application definition
 
 INSTALLED_APPS = [
-    'grappelli',
+    "semantic_admin",
     'django.contrib.admin',
     'backend',
+    'education',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
-    'compressor',
     'martor',
+    'ckeditor',
+    'ckeditor_uploader',
+    'django_jinja',
+    'reversion',
+    'compressor',
     'sortedm2m',
-    'django_jinja'
 ]
 
 MIDDLEWARE = [
@@ -64,6 +85,34 @@ ROOT_URLCONF = 'emath.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django_jinja.backend.Jinja2',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'match_extension': ('.html', '.txt'),
+            'match_regex': '^(?!admin/)',
+            'context_processors': [
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                'backend.template_context.get_resources',
+                'backend.template_context.general_info',
+                'backend.template_context.math_setting',
+            ],
+            'autoescape': select_autoescape(['html', 'xml']),
+            'trim_blocks': True,
+            'lstrip_blocks': True,
+            'extensions': DEFAULT_EXTENSIONS + [
+                'compressor.contrib.jinja2ext.CompressorExtension',
+                'backend.jinja2.EmathExtension',
+            ],
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
@@ -71,13 +120,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'backend.template_context.get_resources',
-                'backend.template_context.math_setting',
             ],
         },
     },
@@ -131,34 +177,184 @@ USE_TZ = True
 
 CSRF_COOKIE_HTTPONLY = False
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'resources'),
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
 ]
-STATIC_URL = 'static/'
 
-PYGMENT_THEME = 'pygment-github.css'
-INLINE_JQUERY = True
-INLINE_FONTAWESOME = True
-JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
-FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
-MATERIAL_ICONS = '//fonts.googleapis.com/icon?family=Material+Icons'
-DMOJ_CANONICAL = ''
+# ckeditor settings
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
-MARKDOWN_STYLES = {}
-MARKDOWN_DEFAULT_STYLE = {}
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono',
+        # 'skin': 'office2013',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            {'name': 'forms',
+             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                       'HiddenField']},
+            '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'about', 'items': ['About']},
+            '/',  # put this to force next toolbar on new line
+            {'name': 'yourcustomtools', 'items': [
+                # put the name of your editor.ui.addButton here
+                'Preview',
+                'Maximize',
 
-#martor
+            ]},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 291,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    }
+}
+
+FRONTEND_THEME = "semantic"
+
+LANGUAGES = [
+    ('ca', _('Catalan')),
+    ('de', _('German')),
+    ('en', _('English')),
+    ('es', _('Spanish')),
+    ('fr', _('French')),
+    ('hr', _('Croatian')),
+    ('hu', _('Hungarian')),
+    ('ja', _('Japanese')),
+    ('ko', _('Korean')),
+    ('pt', _('Brazilian Portuguese')),
+    ('ro', _('Romanian')),
+    ('ru', _('Russian')),
+    ('sr-latn', _('Serbian (Latin)')),
+    ('tr', _('Turkish')),
+    ('vi', _('Vietnamese')),
+    ('zh-hans', _('Simplified Chinese')),
+    ('zh-hant', _('Traditional Chinese')),
+]
+
+BLEACH_USER_SAFE_TAGS = [
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
+    'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
+    'p', 'br', 'pre', 'span', 'div', 'blockquote', 'code', 'hr',
+    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section',
+    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col', 'tfoot',
+    'img', 'audio', 'video', 'source',
+    'a',
+    'style', 'noscript', 'center',
+]
+
+BLEACH_USER_SAFE_ATTRS = {
+    '*': ['id', 'class', 'style'],
+    'img': ['src', 'alt', 'title', 'width', 'height', 'data-src'],
+    'a': ['href', 'alt', 'title'],
+    'abbr': ['title'],
+    'dfn': ['title'],
+    'time': ['datetime'],
+    'data': ['value'],
+    'td':  ['colspan', 'rowspan'],
+    'th':  ['colspan', 'rowspan'],
+    'audio': ['autoplay', 'controls', 'crossorigin', 'muted', 'loop', 'preload', 'src'],
+    'video': ['autoplay', 'controls', 'crossorigin', 'height', 'muted', 'loop', 'poster', 'preload', 'src', 'width'],
+    'source': ['src', 'srcset', 'type'],
+}
+
+MARKDOWN_STAFF_EDITABLE_STYLE = {
+    'safe_mode': False,
+    'use_camo': True,
+    'texoid': True,
+    'math': True,
+    'bleach': {
+        'tags': BLEACH_USER_SAFE_TAGS,
+        'attributes': BLEACH_USER_SAFE_ATTRS,
+        'styles': True,
+        'mathml': True,
+    },
+}
+
+MARKDOWN_ADMIN_EDITABLE_STYLE = {
+    'safe_mode': False,
+    'use_camo': True,
+    'texoid': True,
+    'math': True,
+}
+
+MARKDOWN_DEFAULT_STYLE = {
+    'safe_mode': True,
+    'nofollow': True,
+    'use_camo': True,
+    'math': True,
+}
+
+MARKDOWN_USER_LARGE_STYLE = {
+    'safe_mode': True,
+    'nofollow': True,
+    'use_camo': True,
+    'math': True,
+}
+
+MARKDOWN_STYLES = {
+    'default': MARKDOWN_DEFAULT_STYLE,
+    'comment': MARKDOWN_DEFAULT_STYLE,
+    'self-description': MARKDOWN_USER_LARGE_STYLE,
+    'problem': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'problem-full': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'exam': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'flatpage': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'language': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'license': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'judge': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'blog': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'solution': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'contest_tag': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'organization-about': MARKDOWN_USER_LARGE_STYLE,
+    'ticket': MARKDOWN_USER_LARGE_STYLE,
+}
+
+# martor
 # Choices are: "semantic", "bootstrap"
-MARTOR_THEME = 'bootstrap'
+MARTOR_THEME = 'semantic'
 
 # Global martor settings
 # Input: string boolean, `true/false`
@@ -183,9 +379,9 @@ MARTOR_TOOLBAR_BUTTONS = [
 # To setup the martor editor with title label or not (default is False)
 MARTOR_ENABLE_LABEL = False
 
-# # Imgur API Keys
-# MARTOR_IMGUR_CLIENT_ID = 'your-client-id'
-# MARTOR_IMGUR_API_KEY   = 'your-api-key'
+# Imgur API Keys
+MARTOR_IMGUR_CLIENT_ID = 'your-client-id'
+MARTOR_IMGUR_API_KEY   = 'your-api-key'
 
 # Markdownify
 MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default
@@ -211,13 +407,13 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
 
 # Markdown urls
-MARTOR_UPLOAD_URL = '/martor/uploader/' # default
-MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
+MARTOR_UPLOAD_URL = '/widgets/martor/upload-image' # default
+MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user' # default
 
 # Markdown Extensions
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
-MARTOR_MARKDOWN_BASE_EMOJI_URL = '//github.githubassets.com/images/icons/emoji/'                  # default from github
-MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://tmath.vn'                                      # please change this to your domain
+MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
+MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://python.web.id/author/'                                      # please change this to your domain
 
 # If you need to use your own themed "bootstrap" or "semantic ui" dependency
 # replace the values with the file in your static files dir
@@ -231,23 +427,44 @@ ALLOWED_URL_SCHEMES = [
     "sftp", "ssh", "tel", "telnet", "tftp", "vnc", "xmpp",
 ]
 
-MATHOID_URL = False
-MATHOID_GZIP = False
-MATHOID_MML_CACHE = None
-MATHOID_CSS_CACHE = 'default'
-MATHOID_DEFAULT_TYPE = 'auto'
-MATHOID_MML_CACHE_TTL = 86400
-MATHOID_CACHE_ROOT = ''
-MATHOID_CACHE_URL = False
+SEMANTIC_CALENDAR_OPTIONS = {
+    "datetime": {
+        "intlDateTimeFormatOptions": {"dateStyle": "short", "timeStyle": "short"},
+    },
+    "date": {"intlDateTimeFormatOptions": {"dateStyle": "short"}},
+    "time": {"intlDateTimeFormatOptions": {"timeStyle": "short"}},
+}
 
-#grappelli settings
-GRAPPELLI_ADMIN_TITLE = 'Emath'
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'resources'),
+]
+STATIC_URL = 'static/'
+
+PYGMENT_THEME = 'pygment-github.css'
+INLINE_JQUERY = True
+INLINE_FONTAWESOME = True
+JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+MATERIAL_ICONS = '//fonts.googleapis.com/icon?family=Material+Icons'
+DMOJ_CANONICAL = ''
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
+WEBAUTHN_RP_ID = None
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+PROBLEM_STATEMENT_DISALLOWED_CHARACTERS = {'“', '”', '‘', '’'}
+PROBLEM_MIN_PROBLEM_POINTS = 0
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:

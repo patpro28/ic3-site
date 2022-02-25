@@ -1,0 +1,18 @@
+<tr>
+  <td class="center aligned">{{ rank }}</td>
+  <td>
+    <div class="ui grid">
+      <div class="eight wide column">
+        <a class="left aligned user newbie" href="{{ url('user_page', user.username) }}">{{ user.fullname }}</a>
+      </div>
+      {% if user.organization %}
+        <div class="eight wide column">
+          <p class="right aligned six wide organization"> {{ user.organization }} </p>
+        </div>
+      {% endif %}
+    </div>
+  </td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>

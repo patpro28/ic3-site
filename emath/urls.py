@@ -18,23 +18,33 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from backend.views import UserPage, ProfileMarkdownPreviewView
+from backend.views import UserPage, ProfileMarkdownPreviewView, preview
+from backend.views.profile import UserList
+
+admin.autodiscover()
+
+def paged_list_view(view, name):
+    return include([
+        path('', view.as_view(), name=name),
+        path('<slug:page>', view.as_view(), name=name),
+    ])
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
+    path('', include('education.urls')),
 ]
 
 urlpatterns += [
-    # path('users', )
-    path('user', UserPage.as_view(), name='user_page'),
+    path('users/', UserList.as_view(), name='user_list'),
+    path('user/', UserPage.as_view(), name='user_page'),
     path('user/<slug:user>', include([
         path('', UserPage.as_view(), name='user_page'),
     ]))
 ]
 
 preview_patterns = [
+    path('', preview.MarkdownPreviewView.as_view(), name='markdown_preview'),
     path('profile', ProfileMarkdownPreviewView.as_view(), name='profile_preview'),
 ]
 

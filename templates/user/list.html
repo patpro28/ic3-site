@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content_media %}
+<link rel="stylesheet" href="{{ static('style.css') }}">
+{% endblock content_media %}
+
+{% block content_title %}
+  {% include 'title.html' %}
+{% endblock content_title %}
+
+{% block content %}
+{% if page_obj and page_obj.has_other_pages %}
+<div class="ui menu">
+  {% include 'list-page.html' %}
+  <div class="right aligned item">
+    <div class="ui icon input">
+      <input type="text" placeholder="Search...">
+      <i class="search link icon"></i>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% include 'user/user-table.html' %}
+{% if page_obj and page_obj.has_other_pages %}
+{% include 'list-page.html' %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {% block media %}
+    <link
+      rel="stylesheet"
+      href="{{ static('semantic-ui/semantic.min.css') }}"
+    />
+    <link rel="stylesheet" href="{{ static('style.css') }}" />
+    {% block content_media %} {% endblock content_media %}
+    <style>
+      h3.block.header {
+        background-color: #645153c2 !important;
+        color: white;
+      }
+    </style>
+    {% endblock %} {% block js_media %}
+    <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ></script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          packages: ["base", "newcommand", "configMacros"],
+        },
+        svg: {
+          fontCache: "global",
+        },
+      };
+    </script>
+    <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
+    <script src="{{ static('semantic-ui/semantic.min.js') }}"></script>
+    {% block content_js %}{% endblock content_js %} {% endblock %}
+  </head>
+
+  <body>
+    <div class="ui container" id="container">
+      <div class="ui sticky" style="background-color: aliceblue">
+        <div class="ui secondary menu">
+          {% for node in mptt_tree(nav_bar) recursive %} {% set children =
+          node.get_children() %} {% if children %}
+          <div class="ui dropdown item">
+            <span><h3>{{ node.label }}</h3></span>
+            <i class="dropdown icon"></i>
+            <div class="menu">{{ loop(children) }}</div>
+          </div>
+          {% else %}
+          <a href="{{ node.path }}" class="item">
+            <h3>{{ node.label }}</h3>
+          </a>
+          {% endif %} {% endfor %}
+          <div class="right menu">
+            {% if request.user.is_authenticated %}
+            <div class="ui dropdown item">
+              {% if request.user.email %}
+              <img
+                class="ui avatar image"
+                src="https://www.gravatar.com/avatar/61ed114b5efb6c8c179081e8efc00d90?d=identicon&amp;s=32"
+                height="24"
+                width="24"
+              />
+              {% endif %}
+              <span class='newbie'>
+                <h3>{{ request.user.fullname }}</h3>
+              </span>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <a class="item" href="{{ url('user_page') }}">View profile</a>
+                {% if request.user.is_superuser or request.user.is_staff %}
+                <a class="item" href="{{ url('admin:index')}}">
+                  {{ _('Admin') }}</a
+                >
+                {% endif %}
+                <a class="item">Edit profile</a>
+                <a class="item">Logout</a>
+              </div>
+            </div>
+            {% else %}
+            <a href="#" class="item"><h3>Log in</h3></a>
+            <a href="#" class="item"><h3>Sign up</h3></a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% block content_title %}{% endblock %} {% block content %} {% endblock
+      content %}
+    </div>
+    <script>
+      $(".ui.dropdown").dropdown({
+        on: "hover",
+      });
+      $(".ui.sticky").sticky({
+        context: "#container",
+      });
+    </script>
+  </body>
+</html>

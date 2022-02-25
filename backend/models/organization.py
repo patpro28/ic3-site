@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 from .profile import Profile
 
@@ -22,7 +23,7 @@ class Organization(models.Model):
                                         'only applicable to private organizations'))
     access_code = models.CharField(_("access code"), max_length=7, null=True, blank=True,
                             help_text=_('Student access code'))
-    logo = models.FileField(_("Logo override image"), upload_to=None, max_length=150)
+    logo = models.FileField(_("Logo override image"), upload_to='uploads/', max_length=150)
 
 
     def __contains__(self, item):
