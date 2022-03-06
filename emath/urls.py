@@ -18,8 +18,7 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from backend.views import UserPage, ProfileMarkdownPreviewView, preview
-from backend.views.profile import UserList
+from backend.views import organization, preview, profile
 
 admin.autodiscover()
 
@@ -29,23 +28,55 @@ def paged_list_view(view, name):
         path('<slug:page>', view.as_view(), name=name),
     ])
 
+accounts_patterns = [
+    path('accounts/register/', profile.RegistrationView.as_view(), name='register'),
+    path('accounts/login/', profile.LoginView.as_view(), name='login'),
+    path('accounts/logout/', profile.LogoutView.as_view(), name='logout'),
+    path('accounts/change_password/', profile.PasswordChangeView.as_view(), name='change_password'),
+    path('accounts/profile/', profile.UserPage.as_view(), name='user_page'),
+    path('accounts/profile/<slug:user>/', include([
+        path('', profile.UserPage.as_view(), name='user_page'),
+        path('edit/', profile.EditProfile.as_view(), name='user_edit'),
+    ]))
+]
+
+organization_patterns = [
+    path('organizations/', organization.OrganizationList.as_view(), name='organization_list'),
+    path('organization/<slug:organization>/', include([
+        path('', organization.OrganizationHome.as_view(), name='organization_home'),
+        path('users/', organization.OrganizationUsers.as_view(), name='organization_users'),
+        path('join/', organization.JoinOrganization.as_view(), name='join_organization'),
+        path('leave/', organization.LeaveOrganization.as_view(), name='leave_organization'),
+        path('edit/', organization.EditOrganization.as_view(), name='edit_organization'),
+        path('kick/', organization.KickUserWidgetView.as_view(), name='organization_kick_user'),
+
+        path('request/', organization.RequestJoinOrganization.as_view(), name='request_organization'),
+
+    ]))
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
     path('', include('education.urls')),
+    path('backend/', include('backend.urls')),
 ]
 
+urlpatterns += accounts_patterns
+
+urlpatterns += organization_patterns
+
 urlpatterns += [
-    path('users/', UserList.as_view(), name='user_list'),
-    path('user/', UserPage.as_view(), name='user_page'),
-    path('user/<slug:user>', include([
-        path('', UserPage.as_view(), name='user_page'),
-    ]))
+    path('users/', profile.UserList.as_view(), name='user_list')
 ]
 
 preview_patterns = [
     path('', preview.MarkdownPreviewView.as_view(), name='markdown_preview'),
-    path('profile', ProfileMarkdownPreviewView.as_view(), name='profile_preview'),
+    path('self', preview.SelfDescriptionMarkdownPreviewView.as_view(), name='self_preview'),
+    path('description', preview.DescriptionMarkdownPreviewView.as_view(), name='description_preview'),
+    path('default', preview.DefaultPreviewView.as_view(), name='default_preview'),
+    path('description_full', preview.DescriptionFullMarkdownPreviewView.as_view(), name='description_full')
 ]
 
 urlpatterns += [

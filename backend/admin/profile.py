@@ -21,9 +21,9 @@ class ProfileForm(ModelForm):
     password = ReadOnlyPasswordHashField()
     class Meta:
         widgets = {
-            'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('profile_preview')}),
+            'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('self_preview')}),
             'groups': SemanticSelectMultiple(),
-            # 'last_access': SemanticDateTimeInput()
+            # 'last_login': SemanticDateTimeInput()
         }
 
 
@@ -74,7 +74,7 @@ class ProfileAdmin(UserAdmin):
         }),
         (_('Personal info'), {
             "fields": (
-                'email', 'about','organizations', 'timezone', 'last_access',
+                'email', 'about','organizations', 'timezone', 'last_login',
             ),
         }),
         (_('Permission'), {
@@ -90,8 +90,8 @@ class ProfileAdmin(UserAdmin):
             ),
         }),
     )
-    readonly_fields = ('last_access', )
-    list_display = ('username', 'timezone', 'date_joined', 'last_access', 'show_public')
+    readonly_fields = ('last_login', )
+    list_display = ('username', 'timezone', 'date_joined', 'last_login', 'show_public')
     ordering = ('username',)
     search_fields = ('username',)
     list_filter = (TimezoneFilter, )

@@ -62,7 +62,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     display_rank = models.CharField(_("display rank"), max_length=10, default='user', choices=DISPLAY_RANK)
-    last_access = models.DateTimeField(_("last access time"), default=now)
     about = models.TextField(_("self-description"), null=True, blank=True)
     point = models.FloatField(_("point"), default=0.0)
     organizations = SortedManyToManyField('backend.Organization', verbose_name=_('organization'), blank=True,
@@ -71,6 +70,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
                                    default=settings.MATHOID_DEFAULT_TYPE,
                                    help_text=_('the rendering engine used to render math'))
     objects = ProfileManager()
+
+    #Contest
+    current_contest = models.ForeignKey("education.ContestParticipation", verbose_name=_("current contest"), 
+                                        null=True, blank=True, related_name='+',on_delete=models.SET_NULL)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['fullname',]
@@ -86,19 +89,18 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         orgs = self.organizations.all()
         return orgs.first() if orgs else None
 
-    @cached_property
-    def gravatar(self, size=80):
-        import hashlib
-        gravatar_url = 'https://www.gravatar.com/avatar/' + hashlib.md5(utf8bytes(self.email.strip().lower())).hexdigest() + '?'
-        args = {'d': 'identicon', 's': str(size)}
-        gravatar_url += urlencode(args)
-        print(gravatar_url)
-        return gravatar_url
+    def remove_contest(self):
+        self.current_contest = None
+        self.save(update_fields=['current_contest'])
+    
+    remove_contest.alters_data = True
 
-    @property
-    def gravatar_avatar(self):
-        return self.gravatar(size=80)
+    def update_contest(self):
+        contest = self.current_contest
+        if contest is not None and (contest.ended or not contest.contest.is_accessible_by(self)):
+            self.remove_contest()
+    
+    update_contest.alters_data = True
 
-    @property
-    def gravatar_profile(self):
-        return self.gravatar(size=500)
+    class Meta:
+        ordering = ['username']

@@ -10,7 +10,7 @@ class OrganizationForm(ModelForm):
     class Meta:
         widgets = {
             'admins': SemanticSelectMultiple(),
-            'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('profile_preview')})
+            'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('self_preview')})
         }
 
 class OrganizationAdmin(VersionAdmin):

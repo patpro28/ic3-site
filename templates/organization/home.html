@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content_js %}
+    <script type="text/javascript">
+        $(function () {
+            $('.leave-organization').click(function () {
+                return confirm('{{ _("Are you sure you want to leave this organization?") }}\n' +
+                    {% if organization.is_open %}
+                        '{{ _("You will have to rejoin to show up on the organization leaderboard.") }}'
+                    {% else %}
+                        '{{ _("You will have to request membership in order to join again.") }}'
+                    {% endif %}
+                );
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content_title %}
+{% include 'title.html' %}
+{% endblock content_title %}
+
+{% block content %}
+<div class="ui grid">
+    <div class="twelve wide column">
+        <div class="ui segment">
+            {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
+                {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+            {% endcache %}
+        </div>
+    </div>
+    <div class="four wide column">
+        <div class="ui vertical segment">
+            {% if request.user.is_authenticated %}
+                {% if request.user in organization %}
+                    <form action="{{ url('leave_organization', organization.slug) }}" class="ui form">
+                        <a type='submit' class="fluid ui primary button">{{ _('Leave organization') }}</a>
+                    </form>
+                {% else %}
+                    <a href="{{ url('request_organization', organization.slug) }}"
+                    class="fluid ui primary button">{{ _('Request membership') }}</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="ui vertical segment">
+            <a href="#" class="fluid ui primary button">Edit organization</a>
+        </div>
+        <div class="ui vertical segment">
+            <a href="#" class="fluid ui primary button">View request</a>
+        </div>
+        <div class="ui vertical segment">
+            <a href="#" class="fluid ui primary button">Admin organization</a>
+        </div>
+        <div class="ui vertical segment">
+            <a href="{{ url('organization_users', organization.slug) }}" class="fluid ui primary button">View member</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

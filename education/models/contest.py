@@ -134,8 +134,6 @@ class Contest(models.Model):
         else:
             return None
 
-
-    
     @cached_property
     def author_ids(self):
         return Contest.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)

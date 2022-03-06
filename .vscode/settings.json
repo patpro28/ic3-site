@@ -3,5 +3,6 @@
         "martor",
         "mptt",
         "pytz"
-    ]
+    ],
+    "python.formatting.provider": "black"
 }

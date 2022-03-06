@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block content_js %}
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"
+  integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script type="text/javascript">
+  $(function () {
+    $("#organization-table").tablesorter();
+  });
+</script>
+{% endblock %} {% block content_title %}
+{% include 'title.html' %}
+{% endblock %} {% block title_row %} {%
+set tab = 'organizations' %} {% set title = _('Organizations') %} {% include
+"user/user-list-tabs.html" %} {% endblock %} {% block content %}
+<div class="ui segment">
+  <table id="organization-table" class="ui celled table">
+    <thead>
+      <tr>
+        <th class="fourteen wide column">{{ _('Name') }}</th>
+        <th class="center aligned four wide column">{{ _('Members') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for org in organizations %}
+      <tr>
+        <td><a href="{{ org.get_absolute_url() }}">{{ org.name }}</a></td>
+        <td class="center aligned">
+          <a href="{{ org.get_users_url() }}">{{ org.member_count }}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

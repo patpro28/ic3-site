@@ -1,17 +1,44 @@
 from django.utils.functional import cached_property
-from django.http import Http404
-from django.views.generic import DetailView, ListView
-from django.contrib.auth.views import redirect_to_login
+from django.http import Http404, HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse
+from django.views import View
+from django.views.generic import DetailView, ListView, UpdateView, FormView, CreateView
+from django.contrib.auth.views import (
+    redirect_to_login, 
+    LoginView as BaseLoginView, 
+    LogoutView as BaseLogoutView,
+    PasswordChangeView as BasePasswordChangeView
+)
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
+from django.core.exceptions import PermissionDenied
+
+from reversion import revisions
 
 from backend.models import Profile
 from backend.utils.views import TitleMixin, generic_message, QueryStringSortMixin, DiggPaginatorMixin
+from backend.forms import EditProfileForm, RegisterForm, LoginForm
 
 class UserMixin(object):
     model = Profile
     slug_field = 'username'
     slug_url_kwarg = 'user'
     context_object_name = 'user'
+
+    @cached_property
+    def can_edit(self):
+        if self.object == self.request.user or self.request.user.is_superuser:
+            return True
+        return False
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_edit"] = self.can_edit
+        return context
+    
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
@@ -38,7 +65,8 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context[""] = 
+        if not self.object.is_authenticated:
+            raise Http404()
         return context
     
 
@@ -68,4 +96,80 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
         context.update(self.get_sort_context())
         context.update(self.get_sort_paginate_context())
         return context
+
+
+def login_view(request):
+    pass
+
+
+class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):
+    template_name = "user/edit_profile.html"
+    form_class = EditProfileForm
+
+    def get_title(self):
+        return _('Editing %s') % self.object.fullname
+
+    def get_object(self, queryset=None):
+        user = super().get_object(queryset)
+        if not self.request.user.is_superuser and self.request.user != user:
+            raise PermissionDenied()
+        return user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+
+        return form
+
+    def form_valid(self, form):
+        with revisions.create_revision(atomic=True):
+            revisions.set_comment(_('Edited from site'))
+            revisions.set_user(self.request.user)
+            return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except PermissionDenied:
+            return generic_message(request, _("Can't edit user"),
+                                   _('You are not allowed to edit this user.'), status=403)
+
+
+class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
+    form_class = RegisterForm
+    template_name = 'user/registration_form.html'
+    success_url = '/accounts/login/'
+    success_message = _('Your user registration was successful.')
+    model = Profile
+    title = _('Register')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(request.user.get_absolute_url())
+        return super().dispatch(request, *args, **kwargs)
+
+
+class LoginView(TitleMixin, BaseLoginView):
+    template_name = 'user/login_form.html'
+    title = _('Login')
+    success_url = '/user/'
     
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('user_page', kwargs={'user': request.user.username}))
+        return super().dispatch(request, *args, **kwargs)
+
+class LogoutView(BaseLogoutView):
+    template_name = 'user/logout.html'
+    form_class = LoginForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login'))
+        return super().dispatch(request, *args, **kwargs)
+
+class PasswordChangeView(BasePasswordChangeView):
+    template_name = 'user/change_password.html'
+    success_message = _('You have changed your password successfully')
+
+    def get_success_url(self) -> str:
+        return reverse('user_page', kwargs={'user': self.request.user.username})

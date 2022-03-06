@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+  {% include 'title.html' %}
+{% endblock content_title %}
+
+{% block content %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="ui message 
+    {% if message.tags %}
+      {% set tags = message.tags %}
+      {% if tags == 'debug' %}
+      {% elif tags == 'info' %}info
+      {% elif tags == 'success' %}success
+      {% elif tags == 'warning' %}warning
+      {% elif tags == 'error' %}negative
+      {% endif %}
+    {% endif %}"
+    >
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+<form action="" class="ui form" method="post">
+  {% csrf_token %}
+  {% if form.non_field_errors() %}
+    {% for error in form.non_field_errors() %}
+      <div class="ui negative message">
+        <i class="close icon"></i>
+        {{ error }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="field">
+    {% if form.username.errors %}
+      {% for error in form.username.errors %}
+        <div class="ui negative message">
+          <i class="close icon"></i>
+          {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    {{ form.username.label_tag() }} {{ form.username }}
+  </div>
+  <div class="field">
+    {% if form.password.errors %}
+      {% for error in form.password.errors %}
+        <div class="ui negative message">
+          <i class="close icon"></i>
+          {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    {{ form.password.label_tag() }} {{ form.password }}
+  </div>
+  <button class="fluid ui button" type='submit'>Login</button>
+</form>
+{% endblock content %}
+
+{% block extends_js %}
+{% include 'message_js.html' %}
+{% endblock extends_js %}

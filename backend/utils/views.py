@@ -65,7 +65,6 @@ def paginate_query_context(request):
     query = request.GET.copy()
     query.setlist('page', [])
     query = query.urlencode()
-    print(request.path)
     if query:
         return {'page_prefix': '%s?%s&page=' % (request.path, query),
                 'first_page_href': '%s?%s' % (request.path, query)}

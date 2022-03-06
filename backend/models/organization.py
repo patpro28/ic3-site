@@ -23,7 +23,7 @@ class Organization(models.Model):
                                         'only applicable to private organizations'))
     access_code = models.CharField(_("access code"), max_length=7, null=True, blank=True,
                             help_text=_('Student access code'))
-    logo = models.FileField(_("Logo override image"), upload_to='uploads/', max_length=150)
+    logo = models.FileField(_("Logo override image"), upload_to='uploads/', max_length=150, blank=True)
 
 
     def __contains__(self, item):
@@ -38,10 +38,10 @@ class Organization(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("backend:organization_home", args=(self.id, self.slug))
+        return reverse("organization_home", kwargs={'organization':self.slug})
 
     def get_users_url(self):
-        return reverse('backend:organization_users', args=(self.id, self.slug))
+        return reverse('organization_users', kwargs={'organization':self.slug})
 
     class Meta:
         ordering = ['name']

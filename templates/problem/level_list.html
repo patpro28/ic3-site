@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+  {% include 'title.html' %}
+{% endblock content_title %}
+
+{% block content %}
+{% if page_obj and page_obj.has_other_pages() %}
+<div class="ui grid segment">
+  <div class="left floated eight wide column">
+  {% include 'list-page.html' %}
+  </div>
+  <div class="right floated four wide column">
+    <div class="ui secondary menu">
+      <div class="ui right aligned category search item">
+        <div class="ui transparent icon input">
+          <input class="prompt" type="text" placeholder="Search problem...">
+          <i class="search link icon"></i>
+        </div>
+        <div class="results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="ui segment">
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>Category</th>
+      <th class="two wide column">Difficult</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for problem in problems %}
+    <tr>
+      <td><a href="{{ url('education:problem_detail', problem.code) }}">{{ problem.name }}</a></td>
+      <td>{{ problem.group }}</td>
+      <td>{{ problem.difficult }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% if page_obj and page_obj.has_other_pages() %}
+<div class="ui segment">
+  {% include 'list-page.html' %}
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block extends_js %}
+<script>
+  $('.ui.search')
+    .search({
+      type          : 'category',
+      minCharacters : 2,
+      apiSettings   : {
+        url: '{{ url("backend:select_problem") }}?term={query}&level={{ level.code }}',
+        onResponse: function(backendResponse) {
+          var response = {
+            results : {}
+          };
+          $.each(backendResponse.results, function(index, item) {
+            var maxResult = 8, level = item.level;
+            if (index >= maxResult) return false;
+            if (response.results[level] === undefined) {
+              response.results[level] = {
+                name    : level,
+                results : []
+              }
+            }
+            response.results[level].results.push({
+              title: item.code,
+              url: item.url,
+            });
+          });
+          return response;
+        }
+      }
+    });
+</script>
+{% endblock extends_js %}

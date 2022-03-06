@@ -1,11 +1,11 @@
 <div class="ui pagination menu">
   {% if page_obj.has_previous() %}
-    {% if page_obj.previous_page_number() == 1 and first_page_href is not None %}
+    {% if page_obj.previous_page_number() == 1 and first_page_href != None %}
       <a href="{{ first_page_href }}" class="icon item">
         <i class="angle double left icon"></i>
       </a>
     {% else %}
-      <a href={% if page_prefix %} {{ page_prefix }} {% else %}''{% endif %}{{ page_obj.previous_page_number() }}" class="icon item">
+      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.previous_page_number() }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="icon item">
         <i class="angle double left icon"></i>
       </a>
     {% endif %}
@@ -25,18 +25,14 @@
           {{ page }}
         </div>
       {% else %}
-        <a href="
-          {% if page == 1 and first_page_href is not None %}
-            {{ first_page_href }}
-          {% else %}
-            {% if page_prefix %} {{ page_prefix }} {% else %}''{% endif %}{{ page }}
-          {% endif %}
-        " class="item">{{ page }}</a>
+        <a href="{% if page == 1 and first_page_href != None %}{{ first_page_href }}{% else %}
+            {% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}
+          {% endif %}" class="item">{{ page }}</a>
       {% endif %}
     {% endif %}
   {% endfor %}
   {% if page_obj.has_next() %}
-      <a href="{% if page_prefix %} {{ page_prefix }} {% else %}''{% endif %}{{ page_obj.next_page_number() }}" class="icon item">
+      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.next_page_number() }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="icon item">
         <i class="angle double right icon"></i>
       </a>
   {% else %}

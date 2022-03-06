@@ -8,19 +8,65 @@
 {% endblock content_title %}
 
 {% block content %}
-{% if page_obj and page_obj.has_other_pages %}
-<div class="ui menu">
-  {% include 'list-page.html' %}
-  <div class="right aligned item">
-    <div class="ui icon input">
-      <input type="text" placeholder="Search...">
-      <i class="search link icon"></i>
+<div class="ui segment">
+
+  {% if page_obj and page_obj.has_other_pages() %}
+  <div class="ui grid segment">
+    <div class="left floated eight wide column">
+    {% include 'list-page.html' %}
+    </div>
+    <div class="right floated four wide column">
+      <div class="ui secondary menu">
+        <div class="ui right aligned category search item">
+          <div class="ui transparent icon input">
+            <input class="prompt" type="text" placeholder="Search username...">
+            <i class="search link icon"></i>
+          </div>
+          <div class="results"></div>
+        </div>
+      </div>
     </div>
   </div>
+  {% endif %}
+  {% include 'user/user-table.html' %}
+  {% if page_obj and page_obj.has_other_pages() %}
+  <div class="ui segment">
+    {% include 'list-page.html' %}
+  </div>
+  {% endif %}
 </div>
-{% endif %}
-{% include 'user/user-table.html' %}
-{% if page_obj and page_obj.has_other_pages %}
-{% include 'list-page.html' %}
-{% endif %}
 {% endblock content %}
+
+{% block extends_js %}
+<script>
+  $('.ui.search')
+    .search({
+      type          : 'category',
+      minCharacters : 3,
+      apiSettings   : {
+        url: '{{ url("backend:select_profile") }}?term={query}',
+        onResponse: function(backendResponse) {
+          var response = {
+            results : {}
+          };
+          $.each(backendResponse.results, function(index, item) {
+            var maxResult = 8, display_rank = item.display_rank;
+            if (index >= maxResult) return false;
+            if (response.results[display_rank] === undefined) {
+              response.results[display_rank] = {
+                name    : display_rank,
+                results : []
+              }
+            }
+            response.results[display_rank].results.push({
+              title: item.user,
+              image: item.gravatar_url,
+              url: '{{ url("user_page") }}' + item.user
+            });
+          });
+          return response;
+        }
+      }
+    });
+</script>
+{% endblock extends_js %}

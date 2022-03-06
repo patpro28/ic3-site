@@ -1,0 +1,18 @@
+<table class="ui celled striped table">
+    <thead>
+        <tr>
+        <th class="one wide center aligned">Rank</th>
+        <th class="eight wide center aligned">Username</th>
+        <th class="two wide center aligned"></th>
+        {% if is_admin %}
+            <th class="two wide"></th>
+        {% endif %}
+        <th class="two wide center aligned">Point</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rank, user in users %}
+        {% include 'organization/row.html' %}
+        {% endfor %}
+    </tbody>
+</table>

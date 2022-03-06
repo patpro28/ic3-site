@@ -1,177 +1,149 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content_media %}
-<link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+<link rel="stylesheet" href="{{ static('user/css/style.css') }}">
 {% endblock content_media %}
+{% block content_title %}
+{% include 'title.html' %}
+{% endblock content_title %}
+{% block content_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+{% endblock content_js %}
 {% block content %}
-<div class="main-body">
-  <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb" class="main-breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-      <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
-      <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-    </ol>
-  </nav>
-  <!-- /Breadcrumb -->
-
-  {{ request.user.about }}
-
-  <div class="row ">
-    <div class="card col-md-4 mb-3 mr-3 gutters-sm">
-      <div class="card-body">
-        <div class="d-flex flex-column align-items-center text-center">
-          <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
-          <div class="mt-3">
-            <h4>John Doe</h4>
-            <p class="text-secondary mb-1">Full Stack Developer</p>
-            <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-            <button class="btn btn-primary">Follow</button>
-            <button class="btn btn-outline-primary">Message</button>
-          </div>
-        </div>
+<div class="ui grid">
+  <div class="ui four wide column">
+    <div class="ui card">
+      <div class="image">
+        <img 
+        {% if request.user.email %}
+        src="https://www.gravatar.com/avatar/61ed114b5efb6c8c179081e8efc00d90?d=identicon&amp;s=32"
+        {% else %}
+        src={{ static('user/image/avatar-none.png') }}
+        {% endif %} 
+        alt="">
       </div>
-    </div>
-    <div class="col-md-8 card mb-3 gutters-sm">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-3">
-            <h6 class="mb-0">Full Name</h6>
-          </div>
-          <div class="col-sm-9 text-secondary">
-            Kenneth Valdez
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <h6 class="mb-0">Email</h6>
-          </div>
-          <div class="col-sm-9 text-secondary">
-            fip@jukmuh.al
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <h6 class="mb-0">Phone</h6>
-          </div>
-          <div class="col-sm-9 text-secondary">
-            (239) 816-9029
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <h6 class="mb-0">Mobile</h6>
-          </div>
-          <div class="col-sm-9 text-secondary">
-            (320) 380-4539
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <h6 class="mb-0">Address</h6>
-          </div>
-          <div class="col-sm-9 text-secondary">
-            Bay Area, San Francisco, CA
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-12">
-            <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
-          </div>
+      <div class="content">
+        <h3 class="header">{{ user.fullname }}</h3>
+        <div class="meta">
+          Last access at {{ user.last_login|date(_("M j, Y, G:i")) }}
         </div>
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="card col-md-4 mb-3 gutters-sm">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
-          <span class="text-secondary">https://bootdey.com</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
-          <span class="text-secondary">bootdey</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
-          <span class="text-secondary">@bootdey</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
-          <span class="text-secondary">bootdey</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-          <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
-          <span class="text-secondary">bootdey</span>
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-8 gutters-sm">
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-              <small>Web Design</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Website Markup</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>One Page</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Mobile Template</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Backend API</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-              <small>Web Design</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Website Markup</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>One Page</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Mobile Template</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <small>Backend API</small>
-              <div class="progress mb-3" style="height: 5px">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="ui twelve wide column">
+    <div class="ui grid">
+      <div class="four wide column">
+        <h1 class="ui header" style="padding-top: 5px">{{ _('Information') }}</h1>
+      </div>
+      <div class="four wide column"></div>
+      <div class="four wide column">
+        {% if request.user == user %}
+        <a href="{{ url('change_password') }}" class="ui fluid button">{{ _('Change password' )}} </a>
+        {% endif %}
+      </div>
+      <div class="four wide column">
+        {% if can_edit %}
+        <a href="{{ url('user_edit', user.username)}}" class="ui fluid button">{{ _('Edit profile') }} </a>
+        {% endif %}
       </div>
     </div>
+    <table class="ui very basic table" style="font-size: 16px;">
+      <tbody>
+        <tr>
+          <td  class="left aligned four wide column">
+            <i class="university icon"></i>
+            {{ _('Organization') }}
+          </td>
+          <td  class="left aligned twelve wide column">
+            <div class="ui horizontal list">
+              <a href="#" class="item">C1</a>
+              <a href="#" class="item">D1</a>
+              <a href="#" class="item">DT</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <i class="google icon"></i>
+            Google
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <i class="twitter icon"></i>
+            Twitter
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <i class="facebook icon"></i>
+            Facebook
+          </td>
+          <td>https://facebook.com/patpro28</td>
+        </tr>
+        <tr>
+          <td>
+            <i class="facebook icon"></i>
+            Facebook
+          </td>
+          <td>https://facebook.com/patpro28</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
+</div>
+<h3 class="ui block header">About</h3>
+<div class="ui segment">
+  {{ user.about }}
+</div>
+<h3 class="ui block header">Rate history</h3>
+<div class="ui segment">
+  <canvas id="rate-chart"></canvas>
 </div>
 {% endblock %}
+
+{% block extends_js %}
+<script>
+  var rating_history = [{ "label": "K55A3 - Duy\u1ec7t nh\u1ecb ph\u00e2n", "rating": 2169, "ranking": 8, "link": "/contest/k55090222/ranking/#!leminhkhiet", "timestamp": 1644663600000.0, "date": "Feb 12, 2022, 11:00", "class": "rate-master", "height": "0.922em" }, { "label": "K55A3 - Luy\u1ec7n code \u0111\u00f3n T\u1ebft Nh\u00e2n D\u1ea7n", "rating": 2203, "ranking": 1, "link": "/contest/k55290122/ranking/#!leminhkhiet", "timestamp": 1644163200000.0, "date": "Feb 6, 2022, 16:00", "class": "rate-grandmaster", "height": "0.004em" }, { "label": "K55A3 - \u0110\u1ec7 quy v\u00e0 chia \u0111\u1ec3 tr\u1ecb", "rating": 2082, "ranking": 4, "link": "/contest/2001/ranking/#!leminhkhiet", "timestamp": 1642935600000.0, "date": "Jan 23, 2022, 11:00", "class": "rate-master", "height": "0.705em" }, { "label": "K55A3 - \u0110\u1ec7 quy v\u00e0 chia \u0111\u1ec3 tr\u1ecb", "rating": 2056, "ranking": 8, "link": "/contest/k55100122/ranking/#!leminhkhiet", "timestamp": 1642590000000.0, "date": "Jan 19, 2022, 11:00", "class": "rate-master", "height": "0.640em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp t\u1ed5ng h\u1ee3p (bu\u1ed5i 2)", "rating": 2065, "ranking": 2, "link": "/contest/b315012022/ranking/#!leminhkhiet", "timestamp": 1642488338000.0, "date": "Jan 18, 2022, 6:45", "class": "rate-master", "height": "0.662em" }, { "label": "K55A3 - Luy\u1ec7n t\u1eadp t\u1ed5ng h\u1ee3p", "rating": 2013, "ranking": 1, "link": "/contest/k55150122/ranking/#!leminhkhiet", "timestamp": 1642244400000.0, "date": "Jan 15, 2022, 11:00", "class": "rate-master", "height": "0.532em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp t\u1ed5ng h\u1ee3p (Bu\u1ed5i 1)", "rating": 1858, "ranking": 13, "link": "/contest/b313012022/ranking/#!leminhkhiet", "timestamp": 1642208839000.0, "date": "Jan 15, 2022, 1:07", "class": "rate-master", "height": "0.145em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp d\u1ea1ng b\u00e0i t\u1eadp \u0111\u00e1nh d\u1ea5u (Bu\u1ed5i 2)", "rating": 2043, "ranking": 2, "link": "/contest/b30901/ranking/#!leminhkhiet", "timestamp": 1641888196000.0, "date": "Jan 11, 2022, 8:03", "class": "rate-master", "height": "0.608em" }, { "label": "K55A3 - \u00d4n t\u1eadp h\u1ecdc k\u1ef3 I -  bu\u1ed5i 4", "rating": 2017, "ranking": 18, "link": "/contest/k55080121/ranking/#!leminhkhiet", "timestamp": 1641639600000.0, "date": "Jan 8, 2022, 11:00", "class": "rate-master", "height": "0.542em" }, { "label": "B3 - D\u1ea1ng b\u00e0i t\u1eadp k\u1ef9 thu\u1eadt \u0111\u00e1nh d\u1ea5u v\u00e0 l\u00f9a b\u00f2 v\u00e0o chu\u1ed3ng", "rating": 2147, "ranking": 1, "link": "/contest/b33012/ranking/#!leminhkhiet", "timestamp": 1641170252000.0, "date": "Jan 3, 2022, 0:37", "class": "rate-master", "height": "0.868em" }, { "label": "K55A3 - Ki\u1ec3m tra th\u1ef1c h\u00e0nh HK1 nh\u00f3m 3", "rating": 2081, "ranking": 4, "link": "/contest/k552912c/ranking/#!leminhkhiet", "timestamp": 1640768451000.0, "date": "Dec 29, 2021, 9:00", "class": "rate-master", "height": "0.703em" }, { "label": "K55A3 - \u00d4n t\u1eadp h\u1ecdc k\u1ef3 I -  bu\u1ed5i 3", "rating": 2146, "ranking": 7, "link": "/contest/k55251221/ranking/#!leminhkhiet", "timestamp": 1640689200000.0, "date": "Dec 28, 2021, 11:00", "class": "rate-master", "height": "0.865em" }, { "label": "B3 - Ki\u1ec3m tra gi\u1eefa k\u1ef3", "rating": 2190, "ranking": 5, "link": "/contest/b32312/ranking/#!leminhkhiet", "timestamp": 1640498415000.0, "date": "Dec 26, 2021, 6:00", "class": "rate-master", "height": "0.975em" }, { "label": "K55A3 - \u00d4n t\u1eadp h\u1ecdc k\u1ef3 I -  bu\u1ed5i 2", "rating": 2289, "ranking": 3, "link": "/contest/k55231221/ranking/#!leminhkhiet", "timestamp": 1640257200000.0, "date": "Dec 23, 2021, 11:00", "class": "rate-grandmaster", "height": "0.111em" }, { "label": "K55A3 - \u00d4n t\u1eadp h\u1ecdc k\u1ef3 I -  bu\u1ed5i 1", "rating": 2296, "ranking": 4, "link": "/contest/k55201221/ranking/#!leminhkhiet", "timestamp": 1640235600000.0, "date": "Dec 23, 2021, 5:00", "class": "rate-grandmaster", "height": "0.120em" }, { "label": "B3- Luy\u1ec7n t\u1eadp s\u1eafp x\u1ebfp, t\u00ecm ki\u1ebfm v\u00e0 ki\u1ec3u d\u1eef li\u1ec7u Struct, pair", "rating": 2325, "ranking": 1, "link": "/contest/b31912/ranking/#!leminhkhiet", "timestamp": 1640180713000.0, "date": "Dec 22, 2021, 13:45", "class": "rate-grandmaster", "height": "0.156em" }, { "label": "K55A3 - chuy\u00ean \u0111\u1ec1 bu\u1ed5i 20 -  S\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm", "rating": 2295, "ranking": 2, "link": "/contest/k55121221/ranking/#!leminhkhiet", "timestamp": 1639803600000.0, "date": "Dec 18, 2021, 5:00", "class": "rate-grandmaster", "height": "0.119em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp s\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm (bu\u1ed5i 5)", "rating": 2274, "ranking": 1, "link": "/contest/b31612/ranking/#!leminhkhiet", "timestamp": 1639789387000.0, "date": "Dec 18, 2021, 1:03", "class": "rate-grandmaster", "height": "0.092em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp s\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm (bu\u1ed5i 4)", "rating": 2229, "ranking": 1, "link": "/contest/b31212/ranking/#!leminhkhiet", "timestamp": 1639572969000.0, "date": "Dec 15, 2021, 12:56", "class": "rate-grandmaster", "height": "0.036em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp s\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm (bu\u1ed5i 3)", "rating": 2135, "ranking": 1, "link": "/contest/b30912/ranking/#!leminhkhiet", "timestamp": 1639226727000.0, "date": "Dec 11, 2021, 12:45", "class": "rate-master", "height": "0.838em" }, { "label": "K55A3 - chuy\u00ean \u0111\u1ec1 bu\u1ed5i 19 -  S\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm", "rating": 2090, "ranking": 5, "link": "/contest/k550612/ranking/#!leminhkhiet", "timestamp": 1639198800000.0, "date": "Dec 11, 2021, 5:00", "class": "rate-master", "height": "0.725em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp s\u1eafp x\u1ebfp v\u00e0 t\u00ecm ki\u1ebfm (Bu\u1ed5i 2)", "rating": 2116, "ranking": 1, "link": "/contest/b30512/ranking/#!leminhkhiet", "timestamp": 1638796223000.0, "date": "Dec 6, 2021, 13:10", "class": "rate-master", "height": "0.790em" }, { "label": "K55A3 - chuy\u00ean \u0111\u1ec1 bu\u1ed5i 18 -  S\u1ed1 h\u1ecdc c\u01a1 b\u1ea3n", "rating": 2086, "ranking": 10, "link": "/contest/k55061221/ranking/#!leminhkhiet", "timestamp": 1638766800000.0, "date": "Dec 6, 2021, 5:00", "class": "rate-master", "height": "0.715em" }, { "label": "K55A3 - chuy\u00ean \u0111\u1ec1 bu\u1ed5i 18 -  S\u1ed1 h\u1ecdc c\u01a1 b\u1ea3n", "rating": 2175, "ranking": 4, "link": "/contest/k55021221/ranking/#!leminhkhiet", "timestamp": 1638583495000.0, "date": "Dec 4, 2021, 2:04", "class": "rate-master", "height": "0.938em" }, { "label": "K55A3 - tu\u1ea7n 13 - S\u1ed1 h\u1ecdc c\u01a1 b\u1ea3n 2", "rating": 2204, "ranking": 4, "link": "/contest/k55291121/ranking/#!leminhkhiet", "timestamp": 1638284029000.0, "date": "Nov 30, 2021, 14:53", "class": "rate-grandmaster", "height": "0.005em" }, { "label": "K55A3 - S\u1ed1 h\u1ecdc c\u01a1 b\u1ea3n", "rating": 2240, "ranking": 2, "link": "/contest/k55271121/ranking/#!leminhkhiet", "timestamp": 1638151495000.0, "date": "Nov 29, 2021, 2:04", "class": "rate-grandmaster", "height": "0.050em" }, { "label": "B3 - M\u1ea3ng 1 chi\u1ec1u v\u00e0 thu\u1eadt to\u00e1n s\u1eafp x\u1ebfp", "rating": 2230, "ranking": 1, "link": "/contest/b31411/ranking/#!leminhkhiet", "timestamp": 1636857000000.0, "date": "Nov 14, 2021, 2:30", "class": "rate-grandmaster", "height": "0.037em" }, { "label": "K55A3 - Ki\u1ec3m tra th\u1ef1c h\u00e0nh GK1 nh\u00f3m 3", "rating": 2201, "ranking": 1, "link": "/contest/k551311c/ranking/#!leminhkhiet", "timestamp": 1636767900000.0, "date": "Nov 13, 2021, 1:45", "class": "rate-grandmaster", "height": "0.001em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 18 - C\u00e1c gi\u1ea3i thu\u1eadt nguy\u00ean t\u1ed1", "rating": 2170, "ranking": 2, "link": "/contest/k551111/ranking/#!leminhkhiet", "timestamp": 1636758244000.0, "date": "Nov 12, 2021, 23:04", "class": "rate-master", "height": "0.925em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 17 - M\u1ea3ng v\u00e0 S\u1eafp x\u1ebfp", "rating": 2149, "ranking": 5, "link": "/contest/k55a30811/ranking/#!leminhkhiet", "timestamp": 1636606800000.0, "date": "Nov 11, 2021, 5:00", "class": "rate-master", "height": "0.873em" }, { "label": "B3 - Luy\u1ec7n t\u1eadp x\u00e2u k\u00ed t\u1ef1", "rating": 2184, "ranking": 1, "link": "/contest/b3711/ranking/#!leminhkhiet", "timestamp": 1636424100000.0, "date": "Nov 9, 2021, 2:15", "class": "rate-master", "height": "0.960em" }, { "label": "K55A3 - \u00d4n t\u1eadp gi\u1eefa k\u1ef3 - X\u00e2u k\u00fd t\u1ef1", "rating": 2154, "ranking": 3, "link": "/contest/k550611/ranking/#!leminhkhiet", "timestamp": 1636328837000.0, "date": "Nov 7, 2021, 23:47", "class": "rate-master", "height": "0.885em" }, { "label": "Contest TMath m\u1edf r\u1ed9ng (B\u1ea3ng B - Thi sau)", "rating": 2139, "ranking": 2, "link": "/contest/test3008b1/ranking/#!leminhkhiet", "timestamp": 1636209000000.0, "date": "Nov 6, 2021, 14:30", "class": "rate-master", "height": "0.848em" }, { "label": "B3 - X\u00e2u k\u00fd t\u1ef1 (bu\u1ed5i 3)", "rating": 2152, "ranking": 1, "link": "/contest/b30411/ranking/#!leminhkhiet", "timestamp": 1636194207000.0, "date": "Nov 6, 2021, 10:23", "class": "rate-master", "height": "0.880em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 16 - Luy\u1ec7n t\u1eadp t\u1ed5ng h\u1ee3p", "rating": 2114, "ranking": 4, "link": "/contest/k550411/ranking/#!leminhkhiet", "timestamp": 1636158101000.0, "date": "Nov 6, 2021, 0:21", "class": "rate-master", "height": "0.785em" }, { "label": "A3 - Ch\u01b0\u01a1ng tr\u00ecnh con (bu\u1ed5i 4)", "rating": 2108, "ranking": 2, "link": "/contest/a30211/ranking/#!leminhkhiet", "timestamp": 1636097165000.0, "date": "Nov 5, 2021, 7:26", "class": "rate-master", "height": "0.770em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 15 - Luy\u1ec7n t\u1eadp t\u1ed5ng h\u1ee3p", "rating": 2050, "ranking": 3, "link": "/contest/k550111/ranking/#!leminhkhiet", "timestamp": 1636002000000.0, "date": "Nov 4, 2021, 5:00", "class": "rate-master", "height": "0.625em" }, { "label": "B3 - X\u00e2u k\u00fd t\u1ef1 (bu\u1ed5i 2)", "rating": 2004, "ranking": 1, "link": "/contest/b33110/ranking/#!leminhkhiet", "timestamp": 1635949013000.0, "date": "Nov 3, 2021, 14:16", "class": "rate-master", "height": "0.510em" }, { "label": "B3 -  X\u00e2u k\u00fd t\u1ef1 (bu\u1ed5i 1)", "rating": 1881, "ranking": 2, "link": "/contest/b32810/ranking/#!leminhkhiet", "timestamp": 1635588052000.0, "date": "Oct 30, 2021, 10:00", "class": "rate-master", "height": "0.203em" }, { "label": "K55A3 - Luy\u1ec7n t\u1eadp", "rating": 1805, "ranking": 11, "link": "/contest/k55a33010/ranking/#!leminhkhiet", "timestamp": 1635559200000.0, "date": "Oct 30, 2021, 2:00", "class": "rate-master", "height": "0.013em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 14 - L\u00e0m vi\u1ec7c v\u1edbi file v\u0103n b\u1ea3n v\u00e0 luy\u1ec7n code", "rating": 1844, "ranking": 3, "link": "/contest/k552510/ranking/#!leminhkhiet", "timestamp": 1635397200000.0, "date": "Oct 28, 2021, 5:00", "class": "rate-master", "height": "0.110em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 13 - Luy\u1ec7n code t\u1ed5ng h\u1ee3p", "rating": 1758, "ranking": 3, "link": "/contest/k55a32110/ranking/#!leminhkhiet", "timestamp": 1635085800000.0, "date": "Oct 24, 2021, 14:30", "class": "rate-candidate-master", "height": "0.860em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 12 - Luy\u1ec7n code t\u1ed5ng h\u1ee3p", "rating": 1660, "ranking": 5, "link": "/contest/k551410/ranking/#!leminhkhiet", "timestamp": 1634481000000.0, "date": "Oct 17, 2021, 14:30", "class": "rate-candidate-master", "height": "0.533em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 11 - Struct, pair v\u00e0 Thu\u1eadt to\u00e1n s\u1eafp x\u1ebfp, Quy ho\u1ea1ch \u0111\u1ed9ng", "rating": 1593, "ranking": 7, "link": "/contest/k551110/ranking/#!leminhkhiet", "timestamp": 1634101200000.0, "date": "Oct 13, 2021, 5:00", "class": "rate-candidate-master", "height": "0.310em" }, { "label": "K55A3 - Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 10 - Struct, pair v\u00e0 Thu\u1eadt to\u00e1n s\u1eafp x\u1ebfp", "rating": 1530, "ranking": 5, "link": "/contest/k55a30710/ranking/#!leminhkhiet", "timestamp": 1633928400000.0, "date": "Oct 11, 2021, 5:00", "class": "rate-candidate-master", "height": "0.100em" }, { "label": "A4 - Luy\u1ec7n t\u1eadp m\u1ea3ng 1 chi\u1ec1u v\u00e0 h\u00e0m (bu\u1ed5i 4)", "rating": 1408, "ranking": 23, "link": "/contest/a40310/ranking/#!leminhkhiet", "timestamp": 1633566610000.0, "date": "Oct 7, 2021, 0:30", "class": "rate-expert", "height": "0.693em" }, { "label": "K55A3 Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 8 - Luy\u1ec7n t\u1eadp m\u1ea3ng", "rating": 1437, "ranking": 11, "link": "/contest/k553009/ranking/#!leminhkhiet", "timestamp": 1633239000000.0, "date": "Oct 3, 2021, 5:30", "class": "rate-expert", "height": "0.790em" }, { "label": "K55A3 Chuy\u00ean \u0111\u1ec1 bu\u1ed5i 7 - M\u1ea3ng 2 chi\u1ec1u", "rating": 1350, "ranking": 5, "link": "/contest/k552709/ranking/#!leminhkhiet", "timestamp": 1632979800000.0, "date": "Sep 30, 2021, 5:30", "class": "rate-expert", "height": "0.500em" }, { "label": "A -L\u1edbp 10A3 K55 - C\u1ea5u tr\u00fac \u0111i\u1ec1u khi\u1ec3n v\u00e0 v\u00f2ng l\u1eb7p", "rating": 1051, "ranking": 25, "link": "/contest/a3k550909coban/ranking/#!leminhkhiet", "timestamp": 1631491200000.0, "date": "Sep 13, 2021, 0:00", "class": "rate-amateur", "height": "0.255em" }];
+  $.each(rating_history, function (index, item) {
+    item.x = item.timestamp;
+    // alert(item.x);
+    item.y = item.rating;
+  });
+  const data = {
+    datasets: [{
+      label: 'Rating',
+      backgroundColor: 'rgb(0, 0, 0, 0)',
+      borderColor: 'rgb(168, 85, 85)',
+      pointBackgroundColor: '#FFF',
+      pointHoverBackgroundColor: 'rgb(168, 85, 85)',
+      pointRadius: 4,
+      pointHoverRadius: 4,
+      showLine: true,
+      data: rating_history,
+    }]
+  };
+  const config = {
+    type: 'scatter',
+    data,
+    options: {
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            unit: 'month'
+          }
+        },
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  const ctx = $('#rate-chart');
+  const chart = new Chart(ctx, config);
+</script>
+{% endblock extends_js %}

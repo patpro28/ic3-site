@@ -16,6 +16,19 @@ def disallowed_characters_validator(text):
         raise ValidationError(_('Disallowed characters: %(value)s'),
                               params={'value': ''.join(common_disallowed_characters)})
 
+class Level(models.Model):
+    code = models.CharField(_("code"), max_length=10, unique=True)
+    name = models.CharField(_("name"), max_length=50)
+    description = models.TextField(_("description"), blank=False)
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = _('problem level')
+        verbose_name_plural = _('problem levels')
+
 
 class ProblemGroup(models.Model):
     name = models.CharField(_("Fullname"), max_length=100, unique=True)
@@ -59,13 +72,11 @@ class Problem(models.Model):
     group = models.ForeignKey(ProblemGroup, verbose_name=_("group"), 
                             help_text=_('The group of problem, shown under Category in the problem list.'), on_delete=models.CASCADE)
     
+    level = models.ForeignKey("education.Level", verbose_name=_("level"), null=True, on_delete=models.CASCADE)
     difficult = models.CharField(_("Difficult of problem"), max_length=10, default='newbie', choices=DIFFICULT)
     
     is_full_markup = models.BooleanField(verbose_name=_('allow full markdown access'), default=False)
 
-    class Meta:
-        verbose_name = _("Math Problem")
-        verbose_name_plural = _("Math Problems")
 
     def __str__(self):
         return self.name
@@ -117,6 +128,45 @@ class Problem(models.Model):
     def author_ids(self):
         return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
+    def is_accessible_by(self, user, skip_contest_problem_check=False):
+        # If we don't want to check if the user is in a contest containing that problem.
+        if not skip_contest_problem_check and user.is_authenticated:
+            # If user is currently in a contest containing that problem.
+            current = user.current_contest_id
+            if current is not None:
+                from education.models import ContestProblem
+                if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
+                    return True
+
+        # Problem is public.
+        if self.is_public:
+            # Problem is not private to an organization.
+            if not self.is_organization_private:
+                return True
+
+            # If the user can see all organization private problems.
+            if user.has_perm('education.see_organization_problem'):
+                return True
+
+            # If the user is in the organization.
+            if user.is_authenticated and \
+                    self.organizations.filter(id__in=user.organizations.all()):
+                return True
+
+        if not user.is_authenticated:
+            return False
+
+        # If the user can view all problems.
+        if user.has_perm('education.see_private_problem'):
+            return True
+
+        # If the user can edit the problem.
+        # We are using self.editor_ids to take advantage of caching.
+        if self.is_editable_by(user) or user.id in self.author_ids:
+            return True
+
+        return False
+
     def is_editable_by(self, user):
         if not user.is_authenticated:
             return False
@@ -128,7 +178,7 @@ class Problem(models.Model):
 
     @property
     def markdown_style(self):
-        return 'problem-full' if self.is_full_markup else 'problem'
+        return 'description-full'
 
     class Meta:
         permissions = (
@@ -139,6 +189,9 @@ class Problem(models.Model):
             ('see_organization_problem', _('See organizations-private Math problems')),
             ('change_public_visibility', _('Change public math problem visibility'))
         )
+        verbose_name = _("Problem")
+        verbose_name_plural = _("Problems")
+        ordering = ['code']
 
 
 class Answer(models.Model):

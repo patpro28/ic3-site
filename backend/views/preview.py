@@ -14,9 +14,17 @@ class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
         ))
 
 
-class MarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'preview.html'
+class DefaultPreviewView(MarkdownPreviewView):
+    template_name = 'preview/default.html'
 
 
-class ProfileMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'user/preview.html'
+class SelfDescriptionMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'preview/self.html'
+
+
+class DescriptionMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'preview/description.html'
+
+
+class DescriptionFullMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'preview/description_full.html'
