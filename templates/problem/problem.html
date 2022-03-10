@@ -1,11 +1,11 @@
 {% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
-{% endblock content_title %} {% block title %} {{ title }} {% endblock title %}
+{% endblock content_title %}
 {% block content %}
 <div class="ui segment">
   <fieldset>
     <legend class="ui header">Description</legend>
     <div class="ui segment" style="font-weight: 800; margin-top: 0">
-      {% cache 86400 'problem_html' problem.id MATH_ENGINE %} {{
+      {% cache 3600 'problem_html' problem.id MATH_ENGINE %} {{
       description|markdown(problem.markdown_style,
       MATH_ENGINE)|reference|str|safe }} {% endcache %}
     </div>

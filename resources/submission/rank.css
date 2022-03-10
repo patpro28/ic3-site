@@ -1,0 +1,27 @@
+.accept {
+  background-color: #53f23f;
+}
+
+.pending {
+  background-color: #ccc;
+}
+
+.wrong3 {
+  background-color: red;
+}
+
+.wrong5 {
+  background-color: yellow;
+}
+
+.wrong7 {
+  background-color: purple;
+}
+
+.wrong9 {
+  background-color: blue;
+}
+
+.pre_accept {
+  background-color: #88e07f;
+}

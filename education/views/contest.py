@@ -1,5 +1,8 @@
 from collections import namedtuple
+from functools import partial
+from itertools import chain
 from operator import attrgetter
+import random
 from django import forms
 from django.db import IntegrityError
 from django.http import Http404, HttpResponseRedirect
@@ -13,25 +16,43 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.functional import cached_property
 from django.db.models import Q, F, Max
+from backend.utils.ranker import ranker
 
-from backend.utils.views import generic_message, QueryStringSortMixin, TitleMixin
+from backend.utils.views import generic_message, QueryStringSortMixin, TitleMixin, DiggPaginatorMixin
 from education.models import Contest
-from education.models.contest import ContestParticipation
+from education.models.contest import ContestParticipation, ContestProblem
+from education.models.problem import Answer
+from education.models.submission import Submission, SubmissionProblem
+
+class PrivateContestError(Exception):
+    def __init__(self, name, is_private, is_organization_private, orgs):
+        self.name = name
+        self.is_private = is_private
+        self.is_organization_private = is_organization_private
+        self.orgs = orgs
 
 class ContestMixin(object):
   context_object_name = 'contest'
   slug_field = 'key'
   slug_url_kwarg = 'contest'
   model = Contest
+  tab = None
+
+  def get_tab(self):
+    return self.tab
 
   def get_object(self, queryset=None):
     contest = super().get_object(queryset)
     user = self.request.user
-    if user is not None and ContestParticipation.objects.filter(id=user.current_contest_id, contest_id=contest.id).exists():
-      return contest
-    if not contest.is_accessible_by(user):
+    try:
+      contest.access_check(user)
+    except Contest.PrivateContest:
+      raise PrivateContestError(contest.name, contest.is_private, contest.is_organization_private,
+                                contest.organizations.all())
+    except Contest.Inaccessible:
       raise Http404
-    return contest
+    else:
+      return contest
 
   def no_such_contest(self):
     key = self.kwargs.get(self.slug_url_kwarg, None)
@@ -45,12 +66,6 @@ class ContestMixin(object):
     return self.request.user.id in self.object.editor_ids
 
   @cached_property
-  def is_curators(self):
-    if not self.request.user.is_authenticated:
-      return False
-    return self.request.user.id in self.object.curator_ids
-
-  @cached_property
   def can_edit(self):
     return self.object.is_editable_by(self.request.user)
 
@@ -58,8 +73,8 @@ class ContestMixin(object):
       context = super().get_context_data(**kwargs)
       context["now"] = timezone.now()
       context['is_editor'] = self.is_editor
-      context['is_curators'] = self.is_curators
       context['can_edit'] = self.can_edit
+      context['tab'] = self.get_tab()
 
       if self.request.user.is_authenticated:
         try:
@@ -79,7 +94,7 @@ class ContestMixin(object):
         context['has_joined'] = False
       context['logo_override_image'] = self.object.logo_override_image
       if not context['logo_override_image'] and self.object.organizations.count() == 1:
-        context['logo_override_image'] = self.object.organizations.first().logo_override_image
+        context['logo_override_image'] = self.object.organizations.first().logo
       
       return context
   
@@ -96,13 +111,13 @@ class ContestListMixin(object):
     return Contest.get_visible_contests(self.request.user)
 
 
-class ContestList(QueryStringSortMixin, TitleMixin, ListView):
+class ContestList(QueryStringSortMixin, TitleMixin, ContestListMixin, DiggPaginatorMixin, ListView):
   model = Contest
-  template_name = ''
+  template_name = 'contest/list.html'
   title = _('Contests')
   context_object_name = 'contests'
   paginate_by = 20
-  all_sort = frozenset(('name', 'user_count', 'start_time'))
+  all_sorts = frozenset(('name', 'user_count', 'start_time'))
   default_desc = frozenset(('name', 'user_count'))
   default_sort = '-start_time'
 
@@ -150,7 +165,8 @@ class ContestList(QueryStringSortMixin, TitleMixin, ListView):
   
 
 class ContestDetail(ContestMixin, TitleMixin, DetailView):
-  template_name = ''
+  template_name = 'contest/contest.html'
+  tab = 'info'
 
   def get_title(self):
     return self.object.name
@@ -165,11 +181,18 @@ class ContestAccessForm(forms.Form):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.field['access_code'].widget.attrs.update({'autocomplete': 'off'})
+    self.fields['access_code'].widget.attrs.update({'autocomplete': 'off'})
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
   def get(self, request, *args, **kwargs):
     self.object = self.get_object()
+    user = request.user
+    if user.current_contest is not None:
+      if user.current_contest.contest == self.object:
+        return HttpResponseRedirect(reverse('education:contest_detail', kwargs={'contest': self.object.key}))
+      return generic_message(request, _('Already in contest'),
+                            _('You are already in a contest "%s".') % user.current_contest.contest.name)
+    
     return self.ask_for_access_code()
 
   def post(self, request, *args, **kwargs):
@@ -250,7 +273,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     user.save()
     contest._updating_stats_only = True
     contest.update_user_count()
-    return HttpResponseRedirect(reverse('education:contest_detail'))
+    return HttpResponseRedirect(reverse('education:contest_detail', kwargs={'contest': contest.key}))
   
   def ask_for_access_code(self, form=None):
     contest = self.object
@@ -278,7 +301,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
                             _('You are not in contest "%s".') % contest.key, status=404)
     
     user.remove_contest()
-    return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
+    return HttpResponseRedirect(reverse('education:contest_detail', kwargs={'contest': contest.key}))
 
 
 ContestRankingProfile = namedtuple(
@@ -307,7 +330,7 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
     username=user.username,
     points=participation.score,
     cumtime=participation.cumtime,
-    tiebreaker=participation.tiebreak,
+    tiebreaker=participation.tiebreaker,
     organization=user.organization,
     participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
     problem_cells=[display_user_problem(problem) for problem in contest_problems],
@@ -317,9 +340,162 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
 
 def base_contest_ranking_list(contest, problems, queryset):
   return [make_contest_ranking_profile(contest, participation, problems) for participation in 
-          queryset.select_related('user', 'rating').defer('user__about', 'user__organization__about')]
+          queryset.select_related('user').defer('user__about', 'user__organizations__about')]
 
 def contest_ranking_list(contest, problems):
   return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                   .prefetch_related('user__organizations')
                                   .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker'))
+
+class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
+    template_name = 'contest/ranking.html'
+    tab = None
+
+    def get_title(self):
+        raise NotImplementedError()
+
+    def get_content_title(self):
+        return self.object.name
+
+    def get_ranking_list(self):
+        raise NotImplementedError()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if not self.object.can_see_own_scoreboard(self.request.user):
+            raise Http404()
+
+        users, problems = self.get_ranking_list()
+        context['users'] = users
+        context['problems'] = problems
+        # context['last_msg'] = event.last()
+        # context['tab'] = self.tab
+        return context
+
+def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
+                          show_current_virtual=True, ranker=ranker):
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+
+    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime', 'tiebreaker'))
+
+    if show_current_virtual:
+        if participation is None and request.user.is_authenticated:
+            participation = request.user.current_contest
+            if participation is None or participation.contest_id != contest.id:
+                participation = None
+        if participation is not None and participation.virtual:
+            users = chain([('-', make_contest_ranking_profile(contest, participation, problems))], users)
+    
+    return users, problems
+
+
+class ContestRanking(ContestRankingBase):
+  tab = 'ranking'
+
+  def get_title(self):
+    return _('%s Rankings') % self.object.name
+
+  def get_ranking_list(self):
+    if not self.object.can_see_full_scoreboard(self.request.user):
+      queryset = self.object.users.filter(user=self.request.user, virtual=ContestParticipation.LIVE)
+      return get_contest_ranking_list(
+        self.request, self.object,
+        ranking_list=partial(base_contest_ranking_list, queryset=queryset),
+        ranker=lambda users, key: ((_('???'), user) for user in users),
+      )
+
+    return get_contest_ranking_list(self.request, self.object)
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    # context['has_rating'] = self.object.ratings.exists()
+    return context
+
+
+def get_answer_contest_problem(problem):
+  ans = list(Answer.objects.filter(problem=problem))
+  random.shuffle(ans)
+  answer = [(chr(idx + 65), answer.description) for idx, answer in enumerate(ans) ]
+  return answer
+
+def get_participation(user, contest):
+  LIVE = ContestParticipation.LIVE
+  SPETATE = ContestParticipation.SPECTATE
+  spectate = user in contest.editor_ids
+  if not contest.ended:
+    participation = ContestParticipation.objects.get(
+      user=user,
+      contest=contest,
+      virtual=SPETATE if spectate else LIVE
+    )
+  else:
+    participation = ContestParticipation.objects.filter(
+      user=user,
+      contest=contest,
+      virtual__gt=LIVE
+    ).order_by('-virtual').first()
+  return participation
+
+class ContestTaskView(ContestMixin, TitleMixin, DetailView):
+  template_name = 'contest/tasks.html'
+  
+  def get_title(self):
+      return "Contest %(contest)s by %(user)s" % {
+        'contest': self.object.name,
+        'user': self.request.user.fullname
+      }
+
+  def get_context_data(self, **kwargs):
+      context = super().get_context_data(**kwargs)
+      problems = list(ContestProblem.objects.filter(contest=self.object).order_by('order'))
+      random.shuffle(problems)
+      user = self.request.user
+      contest = self.object
+      auth = user.is_authenticated and user.current_contest is not None and user.current_contest.contest == contest
+      auth = auth or self.is_editor
+      context['problems'] = []
+      for problem in problems:
+        answer = get_answer_contest_problem(problem.problem)
+        context['problems'].append((problem, answer))
+      participation = get_participation(user, contest)
+      submission = Submission.objects.create(
+        user=participation,
+        contest=contest,
+        result='PE'
+      )
+      context['submission'] = submission
+      return context
+  
+  def post(self, request, *args, **kwargs):
+    key = request.POST.get('contest', None)
+    sub_id = request.POST.get('submission', None)
+    if key is None or sub_id is None:
+      raise Http404
+    try:
+      contest = Contest.objects.get(key=key)
+      submission = Submission.objects.get(id=sub_id)
+    except (Contest.DoesNotExist, Submission.DoesNotExist):
+      raise Http404
+
+    if submission.problems.exists():
+      return generic_message(request, _('Duplicate submission'),
+                            _('You must click "Take a test" button to start contest'))
+
+    problems = ContestProblem.objects.filter(contest=contest).select_related('problem').defer('problem__description')
+    for problem in problems:
+      ans = request.POST.get('answer_' + str(problem.id), None)
+      if ans is not None:
+        submissionProblem = SubmissionProblem.objects.get_or_create(
+          submission=submission,
+          problem=problem,
+        )[0]
+        submissionProblem.output = ans
+        submissionProblem.save()
+    submission.time = timezone.now()
+    # print(submission.id)
+    submission.save()
+    submission.judge()
+    submission.update_contest()
+
+    return HttpResponseRedirect(reverse('education:all_submissions'))

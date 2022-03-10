@@ -87,7 +87,6 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
         context = super().get_context_data(**kwargs)
         users = context['users']
         start = self.paginate_by * (context['page_obj'].number - 1)
-        print(context['page_obj'].has_previous())
         context['users'] = []
         for user in users:
             start += 1
@@ -96,10 +95,6 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
         context.update(self.get_sort_context())
         context.update(self.get_sort_paginate_context())
         return context
-
-
-def login_view(request):
-    pass
 
 
 class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):

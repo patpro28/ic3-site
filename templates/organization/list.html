@@ -1,13 +1,18 @@
-{% extends "base.html" %} {% block content_js %}
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"
-  integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
+{% extends "base.html" %}
+
+{% block content_media %}
+<style>
+  #name {
+    min-width: 200px;
+  }
+</style>
+{% endblock content_media %}
+
+{% block content_js %}
+<script src="{{ static('jquery/tablesort.js') }}" ></script>
 <script type="text/javascript">
   $(function () {
-    $("#organization-table").tablesorter();
+    $("table").tablesort();
   });
 </script>
 {% endblock %} {% block content_title %}
@@ -16,11 +21,11 @@
 set tab = 'organizations' %} {% set title = _('Organizations') %} {% include
 "user/user-list-tabs.html" %} {% endblock %} {% block content %}
 <div class="ui segment">
-  <table id="organization-table" class="ui celled table">
+  <table id="organization-table" class="ui sortable unstackable celled table">
     <thead>
       <tr>
-        <th class="fourteen wide column">{{ _('Name') }}</th>
-        <th class="center aligned four wide column">{{ _('Members') }}</th>
+        <th class="ten wide sorted descending" id="name">{{ _('Name') }}</th>
+        <th class="center aligned two wide">{{ _('Members') }}</th>
       </tr>
     </thead>
     <tbody>

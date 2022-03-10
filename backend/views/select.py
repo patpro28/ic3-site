@@ -15,6 +15,7 @@ def _get_user_queryset(term):
     queryset = queryset.filter(username=term.strip())
   else:
     queryset = queryset.filter(username__icontains=term)
+  # print(queryset)
   return queryset
 
 

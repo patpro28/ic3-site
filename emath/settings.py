@@ -34,7 +34,11 @@ SSL = 0
 
 EMATH_EMAIL_THROTTLING = (10, 60)
 DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
-DEFAULT_USER_TIME_ZONE = 'Asia/Saigon'
+SITE_NAME = "EMATH"
+SITE_LONG_NAME = 'Emath'
+SITE_ADMIN_EMAIL = False
+
+DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 NOFOLLOW_EXCLUDED = set()
 
 MATHOID_URL = False
@@ -49,6 +53,24 @@ MATHOID_CACHE_URL = False
 TEXOID_GZIP = False
 TEXOID_META_CACHE = 'default'
 TEXOID_META_CACHE_TTL = 86400
+# DATETIME_INPUT_FORMATS = '%m/%d/%Y, %H:%M:%S'
+SEMANTIC_CALENDAR_OPTIONS = {
+    "datetime": {
+        "intlDateTimeFormatOptions": {
+            #   'year'    : 'numeric', 
+            #   'month'   : 'numeric', 
+            #   'day'     : 'numeric',
+            #   'hour'    : 'numeric', 
+            #   'minute'  : 'numeric', 
+            #   'second'  : 'numeric',
+              'hour12'  : False,
+              'timeZone': 'Asia/Ho_Chi_Minh'
+        },
+        "ampm": False,
+    },
+    "date": {"intlDateTimeFormatOptions": {"dateStyle": "short"}},
+    "time": {"intlDateTimeFormatOptions": {"timeStyle": "short"}, "ampm": False},
+}
 
 # Application definition
 
@@ -66,6 +88,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mptt',
     'martor',
+    'django_select2',
+    'statici18n',
     # 'ckeditor',
     # 'ckeditor_uploader',
     'django_jinja',
@@ -83,6 +107,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'backend.middleware.ContestMiddleware'
 ]
 
 ROOT_URLCONF = 'emath.urls'
@@ -106,6 +131,7 @@ TEMPLATES = [
                 'backend.template_context.get_resources',
                 'backend.template_context.general_info',
                 'backend.template_context.math_setting',
+                'backend.template_context.site_name',
             ],
             'autoescape': select_autoescape(['html', 'xml']),
             'trim_blocks': True,
@@ -113,6 +139,7 @@ TEMPLATES = [
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
                 'backend.jinja2.EmathExtension',
+                'backend.jinja2.spaceless.SpacelessExtension'
             ],
         },
     },
@@ -168,6 +195,26 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    # … default cache config and others
+    "select2": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+SELECT2_CACHE_BACKEND = "select2"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -177,8 +224,8 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
-
-USE_TZ = True
+# USE_L10N = True
+USE_TZ = False
 
 CSRF_COOKIE_HTTPONLY = False
 
@@ -421,14 +468,6 @@ ALLOWED_URL_SCHEMES = [
     "file", "ftp", "ftps", "http", "https", "irc", "mailto",
     "sftp", "ssh", "tel", "telnet", "tftp", "vnc", "xmpp",
 ]
-
-SEMANTIC_CALENDAR_OPTIONS = {
-    "datetime": {
-        "intlDateTimeFormatOptions": {"dateStyle": "short", "timeStyle": "short"},
-    },
-    "date": {"intlDateTimeFormatOptions": {"dateStyle": "short"}},
-    "time": {"intlDateTimeFormatOptions": {"timeStyle": "short"}},
-}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

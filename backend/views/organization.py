@@ -1,3 +1,4 @@
+from urllib import request
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -9,7 +10,7 @@ from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import ngettext, gettext_lazy as _
 from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import (
     SingleObjectMixin,
@@ -73,7 +74,7 @@ class OrganizationMixin(object):
         if not self.request.user.is_authenticated:
             return False
         profile_id = self.request.user.id
-        return org.admins.filter(id=profile_id).exists()
+        return org.admins.filter(id=profile_id).exists() and (self.request.user.is_staff or self.request.user.is_superuser)
 
 
 class OrganizationDetailView(OrganizationMixin, DetailView):
@@ -135,7 +136,6 @@ class OrganizationMembershipChange(
 ):
     def post(self, request, *args, **kwargs):
         org = self.get_object()
-        print(1)
         response = self.handle(request, org, request.user)
         if response is not None:
             return response
@@ -160,7 +160,6 @@ class JoinOrganization(OrganizationMembershipChange):
             )
 
         max_orgs = settings.DMOJ_USER_MAX_ORGANIZATION_COUNT
-        print(1)
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
             return generic_message(
                 request,
@@ -191,12 +190,15 @@ class OrganizationRequestForm(Form):
     reason = forms.CharField(widget=forms.Textarea)
 
 
-class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
+class RequestJoinOrganization(LoginRequiredMixin, TitleMixin, SingleObjectMixin, FormView):
     model = Organization
-    slug_field = "key"
-    slug_url_kwarg = "key"
+    slug_field = "slug"
+    slug_url_kwarg = "organization"
     template_name = "organization/requests/request.html"
     form_class = OrganizationRequestForm
+
+    def get_title(self):
+        return _("Request to join %s") % self.object.name
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -206,7 +208,6 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
         if self.object.is_open:
             raise Http404()
-        context["title"] = _("Request to join %s") % self.object.name
         return context
 
     def form_valid(self, form):
@@ -219,11 +220,10 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         return HttpResponseRedirect(
             reverse(
                 "request_organization_detail",
-                args=(
-                    request.organization.id,
-                    request.organization.slug,
-                    request.id,
-                ),
+                kwargs={
+                    'organization': request.organization.slug,
+                    'pk': request.pk
+                }
             )
         )
 
@@ -232,7 +232,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = "organization/requests/detail.html"
     title = _("Join request detail")
-    pk_url_kwarg = "rpk"
+    pk_url_kwarg = "pk"
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
@@ -254,8 +254,8 @@ class OrganizationRequestBaseView(
     LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View
 ):
     model = Organization
-    slug_field = "key"
-    slug_url_kwarg = "key"
+    slug_field = "slug"
+    slug_url_kwarg = "organization"
     tab = None
 
     def get_object(self, queryset=None):
@@ -324,11 +324,8 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                     rejected += 1
             messages.success(
                 request,
-                gettext("Approved %d user.", "Approved %d users.", approved)
-                % approved
-                + "\n"
-                + gettext("Rejected %d user.", "Rejected %d users.", rejected)
-                % rejected,
+                ngettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
+                ngettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected
             )
             cache.delete(
                 make_template_fragment_key("org_member_count", (organization.id,))

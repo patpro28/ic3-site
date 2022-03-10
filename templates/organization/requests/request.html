@@ -1,22 +1,18 @@
 {% extends "base.html" %}
 
-{% block js_media %}
-    <script type="text/javascript">
-        $(function () {
-            $('#id_reason').keydown(function (e) {
-                if (e.ctrlKey && (e.keyCode === 13 || e.keyCode === 10)) {
-                    $(this).closest('form').submit();
-                }
-            });
-        });
-    </script>
-{% endblock %}
+{% block content_title %}
+{% include 'title.html' %}
+{% endblock content_title %}
 
-{% block body %}
-    <form action="" method="post" class="form-area">
+{% block content %}
+<div class="ui segment">
+    <form action="" method="post" class="ui form">
         {% csrf_token %}
-        <p><label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label></p>
-        <p>{{ form.reason }}</p>
-        <button type="submit">{{ _('Request') }}</button>
+        <div class="field">
+            <label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label>
+            {{ form.reason }}
+        </div>
+        <button type="submit" class="fluid ui primary button">{{ _('Request') }}</button>
     </form>
+</div>
 {% endblock %}

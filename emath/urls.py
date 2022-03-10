@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.i18n import JavaScriptCatalog
 
 from backend.views import organization, preview, profile
+from select2 import views
 
 admin.autodiscover()
 
@@ -51,14 +53,21 @@ organization_patterns = [
         path('kick/', organization.KickUserWidgetView.as_view(), name='organization_kick_user'),
 
         path('request/', organization.RequestJoinOrganization.as_view(), name='request_organization'),
+        path('request/<int:pk>/', organization.OrganizationRequestDetail.as_view(), name="request_organization_detail"),
 
-    ]))
+        path('requests/', include([
+            path('pending/', organization.OrganizationRequestView.as_view(), name="organization_requests_pending"),
+            path('log/', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
+        ]))
+    ])) 
 ]
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
+    path("select2/", include("django_select2.urls")),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('', include('education.urls')),
     path('backend/', include('backend.urls')),
 ]

@@ -1,0 +1,14 @@
+<tr>
+  <td class="rank">{{ rank }}</td>
+  {{ user.result_cell }}
+  <td class="organization organization_column">
+    {% if user.user.organization %}
+      {{ user.user.organization.short_name }}
+    {% endif %}
+  </td>
+  <td class="username username_column">{{ user.username }}</td>
+  <td class="fullname">{{ link_user(user.user) }}</td>
+  {% for cell in user.problem_cells %}
+    {{ cell }}
+  {% endfor %}
+</tr>

@@ -81,6 +81,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def __str__(self) -> str:
         return self.username
 
+    @cached_property
+    def css_class(self):
+        return 'newbie'
+
     def get_absolute_url(self):
         return reverse("user_page", kwargs={"user": self.username})
     

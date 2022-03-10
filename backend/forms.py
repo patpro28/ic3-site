@@ -5,8 +5,9 @@ from django.contrib.auth import password_validation
 
 from backend.models import Profile
 from backend.models.organization import Organization
-from backend.widgets.fields import TextInput, Textarea, SelectMultiple
 from backend.widgets.martor import MartorWidget
+from backend.widgets.select2 import UserMultipleWidget
+from backend.widgets.fields import SelectMultiple
 from semantic_admin.widgets import SemanticTextInput, SemanticSelectMultiple
 
 
@@ -16,7 +17,7 @@ class EditProfileForm(forms.ModelForm):
     model = Profile
     fields = ["fullname", 'email', 'about', 'is_active', 'is_staff', 'is_superuser', 'groups']
     widgets = {
-      'fullname': TextInput,
+      'fullname': SemanticTextInput,
       'about': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('markdown_preview')}),
       'groups': SelectMultiple
     }
@@ -24,7 +25,7 @@ class EditProfileForm(forms.ModelForm):
 
 class RegisterForm(forms.ModelForm):
   error_messages = {
-    'password_mismatch': _('The two password fields didn’t match.'),
+    'password_mismatch': _("The two password fields didn’t match."),
   }
   fullname = forms.CharField(max_length=30, required=True, label=_('Fullname'))
   username = forms.RegexField(regex=r'^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$', max_length=30, label=_('Username'),
@@ -78,4 +79,8 @@ class EditOrganizationForm(forms.ModelForm):
   class Meta:
     model = Organization
     fields = ['about', 'logo', 'admins']
-    widgets = {'admins': SelectMultiple(attrs={'style': 'width: 200px'})}
+
+    widgets = {
+      'admins': SelectMultiple,
+      'about': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
+    }

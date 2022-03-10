@@ -13,7 +13,7 @@ class Organization(models.Model):
     short_name = models.CharField(_("short name"), max_length=20,
                             help_text=_('Displayed beside user name during exams'))
     about = models.TextField(_("organization description"))
-    admins = models.ManyToManyField("backend.profile", verbose_name=_("administrators"), related_name='admin_of',
+    admins = models.ManyToManyField(Profile, verbose_name=_("administrators"), related_name='admin_of',
                             help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(_("creation date"), auto_now_add=True)
     is_open = models.BooleanField(_("is open organization?"),

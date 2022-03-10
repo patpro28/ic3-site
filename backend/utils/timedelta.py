@@ -1,12 +1,14 @@
 import datetime
 
-from django.utils.translation import gettext, gettext, gettext
+from django.utils.translation import npgettext, pgettext, ngettext
 
 
 def nice_repr(timedelta, display='long', sep=', '):
     """
     Turns a datetime.timedelta object into a nice string repr.
+
     display can be 'minimal', 'short' or 'long' [default].
+
     >>> from datetime import timedelta as td
     >>> nice_repr(td(days=1, hours=2, minutes=3, seconds=4))
     '1 day, 2 hours, 3 minutes, 4 seconds'
@@ -44,21 +46,21 @@ def nice_repr(timedelta, display='long', sep=', '):
     elif display == 'localized':
         days += weeks * 7
         if days:
-            return gettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days) \
+            return npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days) \
                 .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes) \
                 .replace('%s', '%02d' % seconds)
         else:
-            return gettext('time format without day', '%h:%m:%s') \
+            return pgettext('time format without day', '%h:%m:%s') \
                 .replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes).replace('%s', '%02d' % seconds)
     elif display == 'localized-no-seconds':
         days += weeks * 7
         if days:
             if hours or minutes:
-                return gettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days) \
+                return npgettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days) \
                     .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
-            return gettext('%d day', '%d days', days) % days
+            return ngettext('%d day', '%d days', days) % days
         else:
-            return gettext('hours and minutes', '%h:%m').replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
+            return pgettext('hours and minutes', '%h:%m').replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
     elif display == 'concise':
         days += weeks * 7
         if days:

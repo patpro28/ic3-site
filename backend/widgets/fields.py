@@ -31,7 +31,6 @@ class Textarea(OldTextarea):
 
 class Select(OldSelect):
   template_name = 'admin/widgets/select.html'
-  option_template_name = 'admin/widgets/select_option.html'
 
 class SelectMultiple(OldSelectMultiple, Select):
   pass

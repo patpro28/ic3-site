@@ -1,0 +1,18 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="ui message 
+    {% if message.tags %}
+      {% set tags = message.tags %}
+      {% if tags == 'debug' %}
+      {% elif tags == 'info' %}info
+      {% elif tags == 'success' %}success
+      {% elif tags == 'warning' %}warning
+      {% elif tags == 'error' %}negative
+      {% endif %}
+    {% endif %}"
+    >
+    <i class="close icon"></i>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content_media %}
+<link rel="stylesheet" href="{{ static('submission/rank.css') }}">
+<style>
+  th {
+    background-color: teal !important;
+    color: white !important;
+  }
+
+  td .ui.header, td .ui.header .sub{
+    color: #000 !important;
+  }
+
+  table, td, th {
+    border-color: grey!important;
+  }
+  @media only screen and (max-width: 768px) {
+    .date_field {
+      display: none;
+    }
+  }
+</style>
+{% endblock content_media %}
+
+{% block content_title %}
+{% include 'title.html' %}
+{% endblock content_title %}
+
+{% block content %}
+{% if page_obj and page_obj.has_other_pages() %}
+  <div class="ui segment">
+    {% include 'list-page.html' %}
+  </div>
+{% endif %}
+<div class="ui segment">
+  <table class="ui celled striped unstackable table">
+    <thead>
+      <tr>
+        <th class="one wide column center aligned">{{ _('Result') }}</th>
+        <th class="one wide column center aligned">{{ _('Time') }}</th>
+        <th class="three wide column center aligned">{{ _('User') }}</th>
+        <th class="center aligned">{{ _('Contest') }}</th>
+        <th class="two wide column center aligned date_field">{{ _('Date') }}</th>
+        <th class="one wide">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for submission in submissions %}
+        {% include 'submission/row.html' %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if page_obj and page_obj.has_other_pages() %}
+  <div class="ui segment">
+    {% include 'list-page.html' %}
+  </div>
+{% endif %}
+{% endblock content %}

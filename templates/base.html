@@ -4,11 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      {% block title %}
-        Emath
-      {% endblock title %}
-    </title>
+    <title>{% block title %}{{ title }} - {{ SITE_LONG_NAME }}{% endblock %}</title>
     {% block media %}
     <link
       rel="stylesheet"
@@ -17,14 +13,19 @@
     {% block content_media %} {% endblock content_media %}
     <style>
       h3.block.header {
-        background-color: #645153c2 !important;
+        background-color: green !important;
         color: white;
+      }
+      table, td, th {
+        border-color: grey!important;
       }
     </style>
     {% endblock %} {% block js_media %}
     <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
+    <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
     <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
     <script src="{{ static('semantic-themed/semantic.min.js') }}"></script>
+    <script src="{{ static('common.js') }}"></script>
     {% block content_js %}{% endblock content_js %} {% endblock %}
   </head>
 
@@ -32,6 +33,9 @@
     <div class="ui inverted segment" id="top">
       <div class="ui sticky">
         <div class="ui inverted secondary menu">
+          <div class="item">
+            <img src="{{ static('icons/logo.png')}}" alt="">
+          </div>
           {% for node in mptt_tree(nav_bar) recursive %} 
           {% set children = node.get_children() %} {% if children %}
           <div class="ui dropdown item">
@@ -80,15 +84,19 @@
         </div>
       </div>
     </div>
+
     <div class="ui container" id="container">
       {% block content_title %}{% endblock %} 
       {% block content %} {% endblock content %}
     </div>
+    {% block extends_js %}{% endblock extends_js %}
     <script>
       $(".ui.dropdown").dropdown({
         on: "hover",
       });
+      $('.ui.sidebar')
+        .sidebar('hide')
+      ;
     </script>
-    {% block extends_js %}{% endblock extends_js %}
   </body>
 </html>

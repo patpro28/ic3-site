@@ -78,7 +78,7 @@ class Contest(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("contest_detail", args=(self.key))
+        return reverse("education:contest_detail", kwargs={'contest': self.key})
     
     @property
     def contest_window_length(self):
@@ -167,10 +167,7 @@ class Contest(models.Model):
         if user.has_perm('education.see_private_contest') or user.has_perm('education.edit_all_contest'):
             return
         
-        if user.profile.id in self.editor_ids:
-            return
-
-        if user.profile.id in self.tester_ids:
+        if user.id in self.editor_ids:
             return
         
         if not self.is_visible:
@@ -179,11 +176,11 @@ class Contest(models.Model):
         if not self.is_private and not self.is_organization_private:
             return
 
-        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+        if self.view_contest_scoreboard.filter(id=user.id).exists():
             return
 
-        in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
-        in_users = self.private_contestants.filter(id=user.profile.id).exists()
+        in_org = self.organizations.filter(id__in=user.organizations.all()).exists()
+        in_users = self.private_contestants.filter(id=user.id).exists()
 
         if self.is_private and not self.is_organization_private:
             if in_users:
@@ -205,7 +202,7 @@ class Contest(models.Model):
         
     def has_completed_contest(self, user):
         if user.is_authenticated:
-            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user.profile).first()
+            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user).first()
             if participation and participation.ended:
                 return True
         return False
@@ -221,8 +218,7 @@ class Contest(models.Model):
 
     def is_in_contest(self, user):
         if user.is_authenticated:
-            profile = user.profile
-            return profile and profile.current_contest is not None and profile.current_contest.contest == self
+            return user and user.current_contest is not None and user.current_contest.contest == self
         return False
 
     def can_see_own_scoreboard(self, user):
@@ -345,17 +341,41 @@ class ContestParticipation(models.Model):
     def spectate(self):
         return self.virtual == self.SPECTATE
 
+    @cached_property
+    def start(self):
+        contest = self.contest
+        return contest.start_time if self.live or self.spectate else self.real_start
+
     def __str__(self) -> str:
         name = self.user.fullname
         if self.spectate:
             return gettext('%s spectating in %s' % (name, self.contest.name))
         if self.virtual:
             return gettext('%s in %s, v%d' % (name, self.contest.name, self.virtual))
-        return gettext('%s in %s', (name, self.contest.name))
+        return gettext('%s in %s' % (name, self.contest.name))
     
+    @cached_property
+    def end_time(self):
+        contest = self.contest
+        if self.spectate:
+            return contest.end_time
+        if self.virtual:
+            return self.real_start + (contest.end_time - contest.start_time)
+        return contest.end_time
+
+    @property
+    def ended(self):
+        return self.end_time is not None and self.end_time < self._now
+    
+    @property
+    def time_remaining(self):
+        end = self.end_time
+        if end is not None and end >= self._now:
+            return end - self._now
+
     class Meta:
-        verbose_name = _('exam participation')
-        verbose_name_plural = _('exam participations')
+        verbose_name = _('contest participation')
+        verbose_name_plural = _('contest participations')
 
         unique_together = ('contest', 'user', 'virtual')
 

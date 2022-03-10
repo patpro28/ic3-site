@@ -8,7 +8,7 @@ from django.utils.html import format_html
 
 from semantic_admin.admin import SemanticTabularInline
 from semantic_admin import widgets
-from martor.widgets import MartorWidget
+from martor.widgets import AdminMartorWidget
 
 from education.models import Problem, ProblemGroup, Answer#, Level
 from backend.utils.models import AlwaysChangedModelForm
@@ -72,7 +72,7 @@ class ProblemForm(forms.ModelForm):
     class Meta:
         widgets = {
             'authors': widgets.SemanticSelectMultiple,
-            'description': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
+            'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
             'organizations': widgets.SemanticSelectMultiple,
             'group': widgets.SemanticSelect
         }

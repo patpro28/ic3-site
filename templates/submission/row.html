@@ -1,0 +1,29 @@
+<tr>
+  {{ submission.result_class }}
+  <td class="center aligned">
+    {{ submission.time_excute|timedelta('simple') }}
+  </td>
+  <td class="left aligned">
+    <h3 class="ui header">
+      {{ link_user(submission.user.user) }}
+    </h3>
+  </td>
+  <td class="left aligned">
+    <a href="{{ url('education:contest_detail', submission.contest.key) }}">
+      <h3 class="ui header">
+      {{ submission.contest }}
+      </h3>
+    </a>
+  </td>
+  <td class="left aligned date_field">
+    <h4 class="ui header">
+      {{ submission.date|date }}
+      <div class="sub header">
+        {{ submission.date|time }}
+      </div>
+    </h4>
+  </td>
+  <td>
+    <a href="{{ url('education:submission_status', submission.pk) }}" class="ui teal button">{{_('Detail')}}</a>
+  </td>
+</tr>

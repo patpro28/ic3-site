@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 
 import six
 
-class BaseExamFormat(six.with_metaclass(ABCMeta)):
+class BaseContestFormat(six.with_metaclass(ABCMeta)):
     @abstractmethod
     def __init__(self, contest):
         self.contest = contest
@@ -10,7 +10,7 @@ class BaseExamFormat(six.with_metaclass(ABCMeta)):
     @abstractproperty
     def name(self):
         """
-        Name of this exam format. Should be invoked with gettext_lazy.
+        Name of this contest format. Should be invoked with gettext_lazy.
         :return: str
         """
         raise NotImplementedError
@@ -18,20 +18,20 @@ class BaseExamFormat(six.with_metaclass(ABCMeta)):
     @abstractmethod
     def update_participation(self, participation):
         """
-        Updates a ExamParticipation object's score, cumtime, and format_data fields based on this exam format.
-        Implementations should call ExamParticipation.save().
-        :param participation: A ExamParticipation object.
+        Updates a ContestParticipation object's score, cumtime, and format_data fields based on this contest format.
+        Implementations should call ContestParticipation.save().
+        :param participation: A ContestParticipation object.
         :return: None
         """
         raise NotImplementedError()
     
     @abstractmethod
-    def display_user_problem(self, participation, exam_problem):
+    def display_user_problem(self, participation, contest_problem):
         """
         Returns the HTML fragment to show a user's performance on an individual problem. This is expected to use
         information from the format_data field instead of computing it from scratch.
-        :param participation: The ExamParticipation object linking the user to the exam.
-        :param exam_problem: The ExamProblem object representing the problem in question.
+        :param participation: The ContestParticipation object linking the user to the contest.
+        :param contest_problem: The ContestProblem object representing the problem in question.
         :return: An HTML fragment, marked as safe for Jinja2.
         """
         raise NotImplementedError()
@@ -39,20 +39,20 @@ class BaseExamFormat(six.with_metaclass(ABCMeta)):
     @abstractmethod
     def display_participation_result(self, participation):
         """
-        Returns the HTML fragment to show a user's performance on the whole exam. This is expected to use
+        Returns the HTML fragment to show a user's performance on the whole contest. This is expected to use
         information from the format_data field instead of computing it from scratch.
-        :param participation: The ExamParticipation object.
+        :param participation: The ContestParticipation object.
         :return: An HTML fragment, marked as safe for Jinja2.
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def get_problem_breakdown(self, participation, exam_problems):
+    def get_problem_breakdown(self, participation, contest_problems):
         """
         Returns a machine-readable breakdown for the user's performance on every problem.
-        :param participation: The ExamParticipation object.
-        :param exam_problems: The list of ExamProblem objects to display performance for.
-        :return: A list of dictionaries, whose content is to be determined by the exam system.
+        :param participation: The ContestParticipation object.
+        :param contest_problems: The list of ContestProblem objects to display performance for.
+        :return: A list of dictionaries, whose content is to be determined by the contest system.
         """
         raise NotImplementedError()
 

@@ -27,7 +27,7 @@ class TitleMixin(object):
 
 
 def generic_message(request, title, message, status=None):
-    return render(request, '', {
+    return render(request, 'generic-message.html', {
         'message': message,
         'title': title,
     }, status=status)

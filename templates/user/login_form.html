@@ -5,23 +5,7 @@
 {% endblock content_title %}
 
 {% block content %}
-{% if messages %}
-  {% for message in messages %}
-    <div class="ui message 
-    {% if message.tags %}
-      {% set tags = message.tags %}
-      {% if tags == 'debug' %}
-      {% elif tags == 'info' %}info
-      {% elif tags == 'success' %}success
-      {% elif tags == 'warning' %}warning
-      {% elif tags == 'error' %}negative
-      {% endif %}
-    {% endif %}"
-    >
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
+{% include 'messages.html' %}
 <form action="" class="ui form" method="post">
   {% csrf_token %}
   {% if form.non_field_errors() %}

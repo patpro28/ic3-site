@@ -1,0 +1,75 @@
+<div class="ui top attached tabular right menu" style="overflow-x: auto; overflow-y: hidden">
+  <a class="{% if tab == 'info' %}active{% endif %} item" href="{{ url('education:contest_detail', contest.key)}}">
+    <i class="info circle icon"></i>
+    {{ _('Info') }}
+  </a>
+  <a class="{% if tab == 'statistic' %}active{% endif %} item">
+    <i class="chart pie icon"></i>
+    {{ _('Statistic')}}
+  </a>
+  <a class="{% if tab == 'ranking' %}active{% endif %} item" href="{{ url('education:contest_ranking', contest.key)}}">
+    <i class="chart bar outline pie icon"></i>
+    {{ _('Ranking')}}
+  </a>
+  {% if can_edit %}
+  <a class="{% if tab == 'edit' %}active{% endif %} item" href="{{ url('admin:education_contest_change', contest.pk) }}">
+    <i class="edit icon"></i>
+    {{ _('Edit')}}
+  </a>
+  {% endif %}
+  {% if request.user.is_authenticated %}
+  <div class="right menu">
+    {% if contest.can_join or is_editor %}
+      {% set in_contest = contest.is_in_contest(request.user) %}
+      {% if contest.ended %}
+        {# virtual participation #}
+        {% if in_contest %}
+          <form action="{{ url('education:contest_leave', contest.key) }}" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+              <input type="submit" class="ui primary button leaving-forever" value="{{ _('Leave contest') }}">
+            </div>
+          </form>
+        {% else %}
+          <form action="{{ url('education:contest_join', contest.key)}}" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+              <input type="submit" value="{{ _('Join contest') }}" class="ui primary button">
+            </div>
+          </form>
+        {% endif %}
+      {% else %}
+        {# live participation #}
+        {% if in_contest %}
+          <form action="{{ url('education:contest_leave', contest.key) }}" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+              <input type="submit" value="
+                {%- if request.participation.spectate %}
+                  {{- _('Stop spectating') -}}
+                {% else %}
+                  {{- _('Leave contest') -}}
+                {% endif %}" 
+                class="ui primary button">
+            </div>
+          </form>
+        {% elif is_editor or live_participation.ended %}
+          <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+              <input type="submit" class="ui primary button" value="{{ _('Spectate contest') }}">
+            </div>
+          </form>
+        {% else %}
+          <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+              <input type="submit" class="ui primary button {% if not has_joined %}first-join{% endif %}" value="{{ _('Join contest') }}">
+            </div>
+          </form>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+    </div>
+  {% endif %}
+</div>

@@ -10,6 +10,11 @@ class FixedSimpleLazyObject(SimpleLazyObject):
     if not hasattr(SimpleLazyObject, '__iter__'):
         __iter__ = new_method_proxy(iter)
 
+def site_name(request):
+    return {'SITE_NAME': settings.SITE_NAME,
+            'SITE_LONG_NAME': settings.SITE_LONG_NAME,
+            'SITE_ADMIN_EMAIL': settings.SITE_ADMIN_EMAIL}
+
 def get_resources(request):
     use_https = settings.SSL
 

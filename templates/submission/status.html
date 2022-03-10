@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
+{% endblock content_title %} {% block content_media %}
+<style>
+  .wrong {
+    color: red;
+  }
+  .correct {
+    color: green;
+  }
+</style>
+{% endblock content_media %} 
+{% block content_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+{% endblock content_js %}
+{% block content %}
+<div class="ui two column equal width grid segment">
+  <div class="column">
+    <canvas id="myChart" width="100px" height="100px"></canvas>
+    <div class="ui segment two column equal width grid">
+      <div class="column">
+        <strong>Point: </strong>{{ point|floatformat(2) }}
+      </div>
+      <div class="column">
+        <strong>Time: </strong>{{ submission.time_excute|timedelta('simple') }}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="fluid ui styled accordion">
+      {% for output, result in status %}
+      <div class="title {% if not output %}disable{% endif %}">
+        {{ _('Problem ') }}{{- loop.index -}}:
+        <span class="{{ result|lower }}">{{ result }}</span>
+      </div>
+      <div class="content">
+        {% if output and perms.education.view_output_submission %} {{_('User
+        answer:')}}{{ output }} {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %} {% block extends_js %}
+<script>
+  $(".ui.accordion").accordion();
+  const ctx = document.getElementById("myChart").getContext("2d");
+  const myChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Correct", "Wrong", "Pending"],
+      datasets: [
+        {
+          label: "Result of submission",
+          data: [{{correct}}, {{wrong}}, {{pending}}],
+          backgroundColor: [
+            "rgba(9, 255, 0, 0.911)",
+            "rgba(255, 0, 0, 0.808)",
+            "rgba(156, 156, 156, 0.911)",
+          ],
+          borderColor: [
+            "rgba(9, 255, 0, 0.911)",
+            "rgba(255, 0, 0, 0.808)",
+            "rgba(156, 156, 156, 0.911)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+</script>
+{% endblock extends_js %}

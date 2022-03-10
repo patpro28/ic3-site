@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content_media %}
+    <style>
+        #access-code-form {
+            margin: 50px auto 0;
+            display: block;
+            max-width: 500px;
+        }
+
+        #id_access_code {
+            width: 100%;
+        }
+
+        .button-line {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="ui two column centered grid">
+    <div class="ui segment column">
+        <form id="access-code-form" action="" method="post" class="ui form" >
+            {% csrf_token %}
+            {% if form.errors or wrong_code %}
+            <div class="ui message negative">
+              <i class="close icon"></i>
+              <p>{{ _('Invalid access code.')}}</p>
+            </div>
+            {% endif %}
+            <div class="field">
+              <label for="{{ form.access_code.id_for_label }}">{{ _('Please enter your access code:') }}</label>
+              {{ form.access_code }}
+            </div>
+            <button class="fluid ui primary button" type="submit">{{ _('Join Contest') }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extends_js %}
+{% include 'message_js.html' %}
+{% endblock extends_js %}
