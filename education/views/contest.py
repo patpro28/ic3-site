@@ -459,11 +459,18 @@ class ContestTaskView(ContestMixin, TitleMixin, DetailView):
         answer = get_answer_contest_problem(problem.problem)
         context['problems'].append((problem, answer))
       participation = get_participation(user, contest)
-      submission = Submission.objects.create(
-        user=participation,
-        contest=contest,
-        result='PE'
-      )
+      if Submission.objects.filter(user=participation, contest=contest).order_by('-date').exists():
+        last_submission = Submission.objects.filter(user=participation, contest=contest).order_by('-date').first()
+      else:
+        last_submission = None
+      if last_submission is None or last_submission.result != 'PE':
+        submission = Submission.objects.create(
+          user=participation,
+          contest=contest,
+          result='PE'
+        )
+      else:
+        submission = last_submission
       context['submission'] = submission
       return context
   

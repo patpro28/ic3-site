@@ -8,6 +8,7 @@
 <div class="ui segment">
   <form action="" method="post" class="ui form" autocomplete="off">
     {% csrf_token %}
+    <input type="hidden" id="refreshed" value="no">
     <input type="hidden" name="contest" value="{{ contest.key }}">
     <input type="hidden" name="submission" value="{{ submission.id }}">
     {% for problem, answers in problems %}
@@ -46,7 +47,7 @@
 {% endblock content %}
 
 {% block extends_js %}
-<script>
+<script type="text/javascript">
   $(".ui.form")
     .form({
       fields: {
@@ -62,6 +63,14 @@
         },
         {% endfor %}
       }
-    })
+    });
+  onload = function() {
+    var e = document.getElementById("refreshed");
+    if(e.value=="no") e.value="yes";
+    else{
+      e.value="no";
+      location.reload();
+    }
+  }
 </script>
 {% endblock extends_js %}

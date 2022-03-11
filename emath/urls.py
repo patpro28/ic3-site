@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 from django.views.i18n import JavaScriptCatalog
 
 from backend.views import organization, preview, profile
-from select2 import views
 
 admin.autodiscover()
 
@@ -71,6 +70,7 @@ urlpatterns = [
     path('', include('education.urls')),
     path('backend/', include('backend.urls')),
 ]
+
 
 urlpatterns += accounts_patterns
 

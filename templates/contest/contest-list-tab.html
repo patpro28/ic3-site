@@ -27,14 +27,14 @@
           <form action="{{ url('education:contest_leave', contest.key) }}" method="post" class="ui form">
             {% csrf_token %}
             <div class="field">
-              <input type="submit" class="ui primary button leaving-forever" value="{{ _('Leave contest') }}">
+              <input type="submit" class="fluid ui primary button leaving-forever" value="{{ _('Leave contest') }}">
             </div>
           </form>
         {% else %}
           <form action="{{ url('education:contest_join', contest.key)}}" method="post" class="ui form">
             {% csrf_token %}
             <div class="field">
-              <input type="submit" value="{{ _('Join contest') }}" class="ui primary button">
+              <input type="submit" value="{{ _('Join contest') }}" class="fluid ui primary button">
             </div>
           </form>
         {% endif %}
@@ -50,21 +50,21 @@
                 {% else %}
                   {{- _('Leave contest') -}}
                 {% endif %}" 
-                class="ui primary button">
+                class="fluid ui primary button">
             </div>
           </form>
         {% elif is_editor or live_participation.ended %}
           <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
             {% csrf_token %}
             <div class="field">
-              <input type="submit" class="ui primary button" value="{{ _('Spectate contest') }}">
+              <input type="submit" class="fluid ui primary button" value="{{ _('Spectate contest') }}">
             </div>
           </form>
         {% else %}
           <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
             {% csrf_token %}
             <div class="field">
-              <input type="submit" class="ui primary button {% if not has_joined %}first-join{% endif %}" value="{{ _('Join contest') }}">
+              <input type="submit" class="fluid ui primary button {% if not has_joined %}first-join{% endif %}" value="{{ _('Join contest') }}">
             </div>
           </form>
         {% endif %}

@@ -6,9 +6,12 @@ from education.views import submission, contest
 from .views import *
 from emath.urls import paged_list_view
 
+from socical.views import PostList
+
 app_name = 'education'
 
 urlpatterns = [
+    path('', PostList.as_view(template_name="home.html"), name='home'),
     path('problems/', paged_list_view(ProblemList, 'problem_list')),
     path('problems/<slug:level>/', paged_list_view(ProblemLevelList, 'problem_level_list')),
     path('problem/<slug:problem>/', include([

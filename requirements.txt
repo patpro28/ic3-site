@@ -2,11 +2,14 @@ django>=4.0
 django-mptt
 jsonfield
 django_jinja
+django_redis
+django-statici18n
+django-admin-sortable2
 celery
 django-compressor
 django-sortedm2m==3.1.1
 django-reversion
-martor
+martor @ git+git://github.com/patpro28/martor.git
 ua_parser
 django-semantic-admin @ git+git://github.com/patpro28/semantic-admin.git
 lxml

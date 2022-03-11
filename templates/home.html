@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content_js %}
+<script>
+  $(document).ready(function () {
+    $('.time-remaining').each(function () {
+        count_down($(this));
+    });
+});
+</script>
+{% endblock content_js %}
+
+{% block content %}
+<div class="ui grid">
+  <div class="ui eleven wide column">
+    <h3 class="ui block header">News</h3>
+    {% for blog in blogs %}
+    <div class="ui raised segment">
+      <h3 class="ui header">
+        <a href="#"><strong>{{ blog.title }}</strong></a>
+        <div class="sub header">
+          <i class="star icon"></i>
+          <span><a>{{ link_user(blog.author) }}</a> posted on {{ blog.publish|date }}</span>
+        </div>
+      </h3>
+      <div class="summary content-description">
+        {% cache 3600 'blog_summary' blog.id %}
+        {{ blog.description|markdown('blog', 'svg', lazy_load=True)|reference|str|safe }}
+        {% endcache %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="ui five wide column">
+    {% if current_contests %}
+    <div class="ui row">
+      <table class="ui single table">
+        <thead>
+          <tr>
+            <th>Ongoing Contests</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for contest in current_contests %}
+          <tr>
+            <td class="center aligned">
+              <a class="header" href="{{ contest.get_absolute_url() }}">
+                <h3>{{ contest.name }}</h3>
+              </a>
+              <div class="description">
+                <span class="time">
+                  {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
+                </span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    {% if future_contests %}
+    <div class="ui row">
+      <table class="ui single table">
+        <thead>
+          <tr>
+            <th>Upcomming Contests</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for contest in future_contests %}
+          <tr>
+            <td class="center aligned">
+              <a class="header" href="{{ contest.get_absolute_url() }}">
+                <h3>{{ contest.name }}</h3>
+              </a>
+              <div class="description">
+                <span class="time">
+                  {{ _('Starts in %(countdown)s', countdown=contest.time_before_start|as_countdown) }}
+                </span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    <div class="ui row" style="margin-top: 10px">
+      <table class="ui tiny single unstackable celled structured table">
+        <thead>
+          <tr>
+            <th colspan="3">Ranking</th>
+          </tr>
+          <tr>
+            <th class="two wide center aligned">#</th>
+            <th class="twelve wide">Username</th>
+            <th class="two wide">Point</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in ranking %}
+          <tr class="user">
+            <td class="center aligned">{{ user.rank }}</td>
+            <td>
+              {% if user.user %}
+              {{ link_user(user.user) }}
+              {% else %}
+              {{ _('???') }}
+              {% endif %}
+            </td>
+            <td class="center aligned">
+              {% if user.user %}
+              {{ user.user.point }}
+              {% else %}
+              {{ _('???') }}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

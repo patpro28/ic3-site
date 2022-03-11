@@ -47,33 +47,33 @@
 {% endblock %} 
 {% macro contest_head(contest) %} 
 {% spaceless %}
-<h2 class="ui header">
+<h3 class="ui header">
   <div class="content">
     <a href="{{ url('education:contest_detail', contest.key) }}" class="contest-list-title">
       {{- contest.name -}}
     </a>
     <div class="sub header">
       {% if not contest.is_visible %} 
-      <div class="ui red label">
+      <div class="ui red mini label">
         <i class="lock icon"></i> {{ _('hidden') }}
       </div>
       {% endif %} 
       {% if contest.is_organization_private %} 
         {% for org in contest.organizations.all() %}
-            <div class="ui teal label">
+            <div class="ui teal mini label">
             <a href="{{ org.get_absolute_url() }}" style="color: #FFFFFF;">
               <i class="lock icon"></i> {{ org.name }}
             </a>
             </div>
         {% endfor %} 
       {% elif contest.is_private %}
-      <div class="ui label">
+      <div class="ui mini label">
         <i class="lock icon"></i> {{ _('private') }}
       </div>
       {% endif %}
     </div>
   </div>
-</h2>
+</h3>
 {% endspaceless %} 
 {% endmacro %} 
 
@@ -250,7 +250,7 @@
           >
         </th>
         {% if not request.in_contest %}
-        <th class="two wide column"></th>
+        <th class="one wide column"></th>
         {% endif %}
       </tr>
     </thead>

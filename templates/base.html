@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <title>{% block title %}{{ title }} - {{ SITE_LONG_NAME }}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {% if meta_description %}
+        <meta name="description" content="{{ meta_description }}">
+    {% endif %}
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{{ title }} - {{ SITE_LONG_NAME }}{% endblock %}</title>
+    <meta name="theme-color" content="#FFBB33">
+    <meta property="og:site_name" content="{{ SITE_LONG_NAME }}">
     {% block media %}
     <link
       rel="stylesheet"
@@ -30,12 +35,12 @@
   </head>
 
   <body>
-    <div class="ui inverted segment" id="top">
-      <div class="ui sticky">
-        <div class="ui inverted secondary menu">
-          <div class="item">
+    <div class="ui sticky">
+      <div class="ui inverted segment">
+        <div class="ui inverted tiny secondary menu">
+          <a class="item" href="{{ url('education:home') }}">
             <img src="{{ static('icons/logo.png')}}" alt="">
-          </div>
+          </a>
           {% for node in mptt_tree(nav_bar) recursive %} 
           {% set children = node.get_children() %} {% if children %}
           <div class="ui dropdown item">
@@ -54,10 +59,11 @@
               <img
                 class="ui avatar image"
                 {% if request.user.email %}
-                src="https://www.gravatar.com/avatar/61ed114b5efb6c8c179081e8efc00d90?d=identicon&amp;s=32"
+                src="{{ gravatar(request.user, 40) }}"
                 {% else %}
                 src={{ static('user/image/avatar-none.png') }}
                 {% endif %}
+                alt="avatar"
                 height="24"
                 width="24"
               />
@@ -85,7 +91,7 @@
       </div>
     </div>
 
-    <div class="ui container" id="container">
+    <div class="ui segment" id="container" style="margin-top: 2rem">
       {% block content_title %}{% endblock %} 
       {% block content %} {% endblock content %}
     </div>
@@ -94,9 +100,9 @@
       $(".ui.dropdown").dropdown({
         on: "hover",
       });
-      $('.ui.sidebar')
-        .sidebar('hide')
-      ;
+      $(".ui.sticky").sticky({
+        context: "#container",
+      });
     </script>
   </body>
 </html>

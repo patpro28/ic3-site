@@ -9,6 +9,19 @@ class Blog(models.Model):
                           help_text=_('Content of this post'))
   author = models.ForeignKey("backend.Profile", verbose_name=_("author"), on_delete=models.CASCADE,
                           help_text=_('Creator of this post'))
-  publish = models.DateTimeField(_("publish on time"), default=timezone.now)
+  publish = models.DateTimeField(_("publish on time"), auto_now_add=True)
 
   visible = models.BooleanField(_("visible"), default=False)
+
+  def is_editable_by(self, user):
+    if not user.is_authenticated:
+        return False
+    if user.has_perm('socical.edit_all_post'):
+        return True
+    return user.has_perm('socical.change_blogpost') and self.authors.filter(id=user.id).exists()
+
+  class Meta:
+    permissions = (
+      ('edit_all_post', _('Edit all post')),
+      ('change_blogpost', _('Change blogpost')),
+    )

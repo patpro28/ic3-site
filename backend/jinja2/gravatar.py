@@ -10,12 +10,7 @@ from . import registry
 
 @registry.function
 def gravatar(email, size=80, default=None):
-    if isinstance(email, Profile):
-        if default is None:
-            default = email.mute
-        email = email.user.email
-    elif isinstance(email, AbstractUser):
-        email = email.email
+    email = email.email
 
     gravatar_url = 'https://www.gravatar.com/avatar/' + hashlib.md5(utf8bytes(email.strip().lower())).hexdigest() + '?'
     args = {'d': 'identicon', 's': str(size)}
