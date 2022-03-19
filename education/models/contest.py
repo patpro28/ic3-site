@@ -347,12 +347,22 @@ class ContestParticipation(models.Model):
         return contest.start_time if self.live or self.spectate else self.real_start
 
     def __str__(self) -> str:
-        name = self.user.fullname
+        fullname = self.user.fullname
         if self.spectate:
-            return gettext('%s spectating in %s' % (name, self.contest.name))
+            return gettext('%(fullname)s spectating in %(contest)s' % {
+                'fullname': fullname, 
+                'contest' : self.contest.name
+            })
         if self.virtual:
-            return gettext('%s in %s, v%d' % (name, self.contest.name, self.virtual))
-        return gettext('%s in %s' % (name, self.contest.name))
+            return gettext('%(fullname)s in %(contest)s, v%(virtual)d' % {
+                'fullname': fullname, 
+                'contest' : self.contest.name, 
+                'virtual' : self.virtual
+            })
+        return gettext('%(fullname)s in %(contest)s' % {
+            'fullname': fullname, 
+            'contest' : self.contest.name
+        })
     
     @cached_property
     def end_time(self):

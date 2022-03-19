@@ -6,7 +6,7 @@ from education.views import submission, contest
 from .views import *
 from emath.urls import paged_list_view
 
-from socical.views import PostList
+from social.views import PostList
 
 app_name = 'education'
 

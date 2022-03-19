@@ -16,9 +16,9 @@ class Blog(models.Model):
   def is_editable_by(self, user):
     if not user.is_authenticated:
         return False
-    if user.has_perm('socical.edit_all_post'):
+    if user.has_perm('social.edit_all_post'):
         return True
-    return user.has_perm('socical.change_blogpost') and self.authors.filter(id=user.id).exists()
+    return user.has_perm('social.change_blogpost') and self.authors.filter(id=user.id).exists()
 
   class Meta:
     permissions = (

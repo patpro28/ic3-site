@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-=)!t4(@as1ijb(bmnsu*jlwnch3!t)-#mkd%r1&a%jm=4u2l5u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['45.124.95.162', 'www.tmathcoding.vn', 'localhost', 'tmathcoding.vn']
 SSL = 0
 
 EMATH_EMAIL_THROTTLING = (10, 60)
@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'django.forms',
     'backend',
     'education',
-    'socical',
+    'social',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -216,16 +216,26 @@ CACHES = {
 SELECT2_CACHE_BACKEND = "select2"
 
 
+# Event Server configuration
+EVENT_DAEMON_USE = True
+EVENT_DAEMON_POST = 'ws://localhost:15101/'
+EVENT_DAEMON_GET = 'ws://tmathcoding.vn/event/'
+EVENT_DAEMON_POLL = '/channels/'
+EVENT_DAEMON_KEY = None
+EVENT_DAEMON_AMQP_EXCHANGE = 'dmoj-events'
+EVENT_DAEMON_SUBMISSION_KEY = '6Sdmkx^%pk@GsifDfXcwX*Y7LRF%RGT8vmFpSxFBT$fwS7trc8raWfN#CSfQuKApx&$B#Gh2L7p%W!Ww'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
+LANGUAGE_CODE = 'en'
+TIME_ZONE = 'UTC'
+DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
-# USE_L10N = True
-USE_TZ = False
+USE_L10N = True
+USE_TZ = True
 
 CSRF_COOKIE_HTTPONLY = False
 

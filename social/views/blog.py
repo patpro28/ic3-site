@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from backend.models.profile import Profile
 from education.models.contest import Contest
 
-from socical.models import Blog
+from social.models import Blog
 from backend.utils.diggpaginator import DiggPaginator
 
 class PostList(ListView):
@@ -39,7 +39,7 @@ class PostList(ListView):
     users = Profile.objects.all().order_by('-point')
     if users.count() > 10:
       users = users[:10]
-    i = 0
+    i = 1
     context['ranking'] = []
     for user in users:
       context['ranking'].append({
@@ -47,7 +47,7 @@ class PostList(ListView):
         'user': user
       })
       i += 1
-    while i < 10:
+    while i <= 10:
       context['ranking'].append({
         'rank': i,
         'user': None,

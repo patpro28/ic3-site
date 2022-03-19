@@ -35,5 +35,5 @@ class BlogPostAdmin(VersionAdmin):
 
     def has_change_permission(self, request, obj=None):
         if obj is None:
-            return request.user.has_perm('socical.change_blogpost')
+            return request.user.has_perm('social.change_blogpost')
         return obj.is_editable_by(request.user)

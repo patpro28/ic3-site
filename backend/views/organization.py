@@ -306,10 +306,13 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                     messages.error(
                         request,
                         _(
-                            "Your organization can only receive %d more members. "
-                            "You cannot approve %d users."
+                            "Your organization can only receive %(can_add)d more members. "
+                            "You cannot approve %(approve)d users."
                         )
-                        % (can_add, to_approve),
+                        % {
+                            'can_add': can_add, 
+                            'approve': to_approve
+                        },
                     )
                     return self.render_to_response(
                         self.get_context_data(object=organization)

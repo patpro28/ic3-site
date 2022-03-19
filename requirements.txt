@@ -1,9 +1,10 @@
-django>=4.0
+django>=4.0,<4.1
 django-mptt
 jsonfield
 django_jinja
 django_redis
 django-statici18n
+django_select2
 django-admin-sortable2
 celery
 django-compressor
