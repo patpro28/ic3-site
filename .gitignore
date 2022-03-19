@@ -1,5 +1,6 @@
 statics
 media
+node_modules
 *desired*
 
 # Byte-compiled / optimized / DLL files
