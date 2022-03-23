@@ -36,23 +36,25 @@
 {% endblock content_js %}
 
 {% block content %}
-{% include 'contest/contest-list-tab.html' %}
-<div class="ui bottom attached segment">
-  <div class="ui equal width five column grid" style="margin-bottom: 1px;">
-    <div class="column">
-      <input type="checkbox" id="show-username">
-      <label for="show-username">{{ _('Show username') }}</label>
+<div class="column">
+  {% include 'contest/contest-list-tab.html' %}
+  <div class="ui bottom attached segment">
+    <div class="ui equal width five column grid" style="margin-bottom: 1px;">
+      <div class="column">
+        <input type="checkbox" id="show-username">
+        <label for="show-username">{{ _('Show username') }}</label>
+      </div>
+      <div class="column">
+        <input type="checkbox" id="show-organization">
+        <label for="show-organization">{{ _('Show organization') }}</label>
+      </div>
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
     </div>
-    <div class="column">
-      <input type="checkbox" id="show-organization">
-      <label for="show-organization">{{ _('Show organization') }}</label>
+    <div style="overflow-x: auto; white-space:nowrap;">
+      {% include 'contest/ranking-table.html' %}
     </div>
-    <div class="column"></div>
-    <div class="column"></div>
-    <div class="column"></div>
-  </div>
-  <div style="overflow-x: auto; white-space:nowrap;">
-    {% include 'contest/ranking-table.html' %}
   </div>
 </div>
 {% endblock content %}

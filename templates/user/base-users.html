@@ -8,34 +8,36 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="ui segment">
+<div class="column">
+  <div class="ui row segment">
 
-  {% if page_obj and page_obj.has_other_pages() %}
-  <div class="ui grid segment">
-    <div class="left floated eight wide column">
-    {% include 'list-page.html' %}
-    </div>
-    <div class="right floated four wide column">
-      <div class="ui secondary menu">
-        <div class="ui right aligned category search item">
-          <div class="ui transparent icon input">
-            <input class="prompt" type="text" placeholder="Search username...">
-            <i class="search link icon"></i>
+    {% if page_obj and page_obj.has_other_pages() %}
+    <div class="ui grid segment">
+      <div class="left floated eight wide column">
+      {% include 'list-page.html' %}
+      </div>
+      <div class="right floated four wide column">
+        <div class="ui secondary menu">
+          <div class="ui right aligned category search item">
+            <div class="ui transparent icon input">
+              <input class="prompt" type="text" placeholder="Search username...">
+              <i class="search link icon"></i>
+            </div>
+            <div class="results"></div>
           </div>
-          <div class="results"></div>
         </div>
       </div>
     </div>
+    {% endif %}
+    {% block table_user %}
+    {% include 'user/user-table.html' %}
+    {% endblock table_user %}
+    {% if page_obj and page_obj.has_other_pages() %}
+    <div class="ui segment">
+      {% include 'list-page.html' %}
+    </div>
+    {% endif %}
   </div>
-  {% endif %}
-  {% block table_user %}
-  {% include 'user/user-table.html' %}
-  {% endblock table_user %}
-  {% if page_obj and page_obj.has_other_pages() %}
-  <div class="ui segment">
-    {% include 'list-page.html' %}
-  </div>
-  {% endif %}
 </div>
 {% endblock content %}
 

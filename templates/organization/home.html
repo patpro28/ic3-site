@@ -21,48 +21,50 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="ui grid">
-    <div class="twelve wide column">
-        <div class="ui segment">
-            {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
-                {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
-            {% endcache %}
+<div class="column">
+    <div class="ui grid">
+        <div class="twelve wide column">
+            <div class="ui segment">
+                {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
+                    {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+                {% endcache %}
+            </div>
         </div>
-    </div>
-    <div class="four wide column">
-        <div class="ui vertical segment">
-            {% if request.user.is_authenticated %}
-                {% if request.user in organization %}
-                    <form method='post' action="{{ url('leave_organization', organization.slug) }}" class="ui form">
-                        {% csrf_token %}
-                        <a type='submit' class="fluid ui primary button">{{ _('Leave organization') }}</a>
-                    </form>
-                {% elif organization.is_open %}
-                    <form action="{{ url('join_organization', organization.slug) }}" method="post">
-                        {% csrf_token %}
-                        <a type='submit' class="fluid ui primary button">{{ _('Join organization') }}</a>
-                    </form>
-                {% else %}
-                    <a href="{{ url('request_organization', organization.slug) }}"
-                    class="fluid ui primary button">{{ _('Request membership') }}</a>
+        <div class="four wide column">
+            <div class="ui vertical segment">
+                {% if request.user.is_authenticated %}
+                    {% if request.user in organization %}
+                        <form method='post' action="{{ url('leave_organization', organization.slug) }}" class="ui form">
+                            {% csrf_token %}
+                            <a type='submit' class="fluid ui primary button">{{ _('Leave organization') }}</a>
+                        </form>
+                    {% elif organization.is_open %}
+                        <form action="{{ url('join_organization', organization.slug) }}" method="post">
+                            {% csrf_token %}
+                            <a type='submit' class="fluid ui primary button">{{ _('Join organization') }}</a>
+                        </form>
+                    {% else %}
+                        <a href="{{ url('request_organization', organization.slug) }}"
+                        class="fluid ui primary button">{{ _('Request membership') }}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="ui vertical segment">
+                <a href="{{ url('edit_organization', organization.slug) }}" class="fluid ui primary button">Edit organization</a>
+            </div>
+            {% if can_edit %}
+            <div class="ui vertical segment">
+                <a href="{{ url('admin:backend_organization_change', organization.id) }}" class="fluid ui primary button">Edit organization</a>
+            </div>
+                {% if not organization.is_open %}
+                    <div class="ui vertical segment">
+                        <a href="{{ url('organization_requests_pending', organization.slug) }}" class="fluid ui primary button">View request</a>
+                    </div>
                 {% endif %}
             {% endif %}
-        </div>
-        <div class="ui vertical segment">
-            <a href="{{ url('edit_organization', organization.slug) }}" class="fluid ui primary button">Edit organization</a>
-        </div>
-        {% if can_edit %}
-        <div class="ui vertical segment">
-            <a href="{{ url('admin:backend_organization_change', organization.id) }}" class="fluid ui primary button">Edit organization</a>
-        </div>
-            {% if not organization.is_open %}
-                <div class="ui vertical segment">
-                    <a href="{{ url('organization_requests_pending', organization.slug) }}" class="fluid ui primary button">View request</a>
-                </div>
-            {% endif %}
-        {% endif %}
-        <div class="ui vertical segment">
-            <a href="{{ url('organization_users', organization.slug) }}" class="fluid ui primary button">View member</a>
+            <div class="ui vertical segment">
+                <a href="{{ url('organization_users', organization.slug) }}" class="fluid ui primary button">View member</a>
+            </div>
         </div>
     </div>
 </div>

@@ -5,14 +5,16 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="ui segment">
-    <form action="" method="post" class="ui form">
-        {% csrf_token %}
-        <div class="field">
-            <label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label>
-            {{ form.reason }}
-        </div>
-        <button type="submit" class="fluid ui primary button">{{ _('Request') }}</button>
-    </form>
+<div class="column">
+    <div class="ui row segment">
+        <form action="" method="post" class="ui form">
+            {% csrf_token %}
+            <div class="field">
+                <label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label>
+                {{ form.reason }}
+            </div>
+            <button type="submit" class="fluid ui primary button">{{ _('Request') }}</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -10,105 +10,113 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 {% endblock content_js %}
 {% block content %}
-<div class="ui grid">
-  <div class="ui four wide column">
-    <div class="ui card">
-      <div class="image">
-        <img 
-        {% if user.email %}
-        src="{{ gravatar(user, 500) }}"
-        {% else %}
-        src={{ static('user/image/avatar-none.png') }}
-        {% endif %} 
-        alt="">
-      </div>
-      <div class="content">
-        <h3 class="header">{{ user.fullname }}</h3>
-        <div class="meta">
-          Last access at {{ user.last_login|date(_("M j, Y, G:i")) }}
+<div class="column">
+  <div class="row">
+    <div class="ui grid">
+      <div class="ui four wide column">
+        <div class="ui card">
+          <div class="image">
+            <img 
+            {% if user.email %}
+            src="{{ gravatar(user, 500) }}"
+            {% else %}
+            src={{ static('user/image/avatar-none.png') }}
+            {% endif %} 
+            alt="">
+          </div>
+          <div class="content">
+            <h3 class="header">{{ user.fullname }}</h3>
+            <div class="meta">
+              Last access at {{ user.last_login|date(_("M j, Y, G:i")) }}
+            </div>
+          </div>
         </div>
       </div>
+      <div class="ui twelve wide column">
+        <div class="ui grid">
+          <div class="four wide column">
+            <h1 class="ui header" style="padding-top: 5px">{{ _('Information') }}</h1>
+          </div>
+          <div class="four wide column"></div>
+          <div class="four wide column">
+            {% if request.user == user %}
+            <a href="{{ url('change_password') }}" class="ui fluid button">{{ _('Change password' )}} </a>
+            {% endif %}
+          </div>
+          <div class="four wide column">
+            {% if can_edit %}
+            <a href="{{ url('user_edit', user.username)}}" class="ui fluid button">{{ _('Edit profile') }} </a>
+            {% endif %}
+          </div>
+        </div>
+        <table class="ui very basic table" style="font-size: 16px;">
+          <tbody>
+            <tr>
+              <td  class="left aligned four wide column">
+                <i class="university icon"></i>
+                {{ _('Organization') }}
+              </td>
+              <td  class="left aligned twelve wide column">
+                {% with orgs=user.organizations.all() %}
+                {% if orgs %}
+                <div class="ui horizontal list">
+                  {% for org in orgs %}
+                    <a class="item" href="{{ org.get_absolute_url() }}">{{ org.short_name }}</a>
+                  {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="envelope outline icon"></i>
+                Email
+              </td>
+              <td>
+                {% if user.email %}
+                {{ user.email }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="google icon"></i>
+                Google
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <i class="twitter icon"></i>
+                Twitter
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <i class="facebook icon"></i>
+                Facebook
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-  <div class="ui twelve wide column">
-    <div class="ui grid">
-      <div class="four wide column">
-        <h1 class="ui header" style="padding-top: 5px">{{ _('Information') }}</h1>
-      </div>
-      <div class="four wide column"></div>
-      <div class="four wide column">
-        {% if request.user == user %}
-        <a href="{{ url('change_password') }}" class="ui fluid button">{{ _('Change password' )}} </a>
-        {% endif %}
-      </div>
-      <div class="four wide column">
-        {% if can_edit %}
-        <a href="{{ url('user_edit', user.username)}}" class="ui fluid button">{{ _('Edit profile') }} </a>
-        {% endif %}
-      </div>
-    </div>
-    <table class="ui very basic table" style="font-size: 16px;">
-      <tbody>
-        <tr>
-          <td  class="left aligned four wide column">
-            <i class="university icon"></i>
-            {{ _('Organization') }}
-          </td>
-          <td  class="left aligned twelve wide column">
-            {% with orgs=user.organizations.all() %}
-            {% if orgs %}
-            <div class="ui horizontal list">
-              {% for org in orgs %}
-                <a class="item" href="{{ org.get_absolute_url() }}">{{ org.short_name }}</a>
-              {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <i class="envelope outline icon"></i>
-            Email
-          </td>
-          <td>
-            {% if user.email %}
-            {{ user.email }}
-            {% endif %}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <i class="google icon"></i>
-            Google
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <i class="twitter icon"></i>
-            Twitter
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <i class="facebook icon"></i>
-            Facebook
-          </td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <h3 class="ui block header">About</h3>
+  <div class="ui segment">
+    {{ user.about }}
   </div>
 </div>
-<h3 class="ui block header">About</h3>
-<div class="ui segment">
-  {{ user.about }}
+<div class="row">
+  <h3 class="ui block header">Rate history</h3>
+  <div class="ui segment">
+    <canvas id="rate-chart"></canvas>
+  </div>
 </div>
-<h3 class="ui block header">Rate history</h3>
-<div class="ui segment">
-  <canvas id="rate-chart"></canvas>
 </div>
 {% endblock %}
 

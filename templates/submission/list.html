@@ -9,12 +9,13 @@
 {% endblock content_title %}
 
 {% block content %}
+<div class="column">
 {% if page_obj and page_obj.has_other_pages() %}
   <div class="ui segment">
     {% include 'list-page.html' %}
   </div>
 {% endif %}
-<div class="ui segment">
+<div class="ui row segment">
   <table class="ui celled striped unstackable table">
     <thead>
       <tr>
@@ -23,7 +24,7 @@
         <th class="three wide center aligned">{{ _('User') }}</th>
         <th class="center aligned">{{ _('Contest') }}</th>
         <th class="two wide center aligned date_field">{{ _('Date') }}</th>
-        <th class="one wide">
+        <th class="two wide">
         </th>
       </tr>
     </thead>
@@ -39,4 +40,5 @@
     {% include 'list-page.html' %}
   </div>
 {% endif %}
+</div>
 {% endblock content %}

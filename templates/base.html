@@ -25,85 +25,185 @@
       table, td, th {
         border-color: grey!important;
       }
-    </style>
+      #show-sidebar {
+          display: none;
+      }
+      @media only screen and (max-width: 1023px) {
+          #show-sidebar {
+              display: block;
+          }
+      }
+      #computer-menu {
+          margin-top: 0 !important;
+      }
+  </style>
     {% endblock %} {% block js_media %}
     <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
     <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
     <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
     <script src="{{ static('semantic-themed/semantic.min.js') }}"></script>
-    <script src="{{ static('common.js') }}"></script>
+    <script>
+      if (!Date.now) {
+        Date.now = function () {
+            return new Date().getTime();
+        };
+      }
+      
+      function count_down(label) {
+        var initial = parseInt(label.attr('data-secs'));
+        var start = Date.now();
+      
+        function format(num) {
+            var s = "0" + num;
+            return s.substr(s.length - 2);
+        }
+      
+        var timer = setInterval(function () {
+            var time = Math.round(initial - (Date.now() - start) / 1000);
+            if (time <= 0) {
+                clearInterval(timer);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000);
+            }
+            var d = Math.floor(time / 86400);
+            var h = Math.floor(time % 86400 / 3600);
+            var m = Math.floor(time % 3600 / 60);
+            var s = time % 60;
+            if (d > 0)
+                label.text(npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', d)
+                    .replace('%d', d).replace('%h', format(h)).replace('%m', format(m)).replace('%s', format(s)));
+            else
+                label.text(pgettext('time format without day', '%h:%m:%s')
+                    .replace('%h', format(h)).replace('%m', format(m)).replace('%s', format(s)));
+        }, 1000);
+      }
+    </script>
     {% block content_js %}{% endblock content_js %} {% endblock %}
   </head>
 
   <body>
-    <div class="ui sticky">
-      <div class="ui inverted segment">
-        <div class="ui inverted tiny secondary menu">
-          <a class="item" href="{{ url('education:home') }}">
-            <img src="{{ static('icons/logo.png')}}" alt="">
-          </a>
-          {% for node in mptt_tree(nav_bar) recursive %} 
-          {% set children = node.get_children() %} {% if children %}
+    <div class="ui inverted segment grid" style="margin: 0">
+      <div class="ui secondary icon toggle button" id='show-sidebar'>
+        <i class="bars icon"></i>
+      </div>
+      <div class="ui inverted tiny secondary menu computer only row" id="computer-menu">
+        <a class="item" href="{{ url('education:home') }}" style="margin-left: 1.5rem">
+          <img src="{{ static('icons/logo.png')}}" alt="">
+        </a>
+        {% for node in mptt_tree(nav_bar) recursive %} 
+        {% set children = node.get_children() %} {% if children %}
+        <div class="ui dropdown item">
+          <span><h3>{{ node.label }}</h3></span>
+          <i class="dropdown icon"></i>
+          <div class="menu">{{ loop(children) }}</div>
+        </div>
+        {% else %}
+        <a href="{{ node.path }}" class="item">
+          <h3>{{ node.label }}</h3>
+        </a>
+        {% endif %} {% endfor %}
+        <div class="right menu">
+          {% if request.user.is_authenticated %}
           <div class="ui dropdown item">
-            <span><h3>{{ node.label }}</h3></span>
+            <img
+              class="ui avatar image"
+              {% if request.user.email %}
+              src="{{ gravatar(request.user, 40) }}"
+              {% else %}
+              src={{ static('user/image/avatar-none.png') }}
+              {% endif %}
+              alt="avatar"
+              height="24"
+              width="24"
+            />
+            <span>
+              <h3 style="color: white!important; margin: 0 !important;">{{ request.user.fullname }}</h3>
+            </span>
             <i class="dropdown icon"></i>
-            <div class="menu">{{ loop(children) }}</div>
+            <div class="menu">
+              <a class="item" href="{{ url('user_page') }}">View profile</a>
+              {% if request.user.is_superuser or request.user.is_staff %}
+              <a class="item" href="{{ url('admin:index')}}">
+                {{ _('Admin') }}</a
+              >
+              {% endif %}
+              <a href="{{ url('user_edit', request.user.username)}}" class="item">Edit profile</a>
+              <a href="{{ url('logout') }}" class="item">Logout</a>
+            </div>
           </div>
           {% else %}
-          <a href="{{ node.path }}" class="item">
-            <h3>{{ node.label }}</h3>
-          </a>
-          {% endif %} {% endfor %}
-          <div class="right menu">
-            {% if request.user.is_authenticated %}
-            <div class="ui dropdown item">
-              <img
-                class="ui avatar image"
-                {% if request.user.email %}
-                src="{{ gravatar(request.user, 40) }}"
-                {% else %}
-                src={{ static('user/image/avatar-none.png') }}
-                {% endif %}
-                alt="avatar"
-                height="24"
-                width="24"
-              />
-              <span>
-                <h3 style="color: white!important; margin: 0 !important;">{{ request.user.fullname }}</h3>
-              </span>
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <a class="item" href="{{ url('user_page') }}">View profile</a>
-                {% if request.user.is_superuser or request.user.is_staff %}
-                <a class="item" href="{{ url('admin:index')}}">
-                  {{ _('Admin') }}</a
-                >
-                {% endif %}
-                <a href="{{ url('user_edit', request.user.username)}}" class="item">Edit profile</a>
-                <a href="{{ url('logout') }}" class="item">Logout</a>
-              </div>
-            </div>
-            {% else %}
-            <a href="{{ url('login') }}" class="item"><h3>Log in</h3></a>
-            <a href="{{ url('register') }}" class="item"><h3>Sign up</h3></a>
-            {% endif %}
-          </div>
+          <a href="{{ url('login') }}" class="item"><h3>Log in</h3></a>
+          <a href="{{ url('register') }}" class="item"><h3>Sign up</h3></a>
+          {% endif %}
         </div>
       </div>
     </div>
 
-    <div class="ui segment" id="container" style="margin-top: 2rem">
+    <div class="ui inverted left vertical menu sidebar">
+      <a class="item" href="{{ url('education:home') }}">
+        <img src="{{ static('icons/logo.png')}}" alt="">
+      </a>
+      {% for node in mptt_tree(nav_bar) recursive %} 
+      {% set children = node.get_children() %} {% if children %}
+      <div class="ui dropdown item">
+        <span><h3>{{ node.label }}</h3></span>
+        <i class="dropdown icon"></i>
+        <div class="menu">{{ loop(children) }}</div>
+      </div>
+      {% else %}
+      <a href="{{ node.path }}" class="item">
+        <h3>{{ node.label }}</h3>
+      </a>
+      {% endif %} {% endfor %}
+      {% if request.user.is_authenticated %}
+      <div class="ui dropdown item">
+        <img
+          class="ui avatar image"
+          {% if request.user.email %}
+          src="{{ gravatar(request.user, 40) }}"
+          {% else %}
+          src={{ static('user/image/avatar-none.png') }}
+          {% endif %}
+          alt="avatar"
+          height="24"
+          width="24"
+        />
+        <span>
+          <h3 style="color: white!important; margin: 0 !important;">{{ request.user.fullname }}</h3>
+        </span>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="{{ url('user_page') }}">View profile</a>
+          {% if request.user.is_superuser or request.user.is_staff %}
+          <a class="item" href="{{ url('admin:index')}}">
+            {{ _('Admin') }}</a
+          >
+          {% endif %}
+          <a href="{{ url('user_edit', request.user.username)}}" class="item">Edit profile</a>
+          <a href="{{ url('logout') }}" class="item">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <a href="{{ url('login') }}" class="item"><h3>Log in</h3></a>
+      <a href="{{ url('register') }}" class="item"><h3>Sign up</h3></a>
+      {% endif %}
+    </div>
+
+    <div class="ui segment pusher" id="container" style="margin: 0">
       {% block content_title %}{% endblock %} 
-      {% block content %} {% endblock content %}
+      <div class="ui grid">
+        {% block content %} {% endblock content %}
+      </div>
     </div>
     {% block extends_js %}{% endblock extends_js %}
     <script>
       $(".ui.dropdown").dropdown({
         on: "hover",
       });
-      $(".ui.sticky").sticky({
-        context: "#container",
-      });
+      $('.ui.sidebar').sidebar('setting', 'dimPage', false);
+      $('.ui.sidebar').sidebar('attach events', '.toggle.button');
+      $('.toggle.button').removeClass('disabled');
     </script>
   </body>
 </html>

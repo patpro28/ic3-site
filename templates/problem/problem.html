@@ -1,26 +1,28 @@
 {% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
 {% endblock content_title %}
 {% block content %}
-<div class="ui segment">
-  <fieldset>
-    <legend class="ui header">Description</legend>
-    <div class="ui segment" style="font-weight: 800; margin-top: 0">
-      {% cache 3600 'problem_html' problem.id MATH_ENGINE %} {{
-      description|markdown(problem.markdown_style,
-      MATH_ENGINE)|reference|str|safe }} {% endcache %}
-    </div>
-  </fieldset>
-  {% if answers %}
-  <fieldset>
-    <legend class="ui header">Answer</legend>
-    <div class="ui grid" style="padding: 5px">
-      {% for label, answer in answers %}
-      <div class="eight wide column">
-        <strong>{{ label }}</strong>.&nbsp;&nbsp; {{ answer }}
+<div class="column">
+  <div class="ui row segment">
+    <fieldset>
+      <legend class="ui header">Description</legend>
+      <div class="ui segment" style="font-weight: 800; margin-top: 0">
+        {% cache 3600 'problem_html' problem.id MATH_ENGINE %} {{
+        description|markdown(problem.markdown_style,
+        MATH_ENGINE)|reference|str|safe }} {% endcache %}
       </div>
-      {% endfor %}
-    </div>
-  </fieldset>
-  {% endif %}
+    </fieldset>
+    {% if answers %}
+    <fieldset>
+      <legend class="ui header">Answer</legend>
+      <div class="ui grid" style="padding: 5px">
+        {% for label, answer in answers %}
+        <div class="eight wide column">
+          <strong>{{ label }}</strong>.&nbsp;&nbsp; {{ answer }}
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% endif %}
+  </div>
 </div>
 {% endblock content %}

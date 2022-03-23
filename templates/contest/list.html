@@ -39,7 +39,6 @@
   });
 </script>
 {% endblock %} 
-{% block title_ruler %}{% endblock %} 
 {% block title_row %} 
     {% set tab = 'list' %} 
     {% set title = 'Contests' %} 
@@ -121,66 +120,33 @@
 
 {% block content %} 
 {% if active_participations %}
-<div class="ui segment">
-  <h4 class="ui block header">{{ _('Active Contests') }}</h4>
-  <table class="ui table celled striped">
-    <thead>
-      <tr>
-        <th class="eleven wide column center aligned">{{ _('Contest') }}</th>
-        <th class="three wide column center aligned">{{ _('Users') }}</th>
-        {% if not request.in_contest %}
-        <th class="two wide column"></th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for participation in active_participations %} 
-        {% with contest=participation.contest %}
-      <tr>
-        <td>
-          <div class="contest-block">
-            {{ contest_head(contest) }} 
-            {% if contest.start_time %}
-            {% if contest.time_limit %}
-            <span class="time"
-              >{{ _('Window ends in %(countdown)s',
-              countdown=participation.time_remaining|as_countdown) }}</span
-            >
-            {% elif contest.time_before_end %}
-            <span class="time"
-              >{{ _('Ends in %(countdown)s',
-              countdown=contest.time_before_end|as_countdown) }}</span
-            >
-            {% endif %} {{ time_left(contest) }} {% endif %}
-          </div>
-        </td>
-        <td class="center aligned">{{ user_count(contest, request.user) }}</td>
-        {{ contest_join(contest, request) }}
-      </tr>
-      {% endwith %} {% endfor %}
-    </tbody>
-  </table>
-  <br />
-</div>
-{% endif %} 
-<div class="ui two column grid segment">
-  <div class="ui column">
-    <h4 class="ui block header">{{ _('Ongoing Contests') }}</h4>
-    {% if current_contests %}
+<div class="column">
+  <div class="ui row segment">
+    <h4 class="ui block header">{{ _('Active Contests') }}</h4>
     <table class="ui table celled striped">
       <thead>
         <tr>
           <th class="eleven wide column center aligned">{{ _('Contest') }}</th>
-          <th class="one wide column center aligned">{{ _('Users') }}</th>
+          <th class="three wide column center aligned">{{ _('Users') }}</th>
+          {% if not request.in_contest %}
+          <th class="two wide column"></th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
-        {% for contest in current_contests %}
+        {% for participation in active_participations %} 
+          {% with contest=participation.contest %}
         <tr>
           <td>
             <div class="contest-block">
-              {{ contest_head(contest) }} {% if contest.start_time %}
-              {% if contest.time_before_end %}
+              {{ contest_head(contest) }} 
+              {% if contest.start_time %}
+              {% if contest.time_limit %}
+              <span class="time"
+                >{{ _('Window ends in %(countdown)s',
+                countdown=participation.time_remaining|as_countdown) }}</span
+              >
+              {% elif contest.time_before_end %}
               <span class="time"
                 >{{ _('Ends in %(countdown)s',
                 countdown=contest.time_before_end|as_countdown) }}</span
@@ -189,99 +155,138 @@
             </div>
           </td>
           <td class="center aligned">{{ user_count(contest, request.user) }}</td>
+          {{ contest_join(contest, request) }}
         </tr>
-        {% endfor %}
+        {% endwith %} {% endfor %}
       </tbody>
     </table>
-    <br />
-    {% endif %}
-  </div>
-  <div class="ui column">
-    <h4 class="ui block header">{{ _('Upcoming Contests') }}</h4>
-    {% if future_contests %}
-    <table class="ui table celled striped">
-      <thead>
-        <tr>
-          <th class="center aligned">{{ _('Contest') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for contest in future_contests %}
-        <tr>
-          <td>
-            <div class="contest-block">
-              {{ contest_head(contest) }} {% if contest.start_time %}
-              {% if contest.time_before_start %}
-              <span class="time"
-                >{{ _('Starting in %(countdown)s.',
-                countdown=contest.time_before_start|as_countdown) }}</span
-              >
-              {% endif %} {{ time_left(contest) }} {% endif %}
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <i>{{ _('There are no scheduled contests at this time.') }}</i>
-    <br />
-    {% endif %}
     <br />
   </div>
 </div>
+{% endif %} 
+<div class="column">
+  <div class="ui two column grid segment">
+    <div class="ui column">
+      <h4 class="ui block header">{{ _('Ongoing Contests') }}</h4>
+      {% if current_contests %}
+      <table class="ui table celled striped">
+        <thead>
+          <tr>
+            <th class="eleven wide column center aligned">{{ _('Contest') }}</th>
+            <th class="one wide column center aligned">{{ _('Users') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for contest in current_contests %}
+          <tr>
+            <td>
+              <div class="contest-block">
+                {{ contest_head(contest) }} {% if contest.start_time %}
+                {% if contest.time_before_end %}
+                <span class="time"
+                  >{{ _('Ends in %(countdown)s',
+                  countdown=contest.time_before_end|as_countdown) }}</span
+                >
+                {% endif %} {{ time_left(contest) }} {% endif %}
+              </div>
+            </td>
+            <td class="center aligned">{{ user_count(contest, request.user) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <br />
+      {% endif %}
+    </div>
+    <div class="ui column">
+      <h4 class="ui block header">{{ _('Upcoming Contests') }}</h4>
+      {% if future_contests %}
+      <table class="ui table celled striped">
+        <thead>
+          <tr>
+            <th class="center aligned">{{ _('Contest') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for contest in future_contests %}
+          <tr>
+            <td>
+              <div class="contest-block">
+                {{ contest_head(contest) }} {% if contest.start_time %}
+                {% if contest.time_before_start %}
+                <span class="time"
+                  >{{ _('Starting in %(countdown)s.',
+                  countdown=contest.time_before_start|as_countdown) }}</span
+                >
+                {% endif %} {{ time_left(contest) }} {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <i>{{ _('There are no scheduled contests at this time.') }}</i>
+      <br />
+      {% endif %}
+      <br />
+    </div>
+  </div>
+</div>
 {% if contests %}
-<div class="ui segment">
-  <h4 id="past-contests">{{ _('Past Contests') }}</h4>
-  {% if page_obj and page_obj.has_other_pages() %}
-  {% include "list-page.html" %}
-  {% endif %}
-  <table class="ui table celled striped">
-    <thead>
-      <tr>
-        <th class="eleven wide column center aligned">
-          <a href="{{ sort_links.name }}" class="contest-sort-link"
-            >{{ _('Contest') }}{{ sort_order.name }}</a
-          >
-        </th>
-        <th class="three wide column center aligned">
-          <a href="{{ sort_links.user_count }}" class="contest-sort-link"
-            >{{ _('Users') }}{{ sort_order.user_count }}</a
-          >
-        </th>
-        {% if not request.in_contest %}
-        <th class="one wide column"></th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for contest in contests %}
-      <tr>
-        <td>
-          <div class="contest-block">
-            {{ contest_head(contest) }} {{ time_left(contest) }}
-          </div>
-        </td>
-        <td class="center aligned">{{ user_count(contest, request.user) }}</td>
-        {% if not request.in_contest %}
-        <td>
-          <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
-            {% csrf_token %}
-            <div class="field">
-              <input
-                type="submit"
-                class="fluid ui primary button"
-                value="{{ _('Virtual join') }}"
-              />
+<div class="column">
+  <div class="ui segment">
+    <h4 id="past-contests">{{ _('Past Contests') }}</h4>
+    {% if page_obj and page_obj.has_other_pages() %}
+    {% include "list-page.html" %}
+    {% endif %}
+    <table class="ui table celled striped">
+      <thead>
+        <tr>
+          <th class="eleven wide column center aligned">
+            <a href="{{ sort_links.name }}" class="contest-sort-link"
+              >{{ _('Contest') }}{{ sort_order.name }}</a
+            >
+          </th>
+          <th class="three wide column center aligned">
+            <a href="{{ sort_links.user_count }}" class="contest-sort-link"
+              >{{ _('Users') }}{{ sort_order.user_count }}</a
+            >
+          </th>
+          {% if not request.in_contest %}
+          <th class="one wide column"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for contest in contests %}
+        <tr>
+          <td>
+            <div class="contest-block">
+              {{ contest_head(contest) }} {{ time_left(contest) }}
             </div>
-          </form>
-        </td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% if page_obj and page_obj.has_other_pages() %}
-  {% include "list-page.html" %}
+          </td>
+          <td class="center aligned">{{ user_count(contest, request.user) }}</td>
+          {% if not request.in_contest %}
+          <td>
+            <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+              {% csrf_token %}
+              <div class="field">
+                <input
+                  type="submit"
+                  class="fluid ui primary button"
+                  value="{{ _('Virtual join') }}"
+                />
+              </div>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if page_obj and page_obj.has_other_pages() %}
+    {% include "list-page.html" %}
+  </div>
 </div>
 {% endif %} {% endif %} {% endblock %}

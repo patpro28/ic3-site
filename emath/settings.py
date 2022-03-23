@@ -317,23 +317,23 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 FRONTEND_THEME = "semantic"
 
 LANGUAGES = [
-    ('ca', _('Catalan')),
-    ('de', _('German')),
+    # ('ca', _('Catalan')),
+    # ('de', _('German')),
     ('en', _('English')),
-    ('es', _('Spanish')),
-    ('fr', _('French')),
-    ('hr', _('Croatian')),
-    ('hu', _('Hungarian')),
-    ('ja', _('Japanese')),
-    ('ko', _('Korean')),
-    ('pt', _('Brazilian Portuguese')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('sr-latn', _('Serbian (Latin)')),
-    ('tr', _('Turkish')),
+    # ('es', _('Spanish')),
+    # ('fr', _('French')),
+    # ('hr', _('Croatian')),
+    # ('hu', _('Hungarian')),
+    # ('ja', _('Japanese')),
+    # ('ko', _('Korean')),
+    # ('pt', _('Brazilian Portuguese')),
+    # ('ro', _('Romanian')),
+    # ('ru', _('Russian')),
+    # ('sr-latn', _('Serbian (Latin)')),
+    # ('tr', _('Turkish')),
     ('vi', _('Vietnamese')),
-    ('zh-hans', _('Simplified Chinese')),
-    ('zh-hant', _('Traditional Chinese')),
+    # ('zh-hans', _('Simplified Chinese')),
+    # ('zh-hant', _('Traditional Chinese')),
 ]
 
 BLEACH_USER_SAFE_TAGS = [

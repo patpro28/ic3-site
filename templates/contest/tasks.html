@@ -5,44 +5,46 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="ui segment">
-  <form action="" method="post" class="ui form" autocomplete="off">
-    {% csrf_token %}
-    <input type="hidden" id="refreshed" value="no">
-    <input type="hidden" name="contest" value="{{ contest.key }}">
-    <input type="hidden" name="submission" value="{{ submission.id }}">
-    {% for problem, answers in problems %}
-    <div class="ui vertical segment">
-      <legend class="ui header">Problem {{ loop.index }}</legend>
+<div class="column">
+  <div class="ui row segment">
+    <form action="" method="post" class="ui form" autocomplete="off">
+      {% csrf_token %}
+      <input type="hidden" id="refreshed" value="no">
+      <input type="hidden" name="contest" value="{{ contest.key }}">
+      <input type="hidden" name="submission" value="{{ submission.id }}">
+      {% for problem, answers in problems %}
       <div class="ui vertical segment">
-        <strong>
-        {% with problem=problem.problem %}
-          {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
-        {% endwith %}
-        </strong>
-      </div>
-      <div class="ui stackable two column grid segment fields">
-        {% for label, answer in answers %}
-          <div class="column field">
-            <div class="ui radio checkbox">
-              <input 
-                type="radio" 
-                name="answer_{{- problem.id -}}" 
-                id="{{- problem.id -}}_{{- loop.index -}}_answer" 
-                value="{{answer}}"
-              >
-              <label for="{{- problem.id -}}_{{- loop.index -}}_answer">
-                <strong>{{ label }}</strong>. {{ answer }}
-              </label>
+        <legend class="ui header">Problem {{ loop.index }}</legend>
+        <div class="ui vertical segment">
+          <strong>
+          {% with problem=problem.problem %}
+            {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+          {% endwith %}
+          </strong>
+        </div>
+        <div class="ui stackable two column grid segment fields">
+          {% for label, answer in answers %}
+            <div class="column field">
+              <div class="ui radio checkbox">
+                <input 
+                  type="radio" 
+                  name="answer_{{- problem.id -}}" 
+                  id="{{- problem.id -}}_{{- loop.index -}}_answer" 
+                  value="{{answer}}"
+                >
+                <label for="{{- problem.id -}}_{{- loop.index -}}_answer">
+                  <strong>{{ label }}</strong>. {{ answer }}
+                </label>
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
-    {% endfor %}
-    <div class="fluid ui submit primary button">Submit</div>
-    <div class="ui error message"></div>
-  </form>
+      {% endfor %}
+      <div class="fluid ui submit primary button">Submit</div>
+      <div class="ui error message"></div>
+    </form>
+  </div>
 </div>
 {% endblock content %}
 

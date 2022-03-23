@@ -13,30 +13,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 {% endblock content_js %}
 {% block content %}
-<div class="ui two column equal width grid segment">
-  <div class="column">
-    <canvas id="myChart" width="100px" height="100px"></canvas>
-    <div class="ui segment two column equal width grid">
-      <div class="column">
-        <strong>Point: </strong>{{ point|floatformat(2) }}
-      </div>
-      <div class="column">
-        <strong>Time: </strong>{{ submission.time_excute|timedelta('simple') }}
+<div class="column">
+  <div class="ui two column equal width grid segment">
+    <div class="column">
+      <canvas id="myChart" width="100px" height="100px"></canvas>
+      <div class="ui segment two column equal width grid">
+        <div class="column">
+          <strong>Point: </strong>{{ point|floatformat(2) }}
+        </div>
+        <div class="column">
+          <strong>Time: </strong>{{ submission.time_excute|timedelta('simple') }}
+        </div>
       </div>
     </div>
-  </div>
-  <div class="column">
-    <div class="fluid ui styled accordion">
-      {% for output, result in status %}
-      <div class="title {% if not output %}disable{% endif %}">
-        {{ _('Problem ') }}{{- loop.index -}}:
-        <span class="{{ result|lower }}">{{ result }}</span>
+    <div class="column">
+      <div class="fluid ui styled accordion">
+        {% for output, result in status %}
+        <div class="title {% if not output %}disable{% endif %}">
+          {{ _('Problem ') }}{{- loop.index -}}:
+          <span class="{{ result|lower }}">{{ result }}</span>
+        </div>
+        <div class="content">
+          {% if output and perms.education.view_output_submission %} {{_('User
+          answer:')}}{{ output }} {% endif %}
+        </div>
+        {% endfor %}
       </div>
-      <div class="content">
-        {% if output and perms.education.view_output_submission %} {{_('User
-        answer:')}}{{ output }} {% endif %}
-      </div>
-      {% endfor %}
     </div>
   </div>
 </div>

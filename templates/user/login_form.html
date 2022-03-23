@@ -6,40 +6,42 @@
 
 {% block content %}
 {% include 'messages.html' %}
-<form action="" class="ui form" method="post">
-  {% csrf_token %}
-  {% if form.non_field_errors() %}
-    {% for error in form.non_field_errors() %}
-      <div class="ui negative message">
-        <i class="close icon"></i>
-        {{ error }}
-      </div>
-    {% endfor %}
-  {% endif %}
-  <div class="field">
-    {% if form.username.errors %}
-      {% for error in form.username.errors %}
+<div class="column">
+  <form action="" class="ui form" method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors() %}
+      {% for error in form.non_field_errors() %}
         <div class="ui negative message">
           <i class="close icon"></i>
           {{ error }}
         </div>
       {% endfor %}
     {% endif %}
-    {{ form.username.label_tag() }} {{ form.username }}
-  </div>
-  <div class="field">
-    {% if form.password.errors %}
-      {% for error in form.password.errors %}
-        <div class="ui negative message">
-          <i class="close icon"></i>
-          {{ error }}
-        </div>
-      {% endfor %}
-    {% endif %}
-    {{ form.password.label_tag() }} {{ form.password }}
-  </div>
-  <button class="fluid ui button" type='submit'>Login</button>
-</form>
+    <div class="field">
+      {% if form.username.errors %}
+        {% for error in form.username.errors %}
+          <div class="ui negative message">
+            <i class="close icon"></i>
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% endif %}
+      {{ form.username.label_tag() }} {{ form.username }}
+    </div>
+    <div class="field">
+      {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          <div class="ui negative message">
+            <i class="close icon"></i>
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% endif %}
+      {{ form.password.label_tag() }} {{ form.password }}
+    </div>
+    <button class="fluid ui button" type='submit'>Login</button>
+  </form>
+</div>
 {% endblock content %}
 
 {% block extends_js %}
