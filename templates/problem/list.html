@@ -1,5 +1,14 @@
 {% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
 {% endblock content_title %}
+{% block content_media %}
+<style>
+  @media only screen and (max-width: 767px) {
+    .category {
+      display: none;
+    }
+  }
+</style>
+{% endblock content_media %}
 {% block content %}
 <div class="column">
   <div class="fluid ui styled accordion">
@@ -13,11 +22,11 @@
         <strong>Welcome to {{ item.level }}</strong>
         <div><a href="{{ url('education:problem_level_list', item.level.code)}}"></a></div>
       </div>
-      <table class="ui celled table">
+      <table class="ui celled unstackable table">
         <thead>
           <tr>
             <th>Problem</th>
-            <th>Category</th>
+            <th class="category">Category</th>
             <th class="two wide column">Difficult</th>
           </tr>
         </thead>
@@ -25,7 +34,7 @@
           {% for problem in item.problems %}
           <tr>
             <td><a href="{{ url('education:problem_detail', problem.code) }}">{{ problem.name }}</a></td>
-            <td>{{ problem.group }}</td>
+            <td class="category">{{ problem.group }}</td>
             <td>{{ problem.difficult }}</td>
           </tr>
           {% endfor %}
