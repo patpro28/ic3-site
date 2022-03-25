@@ -83,7 +83,7 @@
   </head>
 
   <body>
-    <div class="ui inverted segment grid" style="margin: 0">
+    <div class="ui inverted segment grid" style="margin: 0" id='navbar'>
       <div class="ui secondary icon toggle button" id='show-sidebar'>
         <i class="bars icon"></i>
       </div>
@@ -157,9 +157,9 @@
       </a>
       {% endif %} {% endfor %}
       {% if request.user.is_authenticated %}
-      <div class="ui dropdown item">
+      <div class="item">
         <img
-          class="ui avatar image"
+        class="ui avatar image"
           {% if request.user.email %}
           src="{{ gravatar(request.user, 40) }}"
           {% else %}
@@ -168,11 +168,8 @@
           alt="avatar"
           height="24"
           width="24"
-        />
-        <span>
-          <h3 style="color: white!important; margin: 0 !important;">{{ request.user.fullname }}</h3>
-        </span>
-        <i class="dropdown icon"></i>
+          />
+        <span style="color: white!important; margin: 0 !important; font-size: 16px;">{{ request.user.fullname }}</span>
         <div class="menu">
           <a class="item" href="{{ url('user_page') }}">View profile</a>
           {% if request.user.is_superuser or request.user.is_staff %}
@@ -201,8 +198,7 @@
       $(".ui.dropdown").dropdown({
         on: "hover",
       });
-      $('.ui.sidebar').sidebar('setting', 'dimPage', false);
-      $('.ui.sidebar').sidebar('attach events', '.toggle.button');
+      $('.ui.sidebar').sidebar('attach events', '.toggle.button', 'show');
       $('.toggle.button').removeClass('disabled');
     </script>
   </body>
