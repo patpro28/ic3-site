@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-=)!t4(@as1ijb(bmnsu*jlwnch3!t)-#mkd%r1&a%jm=4u2l5u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['45.124.95.162', 'www.tmathcoding.vn', 'localhost', 'tmathcoding.vn']
+ALLOWED_HOSTS = ['45.124.95.162', 'e.tmath.vn', 'localhost', 'tmathcoding.vn']
 SSL = 0
 
 EMATH_EMAIL_THROTTLING = (10, 60)
@@ -38,7 +38,7 @@ SITE_NAME = "EMATH"
 SITE_LONG_NAME = 'Emath'
 SITE_ADMIN_EMAIL = False
 
-DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
+# DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 NOFOLLOW_EXCLUDED = set()
 
 MATHOID_URL = False
@@ -107,7 +107,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'backend.middleware.ContestMiddleware'
+    'backend.middleware.ContestMiddleware',
+    'backend.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'emath.urls'
@@ -152,6 +153,9 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.i18n',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -459,8 +463,24 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
 
 # Markdown urls
-MARTOR_UPLOAD_URL = '/widgets/martor/upload-image' # default
+import time
+MARTOR_UPLOAD_PATH = 'images/uploads/{}'.format(time.strftime("%Y/%m/%d/"))
+MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'  # change to local uploader
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user' # default
+
+MARTOR_UPLOAD_MEDIA_DIR = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.png', '.gif'}
+# Maximum Upload Image
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
+
 
 # Markdown Extensions
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx

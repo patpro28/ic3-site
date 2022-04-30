@@ -37,8 +37,8 @@ class TimezoneMiddleware(object):
 
     def get_timezone(self, request):
         tzname = settings.DEFAULT_USER_TIME_ZONE
-        if request.profile:
-            tzname = request.profile.timezone
+        if request.user.is_authenticated:
+            tzname = request.user.timezone
         return pytz.timezone(tzname)
 
     def __call__(self, request):

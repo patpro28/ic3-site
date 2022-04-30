@@ -6,16 +6,18 @@
     <th class="username username_column">{{ _('Username') }}</th>
     <th class="fullname">{{ _('Fullname') }}</th>
     {% for problem in problems %}
-      <th class="problem_cell">
+      <th class="problem_cell points">
         <h5 class="ui header">
           {% if can_edit %}
-          <a href="{{ url('education:problem_detail', problem.problem.code)}}">
+          <a href="{{ url('education:problem_detail', problem.problem.code)}}" style="color: purple">
           {% endif %}
             {{- contest.get_label_for_problem(loop.index0) }}
           {% if can_edit %}
           </a>
           {% endif %}
-          <div class="sub header">{{ problem.points }}</div>
+          <div class="sub header" style="margin: 0">
+            {{ problem.points }}
+          </div>
         </h5>
       </th>
     {% endfor %}

@@ -421,13 +421,13 @@ def get_answer_contest_problem(problem):
 
 def get_participation(user, contest):
   LIVE = ContestParticipation.LIVE
-  SPETATE = ContestParticipation.SPECTATE
-  spectate = user in contest.editor_ids
+  SPECTATE = ContestParticipation.SPECTATE
+  spectate = user.id in contest.editor_ids
   if not contest.ended:
     participation = ContestParticipation.objects.get(
       user=user,
       contest=contest,
-      virtual=SPETATE if spectate else LIVE
+      virtual=(SPECTATE if spectate else LIVE)
     )
   else:
     participation = ContestParticipation.objects.filter(

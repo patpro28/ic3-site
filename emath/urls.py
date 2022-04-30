@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.views.i18n import JavaScriptCatalog
 
 from backend.views import organization, preview, profile
+from backend.views.widgets import martor_image_uploader
 
 admin.autodiscover()
 
@@ -91,6 +92,9 @@ preview_patterns = [
 urlpatterns += [
     path('widgets/', include([
         path('preview/', include(preview_patterns)),
+        path('martor/', include([
+            path('upload-image', martor_image_uploader, name='martor_image_uploader'),
+        ])),
     ]))
 ]
 
