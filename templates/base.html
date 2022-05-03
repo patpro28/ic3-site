@@ -15,7 +15,7 @@
     {% block media %}
     <link
       rel="stylesheet"
-      href="{{ static('semantic-themed/dist/semantic.min.css') }}"
+      href="{{ static('semantic-themed/semantic.min.css') }}"
     />
     <link rel="stylesheet" href="{{ static('navbar.css') }}?v=13123">
     {% block content_media %} {% endblock content_media %}
@@ -35,7 +35,7 @@
     <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
     <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
     <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
-    <script src="{{ static('semantic-themed/dist/semantic.min.js') }}"></script>
+    <script src="{{ static('semantic-themed/semantic.min.js') }}"></script>
     <script>
       if (!Date.now) {
         Date.now = function () {
