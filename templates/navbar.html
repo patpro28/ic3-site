@@ -1,0 +1,79 @@
+<div class="sidebar">
+  <div class="logo-details">
+    <a href="/" class="ui mini image">
+      <img src="{{ static('icons/logo.png') }}" alt="logo">
+    </a>
+    <div class="logo_name">Tmath</div>
+    <i class="bars icon" id="btn"></i>
+  </div>
+  <ul class="nav-list">
+    <li>
+      <a href="/problems">
+        <i class="book open icon"></i>
+        <span class="links_name">Problems</span>
+      </a>
+      <span class="tooltip">Problems</span>
+    </li>
+    <li>
+      <a href="/submissions">
+        <i class="book icon"></i>
+        <span class="links_name">Submissions</span>
+      </a>
+      <span class="tooltip">Submissions</span>
+    </li>
+    <li>
+      <a href="/users">
+        <i class="users icon"></i>
+        <span class="links_name">Users</span>
+      </a>
+      <span class="tooltip">Users</span>
+    </li>
+    <li>
+      <a href="/organizations">
+        <i class="asia globe icon"></i>
+        <span class="links_name">Organizations</span>
+      </a>
+      <span class="tooltip">Organizations</span>
+    </li>
+    <li>
+      <a href="/contests">
+        <i class="trophy icon"></i>
+        <span class="links_name">Contest</span>
+      </a>
+      <span class="tooltip">Contest</span>
+    </li>
+    {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+    <li>
+      <a href="{{ url('admin:index')}}">
+        <i class="cog icon"></i>
+        <span class="links_name">Admin</span>
+      </a>
+      <span class="tooltip">Admin</span>
+    </li>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <li class="profile">
+      <div class="profile-details">
+        <img {% if request.user.email %}
+        src="{{ gravatar(request.user, 40) }}"
+        {% else %}
+        src={{ static('user/image/avatar-none.png') }}
+        {% endif %} alt="profileImg">
+        <div class="name_job">
+          <a href="{{ url('user_page') }}" class="name">{{ request.user.fullname }}</a>
+        </div>
+      </div>
+      <a href="{{ url('logout') }}">
+        <i class="sign out alternate icon" id="log_out"></i>
+      </a>
+    </li>
+    {% else %}
+    <li class="profile">
+      <a href="{{ url('login') }}">
+        <i class="user lock icon"></i>
+        <span class="links_name">Sign In/Sign Up</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</div>

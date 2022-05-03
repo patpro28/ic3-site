@@ -15,8 +15,9 @@
     {% block media %}
     <link
       rel="stylesheet"
-      href="{{ static('semantic-themed/semantic.min.css') }}"
+      href="{{ static('semantic-themed/dist/semantic.min.css') }}"
     />
+    <link rel="stylesheet" href="{{ static('navbar.css') }}?v=13123">
     {% block content_media %} {% endblock content_media %}
     <style>
       h3.block.header {
@@ -26,17 +27,6 @@
       table, td, th {
         border-color: grey!important;
       }
-      #show-sidebar {
-          display: none;
-      }
-      @media only screen and (max-width: 1023px) {
-          #show-sidebar {
-              display: block;
-          }
-      }
-      #computer-menu {
-          margin-top: 0 !important;
-      }
       body {
         font-family: 'Roboto', sans-serif;
       }
@@ -45,7 +35,7 @@
     <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
     <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
     <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
-    <script src="{{ static('semantic-themed/semantic.min.js') }}"></script>
+    <script src="{{ static('semantic-themed/dist/semantic.min.js') }}"></script>
     <script>
       if (!Date.now) {
         Date.now = function () {
@@ -87,123 +77,27 @@
   </head>
 
   <body>
-    <div class="ui inverted segment grid" style="margin: 0" id='navbar'>
-      <div class="ui secondary icon toggle button" id='show-sidebar'>
-        <i class="bars icon"></i>
-      </div>
-      <div class="ui inverted tiny secondary menu computer only row" id="computer-menu">
-        <a class="item" href="{{ url('education:home') }}" style="margin-left: 1.5rem">
-          <img src="{{ static('icons/logo.png')}}" alt="">
-        </a>
-        {% for node in mptt_tree(nav_bar) recursive %} 
-        {% set children = node.get_children() %} {% if children %}
-        <div class="ui dropdown item">
-          <span><h3>{{ node.label }}</h3></span>
-          <i class="dropdown icon"></i>
-          <div class="menu">{{ loop(children) }}</div>
-        </div>
-        {% else %}
-        <a href="{{ node.path }}" class="item">
-          <h3>{{ node.label }}</h3>
-        </a>
-        {% endif %} {% endfor %}
-        <div class="right menu">
-          {% if request.user.is_authenticated %}
-          <div class="ui dropdown item">
-            <img
-              class="ui avatar image"
-              {% if request.user.email %}
-              src="{{ gravatar(request.user, 40) }}"
-              {% else %}
-              src={{ static('user/image/avatar-none.png') }}
-              {% endif %}
-              alt="avatar"
-              height="24"
-              width="24"
-            />
-            <span>
-              <h3 style="color: white!important; margin: 0 !important;">{{ request.user.fullname }}</h3>
-            </span>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <a class="item" href="{{ url('user_page') }}">View profile</a>
-              {% if request.user.is_superuser or request.user.is_staff %}
-              <a class="item" href="{{ url('admin:index')}}">
-                {{ _('Admin') }}</a
-              >
-              {% endif %}
-              <a href="{{ url('user_edit', request.user.username)}}" class="item">Edit profile</a>
-              <a href="{{ url('logout') }}" class="item">Logout</a>
-            </div>
-          </div>
-          {% else %}
-          <a href="{{ url('login') }}" class="item"><h3>Log in</h3></a>
-          <a href="{{ url('register') }}" class="item"><h3>Sign up</h3></a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-    <div class="ui inverted left vertical menu sidebar">
-      <a class="item" href="{{ url('education:home') }}">
-        <img src="{{ static('icons/logo.png')}}" alt="">
-      </a>
-      {% for node in mptt_tree(nav_bar) recursive %} 
-      {% set children = node.get_children() %} {% if children %}
-      <div class="ui dropdown item">
-        <span><h3>{{ node.label }}</h3></span>
-        <i class="dropdown icon"></i>
-        <div class="menu">{{ loop(children) }}</div>
-      </div>
-      {% else %}
-      <a href="{{ node.path }}" class="item">
-        <h3>{{ node.label }}</h3>
-      </a>
-      {% endif %} {% endfor %}
-      {% if request.user.is_authenticated %}
-      <div class="item">
-        <img
-        class="ui avatar image"
-          {% if request.user.email %}
-          src="{{ gravatar(request.user, 40) }}"
-          {% else %}
-          src={{ static('user/image/avatar-none.png') }}
-          {% endif %}
-          alt="avatar"
-          height="24"
-          width="24"
-          />
-        <span style="color: white!important; margin: 0 !important; font-size: 16px;">{{ request.user.fullname }}</span>
-        <div class="menu">
-          <a class="item" href="{{ url('user_page') }}">View profile</a>
-          {% if request.user.is_superuser or request.user.is_staff %}
-          <a class="item" href="{{ url('admin:index')}}">
-            {{ _('Admin') }}</a
-          >
-          {% endif %}
-          <a href="{{ url('user_edit', request.user.username)}}" class="item">Edit profile</a>
-          <a href="{{ url('logout') }}" class="item">Logout</a>
-        </div>
-      </div>
-      {% else %}
-      <a href="{{ url('login') }}" class="item"><h3>Log in</h3></a>
-      <a href="{{ url('register') }}" class="item"><h3>Sign up</h3></a>
-      {% endif %}
-    </div>
-
-    <div class="ui segment pusher" id="container" style="margin: 0">
+    {% include 'navbar.html' %}
+    <div class="ui segment home-section" id="container" style="margin: 0">
       {% block content_title %}{% endblock %} 
       <div class="ui grid">
         {% block content %} {% endblock content %}
       </div>
     </div>
+    <script>
+      let sidebar = document.querySelector(".sidebar");
+      let closeBtn = document.querySelector("#btn");
+
+      closeBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    </script>
+    
     {% block extends_js %}{% endblock extends_js %}
     <script>
       $(".ui.dropdown").dropdown({
         on: "hover",
       });
-      $('.ui.sidebar').sidebar('attach events', '.toggle.button', 'show');
-      $('.toggle.button').removeClass('disabled');
     </script>
   </body>
 </html>
