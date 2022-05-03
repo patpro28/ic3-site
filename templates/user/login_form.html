@@ -1,49 +1,90 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content_title %}
   {% include 'title.html' %}
 {% endblock content_title %}
 
+{% block content_media %}
+    <style>
+        h4 {
+            padding-top: 1em;
+        }
+
+        .social {
+            display: inline;
+            font-size: 2.3em;
+            float: none;
+        }
+
+        .google-icon i {
+            color: #DD4B38;
+        }
+
+        .facebook-icon i {
+            color: #133783;
+        }
+
+        .github-icon i {
+            color: black;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 {% include 'messages.html' %}
 <div class="column">
-  <form action="" class="ui form" method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors() %}
-      {% for error in form.non_field_errors() %}
-        <div class="ui negative message">
-          <i class="close icon"></i>
-          {{ error }}
+    <div class="ui container">
+        <div class="ui placeholder segment">
+            <div class="ui two column very relaxed stackable grid">
+                <div class="column">
+                    <form action="" method="post" class="ui form">
+                        {% csrf_token %}
+                        {% if form.non_field_errors() %}
+                          {% for error in form.non_field_errors() %}
+                            <div class="ui negative message">
+                              <i class="close icon"></i>
+                              {{ error }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                        <div class="field">
+                            <label for="{{ form.username.id_for_label }}">
+                                {{ _('Username') }}
+                            </label>
+                            <div class="ui left icon input">
+                                {{ form.username }}
+                                <i class="user icon"></i>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="{{ form.password.id_for_label }}">
+                                {{ _('Password') }}
+                            </label>
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                {{ form.password }}
+                            </div>
+                        </div>
+                        <button type="submit" class="ui fluid primary button">{{ _('Login!') }}</button>
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                </div>
+                <div class="middle aligned column">
+                    <a href="{{ url('register') }}" class="ui big button">
+                        <i class="signup icon"></i>
+                        Sign Up
+                    </a>
+                </div>
+            </div>
+            <div class="ui vertical divider">
+                Or
+            </div>
         </div>
-      {% endfor %}
-    {% endif %}
-    <div class="field">
-      {% if form.username.errors %}
-        {% for error in form.username.errors %}
-          <div class="ui negative message">
-            <i class="close icon"></i>
-            {{ error }}
-          </div>
-        {% endfor %}
-      {% endif %}
-      {{ form.username.label_tag() }} {{ form.username }}
     </div>
-    <div class="field">
-      {% if form.password.errors %}
-        {% for error in form.password.errors %}
-          <div class="ui negative message">
-            <i class="close icon"></i>
-            {{ error }}
-          </div>
-        {% endfor %}
-      {% endif %}
-      {{ form.password.label_tag() }} {{ form.password }}
-    </div>
-    <button class="fluid ui button" type='submit'>Login</button>
-  </form>
 </div>
-{% endblock content %}
+{% endblock %}
 
 {% block extends_js %}
 {% include 'message_js.html' %}
 {% endblock extends_js %}
+
