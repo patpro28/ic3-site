@@ -4,46 +4,99 @@
 {% include 'title.html' %}
 {% endblock content_title %}
 
+{% block content_media %}
+<style>
+  .answer {
+    font-size: 18px !important;
+  }
+</style>
+{% endblock content_media %}
+
 {% block content %}
 <div class="column">
-  <div class="ui row segment">
-    <form action="" method="post" class="ui form" autocomplete="off">
-      {% csrf_token %}
-      <input type="hidden" id="refreshed" value="no">
-      <input type="hidden" name="contest" value="{{ contest.key }}">
-      <input type="hidden" name="submission" value="{{ submission.id }}">
-      {% for problem, answers in problems %}
-      <div class="ui vertical segment">
-        <legend class="ui header">Problem {{ loop.index }}</legend>
-        <div class="ui vertical segment">
-          <strong>
-          {% with problem=problem.problem %}
-            {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
-          {% endwith %}
-          </strong>
-        </div>
-        <div class="ui stackable two column grid segment fields">
-          {% for label, answer in answers %}
-            <div class="column field">
-              <div class="ui radio checkbox">
-                <input 
-                  type="radio" 
-                  name="answer_{{- problem.id -}}" 
-                  id="{{- problem.id -}}_{{- loop.index -}}_answer" 
-                  value="{{answer}}"
-                >
-                <label for="{{- problem.id -}}_{{- loop.index -}}_answer">
-                  <strong>{{ label }}</strong>. {{ answer }}
-                </label>
+  <div class="ui grid" id="task">
+    <div class="thirteen wide column">
+      <div class="ui row segment">
+        <form action="" method="post" class="ui form" id="task_form" autocomplete="off">
+          {% csrf_token %}
+          <input type="hidden" id="refreshed" value="no">
+          <input type="hidden" name="contest" value="{{ contest.key }}">
+          <input type="hidden" name="submission" value="{{ submission.id }}">
+          {% for problem, answers in problems %}
+          <div class="ui segments" id="{{ problem.id }}">
+            <div class="ui top attached secondary black inverted menu">
+              <div class="ui header item">Problem {{ loop.index }}</div>
+            </div>
+            <div class="ui bottom attached segment">
+              <div style="font-size: 16px">
+                {# cache 0 'exam_html' problem.problem.id MATH_ENGINE #} 
+                  {% with problem=problem.problem %}
+                    {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+                  {% endwith %}
+                {# endcache #}
               </div>
             </div>
+            <div class="ui segment">
+              <h3 class="ui header">Answer</h3>
+              <div class="ui stackable two column grid segment fields">
+              {% for label, answer in answers %}
+                <div class="column field">
+                  <div class="ui toggle checkbox">
+                    <input 
+                      type="radio" 
+                      name="answer_{{- problem.id -}}" 
+                      id="{{- problem.id -}}_{{- loop.index -}}_answer" 
+                      value="{{ answer }}"
+                      label={{ label }}
+                    >
+                    <label class='answer' for="{{- problem.id -}}_{{- loop.index -}}_answer">
+                      <strong>{{ label }}</strong>. {{ answer }}
+                    </label>
+                  </div>
+                </div>
+              {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="fluid ui submit primary button" id="form_submit">Submit</div>
+          <div class="ui error message"></div>
+        </form>
+      </div>
+    </div>
+    <div class="three wide column">
+      <div class="ui sticky basic segment">
+        <div class="ui relaxed divided list">
+          {% for problem, answers in problems %}
+          <div class="item" id="answer_{{- problem.id -}}">
+            <i class="large question circle middle aligned icon"></i>
+            <div class="content">
+              <a href="#{{ problem.id }}" class="header">Problem {{ loop.index }}</a>
+              <div class="description"></div>
+            </div>
+          </div>
+          <script>
+            $('input[type=radio][name=answer_{{- problem.id -}}]').change(function() {
+              const answer = document.getElementById('answer_{{- problem.id -}}')
+              var icon = $(answer).find('i')
+              icon.removeClass('question')
+              icon.addClass('green check')
+              var subContent = $(answer).find('.description')
+              subContent.html('<strong>' + this.getAttribute('label') + '</strong>: ' + this.value)
+            })
+          </script>
           {% endfor %}
         </div>
+        <div class="ui divider"></div>
+        <script>
+          const formSubmitBtn = document.getElementById('form_submit')
+          function task_form() {
+            formSubmitBtn.click();
+          }
+        </script>
+        <div class="ui primary fluid button" id="submit" onclick="task_form()">Submit</div>
       </div>
-      {% endfor %}
-      <div class="fluid ui submit primary button">Submit</div>
-      <div class="ui error message"></div>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock content %}
@@ -74,5 +127,9 @@
       location.reload();
     }
   }
+  $('.ui.sticky').sticky({
+    context: '#task'
+  })
+
 </script>
 {% endblock extends_js %}

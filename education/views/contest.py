@@ -437,7 +437,7 @@ def get_participation(user, contest):
     ).order_by('-virtual').first()
   return participation
 
-class ContestTaskView(ContestMixin, TitleMixin, DetailView):
+class ContestTaskView(LoginRequiredMixin, ContestMixin, TitleMixin, DetailView):
   template_name = 'contest/tasks.html'
   
   def get_title(self):
@@ -506,3 +506,4 @@ class ContestTaskView(ContestMixin, TitleMixin, DetailView):
     submission.update_contest()
 
     return HttpResponseRedirect(reverse('education:all_submissions'))
+  
