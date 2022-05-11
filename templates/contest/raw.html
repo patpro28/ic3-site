@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" integrity="sha512-pbLYRiE96XJxmJgF8oWBfa9MdKwuXhlV7vgs2LLlapHLXceztfcta0bdeOgA4reIf0WH67ThWzA684JwkM3zfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="ui grid" id="task">
+  <div class="column">
+    <div class="ui row segment">
+      {% for problem, answers in problems %}
+      <div class="ui segments" id="{{ problem.id }}">
+        <div class="ui top attached secondary black inverted menu">
+          <div class="ui header item">Problem {{ loop.index }}</div>
+        </div>
+        <div class="ui bottom attached segment">
+          <div style="font-size: 16px">
+            {# cache 0 'exam_html' problem.problem.id MATH_ENGINE #} 
+              {% with problem=problem.problem %}
+                {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+              {% endwith %}
+            {# endcache #}
+          </div>
+        </div>
+        <div class="ui segment">
+          <h3 class="ui header">Answer</h3>
+          <div class="ui stackable two column grid segment fields">
+          {% for label, answer in answers %}
+            <div class="column field">
+              <div class="ui toggle checkbox">
+                <input 
+                  type="radio" 
+                  name="answer_{{- problem.id -}}" 
+                  id="{{- problem.id -}}_{{- loop.index -}}_answer" 
+                  value="{{ answer }}"
+                  label={{ label }}
+                >
+                <label class='answer' for="{{- problem.id -}}_{{- loop.index -}}_answer">
+                  <strong>{{ label }}</strong>. {{ answer }}
+                </label>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</body>
+{% if math_engine == 'jax' %}
+    <script type="text/javascript" src="mathjax_config.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script type="text/javascript">
+        MathJax.Hub.Register.StartupHook("End", function () {
+            if (typeof window.callPhantom === 'function')
+                window.callPhantom({'action': 'snapshot'});
+            document.body.classList.add('math-loaded');
+        });
+    </script>
+{% endif %}
+</html>

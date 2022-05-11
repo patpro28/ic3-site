@@ -3,22 +3,29 @@ from functools import partial
 from itertools import chain
 from operator import attrgetter
 import random
+import os
+import logging
+import shutil
 from django import forms
+from django.conf import settings
 from django.db import IntegrityError
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView, DetailView
-from django.views.generic.detail import BaseDetailView
+from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.functional import cached_property
 from django.db.models import Q, F, Max
+from django.template.loader import get_template
 from backend.utils.ranker import ranker
 
-from backend.utils.views import generic_message, QueryStringSortMixin, TitleMixin, DiggPaginatorMixin
+from backend.utils.views import generic_message, QueryStringSortMixin, TitleMixin, DiggPaginatorMixin, add_file_response
+from backend.pdf import HAS_PDF, DefaultPdfMaker
 from education.models import Contest
 from education.models.contest import ContestParticipation, ContestProblem
 from education.models.problem import Answer
@@ -507,3 +514,56 @@ class ContestTaskView(LoginRequiredMixin, ContestMixin, TitleMixin, DetailView):
 
     return HttpResponseRedirect(reverse('education:all_submissions'))
   
+
+class ContestTaskPdfView(ContestMixin, SingleObjectMixin, View):
+  logger = logging.getLogger('education.problem.pdf')
+
+  def get(self, request, *args, **kwargs):
+    if not HAS_PDF:
+      raise Http404()
+    
+    contest = self.get_object()
+
+    cache = os.path.join(settings.PDF_PROBLEM_CACHE, '%s.pdf' % (contest.key))
+
+    if not os.path.exists(cache):
+      self.logger.info('Rendering: %s.pdf', contest.key)
+      with DefaultPdfMaker() as maker:
+        problem_name = contest.name 
+        contestProblem = list(ContestProblem.objects.filter(contest=contest).order_by('order'))
+        random.shuffle(contestProblem)
+        problems = []
+        for problem in contestProblem:
+          answer = get_answer_contest_problem(problem.problem)
+          problems.append((problem, answer))
+        maker.html = get_template('contest/raw.html').render({
+          'contest': contest,
+          'problems': problems,
+          'url': request.build_absolute_uri(),
+          'math_engine': maker.math_engine,
+        }).replace('"//', '"https://').replace("'//", "'https://")
+        maker.title = problem_name
+
+        assets = []
+        if maker.math_engine == 'jax':
+          assets.append('mathjax_config.js')
+        for file in assets:
+          maker.load(file, os.path.join(settings.RESOURCES, file))
+        maker.make()
+        if not maker.success:
+          self.logger.error('Failed to render PDF for %s', contest.key)
+          return HttpResponse(maker.log, status=500, content_type='text/plain')
+        shutil.move(maker.pdffile, cache)
+    
+    response = HttpResponse()
+
+    if hasattr(settings, 'PDF_PROBLEM_INTERNAL'):
+      url_path = '%s/%s.%s.pdf' % (settings.PDF_PROBLEM_INTERNAL, contest.key)
+    else:
+      url_path = None
+    
+    add_file_response(request, response, url_path, cache)
+
+    response['Content-Type'] = 'application/pdf'
+    response['Content-Disposition'] = 'inline; filename=%s.pdf' % (contest.key)
+    return response

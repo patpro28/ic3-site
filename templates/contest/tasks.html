@@ -29,11 +29,11 @@
             </div>
             <div class="ui bottom attached segment">
               <div style="font-size: 16px">
-                {# cache 0 'exam_html' problem.problem.id MATH_ENGINE #} 
+                {% cache 3600 'exam_html' problem.problem.id MATH_ENGINE %} 
                   {% with problem=problem.problem %}
                     {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
                   {% endwith %}
-                {# endcache #}
+                {% endcache %}
               </div>
             </div>
             <div class="ui segment">

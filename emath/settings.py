@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import tempfile
 from jinja2 import select_autoescape
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 from django.utils.translation import gettext_lazy as _
@@ -37,7 +38,12 @@ DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
 SITE_NAME = "EMATH"
 SITE_LONG_NAME = 'Emath'
 SITE_ADMIN_EMAIL = False
+PDF_PROBLEM_CACHE = ''
+PDF_PROBLEM_TEMP_DIR = tempfile.gettempdir()
 
+
+NODEJS = '/usr/bin/node'
+EXIFTOOL = '/usr/bin/exiftool'
 # DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 NOFOLLOW_EXCLUDED = set()
 
@@ -96,6 +102,7 @@ INSTALLED_APPS = [
     'reversion',
     'compressor',
     'sortedm2m',
+    # 'channels',
 ]
 
 MIDDLEWARE = [
@@ -165,6 +172,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'emath.wsgi.application'
+# ASGI_APPLICATION = 'emath.asgi.application'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
@@ -506,6 +514,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+RESOURCES = os.path.join(BASE_DIR, 'resources')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resources'),
 ]
@@ -518,6 +527,25 @@ JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
 FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
 MATERIAL_ICONS = '//fonts.googleapis.com/icon?family=Material+Icons'
 DMOJ_CANONICAL = ''
+
+
+# pdf settings
+PHANTOMJS = ''
+PHANTOMJS_PDF_ZOOM = 0.75
+PHANTOMJS_PDF_TIMEOUT = 5.0
+PHANTOMJS_PAPER_SIZE = 'Letter'
+
+SLIMERJS = ''
+SLIMERJS_PDF_ZOOM = 0.75
+SLIMERJS_FIREFOX_PATH = ''
+SLIMERJS_PAPER_SIZE = 'Letter'
+
+PUPPETEER_MODULE = '/usr/lib/node_modules/puppeteer'
+PUPPETEER_PAPER_SIZE = 'Letter'
+
+USE_SELENIUM = False
+SELENIUM_CUSTOM_CHROME_PATH = None
+SELENIUM_CHROMEDRIVER_PATH = 'chromedriver'
 
 
 # Default primary key field type

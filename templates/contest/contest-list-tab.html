@@ -16,6 +16,10 @@
     <i class="edit icon"></i>
     {{ _('Edit')}}
   </a>
+  <a href="{{ url('education:contest_pdf', contest.key) }}" class="item">
+    <i class="file pdf outline red icon"></i>
+    {{ _('PDF') }}
+  </a>
   {% endif %}
   {% if request.user.is_authenticated %}
   <div class="right menu">
