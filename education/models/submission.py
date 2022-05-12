@@ -51,7 +51,13 @@ class Submission(models.Model):
             return get_result_html(self.result, 0, 100)
         for idx, level in enumerate(WRONG_LEVEL):
             if self.points < self.max_points * level:
-                return get_result_html(self.result, idx, self.points * 100 / self.max_points)
+                points = self.points * 100
+                k = round(points / self.max_points)
+                if points == k * self.max_points:
+                    return get_result_html(self.result, idx, int(points / self.max_points))
+                else:
+                    return get_result_html(self.result, idx, float("{:.1f}".format(points / self.max_points)))
+
         return format_html('<td>???</td>')
     
     @property

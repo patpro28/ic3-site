@@ -4,9 +4,9 @@
     {{ submission.time_excute|timedelta('simple') }}
   </td>
   <td class="left aligned">
-    <h3 class="ui header">
+    <h4 class="ui header">
       {{ link_user(submission.user.user) }}
-    </h3>
+    </h4>
   </td>
   <td class="left aligned">
     <a href="{{ url('education:contest_detail', submission.contest.key) }}">
@@ -24,6 +24,6 @@
     </h4>
   </td>
   <td>
-    <a href="{{ url('education:submission_status', submission.pk) }}" class="ui teal button">{{_('Detail')}}</a>
+    <a href="{{ url('education:submission_status', submission.pk) }}" class="ui teal fluid button">{{_('Detail')}}</a>
   </td>
 </tr>

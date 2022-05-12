@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content_media %}
-<link rel="stylesheet" href="{{ static('submission/rank.css') }}">
+<link rel="stylesheet" href="{{ static('submission/rank.css') }}?v=12312">
 {% endblock content_media %}
 
 {% block content_title %}
@@ -15,17 +15,16 @@
     {% include 'list-page.html' %}
   </div>
 {% endif %}
-<div class="ui row segment">
-  <table class="ui celled striped unstackable table">
+<div class="ui row segment" style="overflow-x: auto; white-space:nowrap;">
+  <table class="ui celled striped unstackable table" style="width: 100%">
     <thead>
       <tr>
         <th class="one wide center aligned">{{ _('Result') }}</th>
         <th class="one wide center aligned">{{ _('Time') }}</th>
         <th class="three wide center aligned">{{ _('User') }}</th>
         <th class="center aligned">{{ _('Contest') }}</th>
-        <th class="two wide center aligned date_field">{{ _('Date') }}</th>
-        <th class="two wide">
-        </th>
+        <th class="three wide center aligned date_field">{{ _('Date') }}</th>
+        <th class="two wide"></th>
       </tr>
     </thead>
     <tbody>

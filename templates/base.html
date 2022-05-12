@@ -7,6 +7,7 @@
         <meta name="description" content="{{ meta_description }}">
     {% endif %}
     <link href="//fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Radio+Canada&display=swap" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFBB33">
@@ -14,7 +15,7 @@
     <link rel="icon" type="image/png" href="{{ static('icons/logo.png') }}" sizes="32x32">
     {% block media %}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" integrity="sha512-pbLYRiE96XJxmJgF8oWBfa9MdKwuXhlV7vgs2LLlapHLXceztfcta0bdeOgA4reIf0WH67ThWzA684JwkM3zfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ static('navbar.css') }}?v=13123">
+    <link rel="stylesheet" href="{{ static('navbar.css') }}?v=123123">
     {% block content_media %} {% endblock content_media %}
     <style>
       h3.ui.block {
@@ -30,9 +31,9 @@
         border-color: grey!important;
       }
       body {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Radio Canada', 'Roboto', sans-serif;
       }
-  </style>
+    </style>
     {% endblock %} {% block js_media %}
     <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
     <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>

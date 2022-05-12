@@ -1,15 +1,15 @@
-<table id="ranking" style="width:100%">
+<table id="ranking" class="ui unstackable table" style="width:100%">
   <thead>
-    <th class="rank">{{_('Rank')}}</th>
-    <th class="points">{{ _('Points') }}</th>
-    <th class="organization organization_column">{{ _('Organization') }}</th>
-    <th class="username username_column">{{ _('Username') }}</th>
-    <th class="fullname">{{ _('Fullname') }}</th>
+    <th class="rank center aligned">{{_('Rank')}}</th>
+    <th class="points center aligned">{{ _('Points') }}</th>
+    <th class="organization organization_column center aligned">{{ _('Organization') }}</th>
+    <th class="username username_column center aligned">{{ _('Username') }}</th>
+    <th class="fullname center aligned">{{ _('Fullname') }}</th>
     {% for problem in problems %}
-      <th class="problem_cell points">
+      <th class="problem_cell points center aligned">
         <h5 class="ui header">
           {% if can_edit %}
-          <a href="{{ url('education:problem_detail', problem.problem.code)}}" style="color: purple">
+          <a href="{{ url('education:problem_detail', problem.problem.code)}}">
           {% endif %}
             {{- contest.get_label_for_problem(loop.index0) }}
           {% if can_edit %}

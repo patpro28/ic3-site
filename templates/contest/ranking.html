@@ -5,7 +5,7 @@
 {% endblock content_title %}
 
 {% block content_media %}
-<link rel="stylesheet" href="{{ static('submission/rank.css') }}">
+<link rel="stylesheet" href="{{ static('submission/rank.css') }}?v=13123">
 {% endblock content_media %}
 
 {% block content_js %}
@@ -41,12 +41,16 @@
   <div class="ui bottom attached segment">
     <div class="ui equal width five column grid" style="margin-bottom: 1px;">
       <div class="column">
-        <input type="checkbox" id="show-username">
-        <label for="show-username">{{ _('Show username') }}</label>
+        <div class="ui checkbox">
+          <input type="checkbox" id="show-username">
+          <label for="show-username">{{ _('Show username') }}</label>
+        </div>
       </div>
       <div class="column">
-        <input type="checkbox" id="show-organization">
-        <label for="show-organization">{{ _('Show organization') }}</label>
+        <div class="ui checkbox">
+          <input type="checkbox" id="show-organization">
+          <label for="show-organization">{{ _('Show organization') }}</label>
+        </div>
       </div>
       <div class="column"></div>
       <div class="column"></div>

@@ -1,5 +1,5 @@
 .accept {
-  background-color: #53f23f;
+  background-color: #00FF00;
 }
 
 .pending {
@@ -11,19 +11,19 @@
 }
 
 .wrong5 {
-  background-color: yellow;
+  background-color: #FF69B4;
 }
 
 .wrong7 {
-  background-color: purple;
+  background-color: #ADD8E6;
 }
 
 .wrong9 {
-  background-color: blue;
+  background-color: #87CEFA;
 }
 
 .pre_accept {
-  background-color: #88e07f;
+  background-color: #00FA9A;
 }
 
 .organization_column, .username_column {
@@ -46,7 +46,6 @@
 }
 #ranking thead th {
   padding: 10px;
-  color:#747474;
   font-size:14px;
   font-weight:bold;
 }
@@ -105,9 +104,9 @@ td.rank {
   font-size: 10px;
 }
 
-th {
-  background-color: teal !important;
-  color: white !important;
+th, th a {
+  background-color: #4169E1 !important;
+  color: #00FFFF !important;
 }
 
 td .ui.header, td .ui.header .sub{
