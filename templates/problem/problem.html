@@ -17,7 +17,9 @@
       <div class="ui grid" style="padding: 5px">
         {% for label, answer in answers %}
         <div class="eight wide column">
-          <strong>{{ label }}</strong>.&nbsp;&nbsp; {{ answer }}
+          <strong>{{ label }}</strong>.&nbsp;&nbsp; {{
+            answer|markdown(problem.markdown_style,
+            MATH_ENGINE)|reference|str|safe }}
         </div>
         {% endfor %}
       </div>
