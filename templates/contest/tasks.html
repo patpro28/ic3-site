@@ -50,7 +50,7 @@
                       label={{ label }}
                     >
                     <label class='answer' for="{{- problem.id -}}_{{- loop.index -}}_answer">
-                      <strong>{{ label }}</strong>. {{ answer }}
+                      <strong>{{ label }}</strong>. {{ answer|markdown(problem.problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
                     </label>
                   </div>
                 </div>
