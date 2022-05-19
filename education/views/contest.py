@@ -431,7 +431,7 @@ def get_participation(user, contest):
   SPECTATE = ContestParticipation.SPECTATE
   spectate = user.id in contest.editor_ids
   if not contest.ended:
-    participation = ContestParticipation.objects.get(
+    participation = ContestParticipation.objects.get_or_create(
       user=user,
       contest=contest,
       virtual=(SPECTATE if spectate else LIVE)
