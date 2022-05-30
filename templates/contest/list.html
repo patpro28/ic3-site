@@ -16,14 +16,11 @@
   }
 
   .contest-block {
-    padding: .5em .5em .5em 1em;
+    padding: 0.5em 0.5em 0.5em 1em;
   }
 </style>
-{% endblock %} 
-{% block content_title %}
-{% include 'title.html' %}
-{% endblock content_title %}
-{% block content_js %}
+{% endblock %} {% block content_title %} {% include 'title.html' %} {% endblock
+content_title %} {% block content_js %}
 <script type="text/javascript">
   $(document).ready(function () {
     $(".time-remaining").each(function () {
@@ -38,261 +35,200 @@
     });
   });
 </script>
-{% endblock %} 
-{% block title_row %} 
-    {% set tab = 'list' %} 
-    {% set title = 'Contests' %} 
-    {% include "contest/contest-list-tabs.html" %} 
-{% endblock %} 
-{% macro contest_head(contest) %} 
-{% spaceless %}
-<h3 class="ui header">
-  <div class="content">
-    <a href="{{ url('education:contest_detail', contest.key) }}" class="contest-list-title">
-      {{- contest.name -}}
-    </a>
-    <div class="sub header">
-      {% if not contest.is_visible %} 
-      <div class="ui red mini label">
-        <i class="lock icon"></i> {{ _('hidden') }}
-      </div>
-      {% endif %} 
-      {% if contest.is_organization_private %} 
-        {% for org in contest.organizations.all() %}
-            <div class="ui teal mini label">
-            <a href="{{ org.get_absolute_url() }}" style="color: #FFFFFF;">
-              <i class="lock icon"></i> {{ org.name }}
-            </a>
-            </div>
-        {% endfor %} 
-      {% elif contest.is_private %}
-      <div class="ui mini label">
-        <i class="lock icon"></i> {{ _('private') }}
-      </div>
-      {% endif %}
-    </div>
+{% endblock %} {% block title_row %} {% set tab = 'list' %} {% set title =
+'Contests' %} {% include "contest/contest-list-tabs.html" %} {% endblock %} {%
+macro contest_head(contest) %} {% spaceless %}
+<div class="ml-2 mt-auto mb-auto">
+  <a
+    class="name font-semibold"
+    href="{{ url('education:contest_detail', contest.key) }}"
+  >
+    {{ contest.name }}
+  </a>
+  <div class="contest_contest_time text-xs text-gray-500">
+    {{ time_left(contest) }}
   </div>
-</h3>
-{% endspaceless %} 
-{% endmacro %} 
-
-{% macro time_left(contest) %}
-<div class="time time-left">
-  {{ contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j, Y, G:i")) }} 
 </div>
-{% endmacro %} 
-
-{% macro user_count(contest, user) %} 
-{% if contest.can_see_own_scoreboard(user) %}
-<a href="{{ url('education:contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
-{% else %} {{ contest.user_count }} {% endif %} 
-{% endmacro %} 
-
+{% endspaceless %} {% endmacro %} {% macro time_left(contest) %} {{
+contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j,
+Y, G:i")) }} {% endmacro %} {% macro user_count(contest, user) %} {% if
+contest.can_see_own_scoreboard(user) %} {{ contest.user_count }} {% else %} {{
+contest.user_count }} {% endif %} {% endmacro %} 
 {% macro contest_join(contest, request) %} 
 {% if not request.in_contest %}
-<td>
-  {% if request.user in contest.authors.all() or request.user in contest.curators.all() %}
-  <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+  {% if request.user in contest.authors.all() or request.user in
+  contest.curators.all() %}
+  <form
+    action="{{ url('education:contest_join', contest.key) }}"
+    method="post"
+  >
     {% csrf_token %}
-    <div class="field">
       <input
         type="submit"
-        class="fluid ui primary button"
+        class="bg-black text-white p-4 pt-1 pb-1 rounded-md ml-auto text-xs cursor-pointer hover:opacity-50"
         value="{{ _('Spectate') }}"
       />
-    </div>
   </form>
   {% else %}
-  <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+  <form
+    action="{{ url('education:contest_join', contest.key) }}"
+    method="post"
+  >
     {% csrf_token %}
-    <div class="field">
       <input
         type="submit"
-        class="fluid ui primary button join-warning"
+        class="bg-black text-white p-4 pt-1 pb-1 rounded-md ml-auto text-xs cursor-pointer hover:opacity-50 join-warning"
         value="{{ _('Join') }}"
       />
-    </div>
   </form>
   {% endif %}
 </td>
-{% endif %} 
-{% endmacro %} 
-
-{% block content %} 
-{% if active_participations %}
-<div class="row">
-  <div class="column">
-    <div class="ui segment">
-      <h4 class="ui block header">{{ _('Active Contests') }}</h4>
-      <table class="ui table celled striped">
-        <thead>
-          <tr>
-            <th class="eleven wide column center aligned">{{ _('Contest') }}</th>
-            <th class="three wide column center aligned">{{ _('Users') }}</th>
-            {% if not request.in_contest %}
-            <th class="two wide column"></th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for participation in active_participations %} 
-            {% with contest=participation.contest %}
-          <tr>
-            <td>
-              <div class="contest-block">
-                {{ contest_head(contest) }} 
-                {% if contest.start_time %}
-                {% if contest.time_limit %}
-                <span class="time"
-                  >{{ _('Window ends in %(countdown)s',
-                  countdown=participation.time_remaining|as_countdown) }}</span
-                >
-                {% elif contest.time_before_end %}
-                <span class="time"
-                  >{{ _('Ends in %(countdown)s',
-                  countdown=contest.time_before_end|as_countdown) }}</span
-                >
-                {% endif %} {{ time_left(contest) }} {% endif %}
-              </div>
-            </td>
-            <td class="center aligned">{{ user_count(contest, request.user) }}</td>
+{% endif %} {% endmacro %} {% block content %} {% if active_participations %}
+<div class="mt-8">
+  <div class="font-semibold">Contest Joining ✋🏻</div>
+  <div class="mt-4">
+    {% for participation in active_participations %} {% with
+    contest=participation.contest %}
+    <div
+      class="joining h-16 w-full bg-white rounded-lg p-2 flex justify-between pl-3 pr-3 mb-2"
+    >
+      <div class="flex items-center">
+        <img
+          class="h-12 w-12 object-cover rounded-lg"
+          src="https://wallpapercave.com/wp/wp8216868.jpg"
+          alt=""
+        />
+        {{ contest_head(contest) }}
+      </div>
+      <div>
+        {% if contest.time_limit %}
+        <span class="time">
+          {{ _('Window ends in %(countdown)s',
+          countdown=participation.time_remaining|as_countdown) }}
+        </span>
+        {% elif contest.time_before_end %}
+        <span class="time">
+          {{ _('Ends in %(countdown)s',
+          countdown=contest.time_before_end|as_countdown) }}
+        </span>
+        {% endif %}
+      </div>
+      <a
+        href="{{ url('education:contest_ranking', contest.key)}}"
+        class="bg-black my-auto h-9 cursor-pointer text-white p-2 w-24 rounded-lg text-xs flex items-center justify-between"
+      >
+        <i class="bx bxs-user mr-0.5"></i>
+        <span> {{ user_count(contest, request.user) }} | View </span>
+      </a>
+    </div>
+    {% endwith %} {% endfor %}
+  </div>
+</div>
+{% endif %}
+<div>
+  {% if current_contests %}
+  <div class="grid grid-cols-2 mt-8 rounded-2xl gap-1">
+    {% with contest = current_contests[0] %}
+    <div class="relative bg-[url(https://www.enjpg.com/img/2020/ios-14-11.jpg)] bg-cover bg-center bg-no-repeat w-full h-64 rounded-2xl p-4 pl-6 pr-6">
+      <div class="text-base font-semibold text-white">Ongoing Contests</div>
+      <div class="text-xs text-white">
+        <span class="time">
+          {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
+        </span>
+      </div>
+      <div class="text-white font-semibold text-3xl mt-8">{{ contest.name }}</div>
+      <div class="text-xs text-white mt-auto">
+        {{ time_left(contest) }}
+      </div>
+    </div>
+    {% endwith %}
+    <div class="list w-full h-64 bg-white rounded-2xl p-2 pr-2">
+      <div class="flex items-center ml-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-yellow-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+          />
+        </svg>
+        <div class="text-base font-semibold mb-2 mt-2 ml-1">
+          Activating Contests
+        </div>
+      </div>
+      <hr />
+      <div class="contest_board overflow-auto h-48 pl-1">
+        <div class="cursor-pointer w-full">
+          {% for contest in current_contests %}
+          <div
+            class="active_contest w-full text-sm p-1.5 pl-3 pr-1.5 rounded-lg flex justify-between items-center mt-1"
+          >
+            <a class="font-semibold" href="{{ url('education:contest_detail', contest.key) }}">
+              {{ contest.name }}
+            </a>
             {{ contest_join(contest, request) }}
-          </tr>
-          {% endwith %} {% endfor %}
-        </tbody>
-      </table>
-      <br />
-    </div>
-  </div>
-</div>
-{% endif %} 
-<div class="row">
-  <div class="column">
-    <div class="ui grid segment">
-      <div class="ui eight wide computer sixteen wide tablet column">
-        <h4 class="ui block header">{{ _('Ongoing Contests') }}</h4>
-        {% if current_contests %}
-        <table class="ui table celled striped">
-          <thead>
-            <tr>
-              <th class="eleven wide column center aligned">{{ _('Contest') }}</th>
-              <th class="one wide column center aligned">{{ _('Users') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for contest in current_contests %}
-            <tr>
-              <td>
-                <div class="contest-block">
-                  {{ contest_head(contest) }} {% if contest.start_time %}
-                  {% if contest.time_before_end %}
-                  <span class="time"
-                    >{{ _('Ends in %(countdown)s',
-                    countdown=contest.time_before_end|as_countdown) }}</span
-                  >
-                  {% endif %} {{ time_left(contest) }} {% endif %}
-                </div>
-              </td>
-              <td class="center aligned">{{ user_count(contest, request.user) }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <br />
-        {% endif %}
-      </div>
-      <div class="ui eight wide computer sixteen wide tablet column">
-        <h4 class="ui block header">{{ _('Upcoming Contests') }}</h4>
-        {% if future_contests %}
-        <table class="ui table celled striped">
-          <thead>
-            <tr>
-              <th class="center aligned">{{ _('Contest') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for contest in future_contests %}
-            <tr>
-              <td>
-                <div class="contest-block">
-                  {{ contest_head(contest) }} {% if contest.start_time %}
-                  {% if contest.time_before_start %}
-                  <span class="time"
-                    >{{ _('Starting in %(countdown)s.',
-                    countdown=contest.time_before_start|as_countdown) }}</span
-                  >
-                  {% endif %} {{ time_left(contest) }} {% endif %}
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <i>{{ _('There are no scheduled contests at this time.') }}</i>
-        <br />
-        {% endif %}
-        <br />
-      </div>
-    </div>
-  </div>
-</div>
-{% if contests %}
-<div class="row">
-  <div class="sixteen wide column">
-    <div class="ui segment">
-      <h4 id="past-contests">{{ _('Past Contests') }}</h4>
-      {% if page_obj and page_obj.has_other_pages() %}
-      {% include "list-page.html" %}
-      {% endif %}
-      <table class="ui table celled striped">
-        <thead>
-          <tr>
-            <th class="eleven wide column center aligned">
-              <a href="{{ sort_links.name }}" class="contest-sort-link"
-                >{{ _('Contest') }}{{ sort_order.name }}</a
-              >
-            </th>
-            <th class="three wide column center aligned">
-              <a href="{{ sort_links.user_count }}" class="contest-sort-link"
-                >{{ _('Users') }}{{ sort_order.user_count }}</a
-              >
-            </th>
-            {% if not request.in_contest %}
-            <th class="one wide column"></th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for contest in contests %}
-          <tr>
-            <td>
-              <div class="contest-block">
-                {{ contest_head(contest) }} {{ time_left(contest) }}
-              </div>
-            </td>
-            <td class="center aligned">{{ user_count(contest, request.user) }}</td>
-            {% if not request.in_contest %}
-            <td>
-              <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
-                {% csrf_token %}
-                <div class="field">
-                  <input
-                    type="submit"
-                    class="fluid ui primary button"
-                    value="{{ _('Virtual join') }}"
-                  />
-                </div>
-              </form>
-            </td>
-            {% endif %}
-          </tr>
+          </div>
           {% endfor %}
-        </tbody>
-      </table>
-      {% if page_obj and page_obj.has_other_pages() %}
-      {% include "list-page.html" %}
+        </div>
+      </div>
     </div>
   </div>
+  {% endif %}
+  {% if contests %}
+  <div class="mt-8">
+    <div class="font-semibold">Contest History ✋🏻</div>
+    {% if page_obj and page_obj.has_other_pages() %} {% include "list-page.html"
+    %} {% endif %}
+    <div class="mt-4">
+      {% for contest in contests %}
+      <div
+        class="joining h-16 w-full bg-white rounded-lg p-2 flex justify-between pl-3 pr-3 mb-2"
+      >
+        <div class="flex items-center">
+          <img
+            class="h-12 w-12 object-cover rounded-lg"
+            src="https://wallpapercave.com/wp/wp8216868.jpg"
+            alt=""
+          />
+          {{ contest_head(contest) }}
+        </div>
+        <a
+          href="{{ url('education:contest_ranking', contest.key)}}"
+          class="bg-black my-auto h-9 cursor-pointer text-white p-2 w-24 rounded-lg text-xs flex items-center justify-between"
+        >
+          <i class="bx bxs-user mr-0.5"></i>
+          <span> {{ user_count(contest, request.user) }} | View </span>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %} {% endblock %} {% block notification %} {% if hot_contest %}
+  <div class="upcoming_contest mt-4 rounded-2xl">
+    <div
+      class="relative bg-[url(https://wallpapercave.com/wp/wp8216868.jpg)] bg-cover bg-no-repeat bg-center w-full h-56 rounded-2xl p-4 pl-6 pr-6"
+    >
+      <div class="text-base font-semibold text-white">Upcoming Contests</div>
+      <div class="text-xs text-white">
+        <span class="time">
+          {{ _('Starting in %(countdown)s.',
+          countdown=hot_contest.time_before_start|as_countdown) }}
+        </span>
+      </div>
+      <div class="text-white font-semibold text-3xl mt-8">
+        {{ hot_contest.name }}
+      </div>
+      <div class="text-xs text-white mt-auto">
+        {{ hot_contest.start_time|date(_("M j, Y, G:i")) }} - {{
+        hot_contest.end_time|date(_("M j, Y, G:i")) }}
+      </div>
+    </div>
+  </div>
+  {% endif %} {% endblock notification %}
 </div>
-{% endif %} {% endif %} {% endblock %}

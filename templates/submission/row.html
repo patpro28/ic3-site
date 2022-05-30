@@ -1,29 +1,19 @@
-<tr>
+<div class="col-start-1 col-span-1 result font-semibold w-full h-8 sm:h-10 flex justify-center items-center bg-white">
   {{ submission.result_class }}
-  <td class="center aligned">
-    {{ submission.time_excute|timedelta('simple') }}
-  </td>
-  <td class="left aligned">
-    <h4 class="ui header">
-      {{ link_user(submission.user.user) }}
-    </h4>
-  </td>
-  <td class="left aligned">
-    <a href="{{ url('education:contest_detail', submission.contest.key) }}">
-      <h3 class="ui header">
-      {{ submission.contest }}
-      </h3>
-    </a>
-  </td>
-  <td class="left aligned date_field">
-    <h4 class="ui header">
-      {{ submission.date|date }}
-      <div class="sub header">
-        {{ submission.date|time }}
-      </div>
-    </h4>
-  </td>
-  <td>
-    <a href="{{ url('education:submission_status', submission.pk) }}" class="ui teal fluid button">{{_('Detail')}}</a>
-  </td>
-</tr>
+</div>
+<div class="col-start-2 col-span-1 time hidden sm:flex w-full h-10 justify-center items-center bg-white">
+  {{ submission.time_excute|timedelta('simple') }}
+</div>
+<div class="col-start-3 col-span-1 user text-xs sm:text-sm w-full h-8 sm:h-10 flex justify-center bg-white items-center">
+  {{ link_user(submission.user.user) }}
+</div>
+
+<a href="{{ url('education:contest_detail', submission.contest.key) }}"class="col-start-4 bg-white col-span-1 contest text-xs sm:text-sm w-full h-8 sm:h-10 flex justify-center items-center">
+  {{ submission.contest }}
+</a>
+
+<a href="{{ url('education:submission_status', submission.pk) }}" class="col-start-5 col-span-1 bg-white" >
+  <div class="detail w-full h-8 sm:h-10 flex justify-center items-center">
+      <i class='bx bx-window-open'></i>
+  </div>
+</a>

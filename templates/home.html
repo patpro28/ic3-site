@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block content_js %}
+{% block extends_js %}
 <script>
   $(document).ready(function () {
     $('.time-remaining').each(function () {
@@ -8,117 +8,378 @@
     });
 });
 </script>
-{% endblock content_js %}
+<script>
+
+  let width = screen.width;
+  let silde = 0;
+  console.log(width);
+  if (width >= 0)
+  {
+      silde = 1;
+  }
+  if (width >= 540)
+  {
+      silde = 2;
+  }
+  if (width >= 768)
+  {
+      silde = 3;
+  }
+  var swiper = new Swiper(".class_swiper", {
+      slidesPerView: silde,
+      spaceBetween: 15,
+      pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      },
+      autoplay: {
+     delay: 5000,
+     disableOnInteraction: false
+   },
+  });
+  
+  var swiper = new Swiper(".mySwiper", {
+   spaceBetween: 30,
+   centeredSlides: true,
+   autoplay: {
+     delay: 5000,
+     disableOnInteraction: false
+   },
+   pagination: {
+     el: ".swiper-pagination",
+     clickable: true
+   },
+   navigation: {
+     nextEl: ".swiper-button-next",
+     prevEl: ".swiper-button-prev"
+   }
+ });
+</script>
+{% endblock %}
+
+{% block content_title %}
+{% set title = 'Home' %}
+{% include 'title.html' %}
+{% endblock content_title %}
 
 {% block content %}
-<div class="ui twelve wide computer sixteen wide tablet column">
-  <h3 class="ui block header">News</h3>
-  {% for blog in blogs %}
-  <div class="ui raised segment">
-    <h3 class="ui header">
-      <a href="#"><strong>{{ blog.title }}</strong></a>
-      <div class="sub header">
-        <i class="star icon"></i>
-        <span><a>{{ link_user(blog.author) }}</a> posted on {{ blog.publish|date }}</span>
+<div class="swiper w-full mySwiper">
+  <div class="swiper-wrapper">
+      <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
+          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
+              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
+              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+                  drive on your skills on your own to achieve what you see.
+              </div>
+              <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
+                  View Course
+              </div>
+          </div>
+      <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
+          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
+              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
+              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+                  drive on your skills on your own to achieve what you see.
+              </div>
+              <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
+                  View Course
+              </div>
+          </div>
+      <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
+          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
+              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
+              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+                  drive on your skills on your own to achieve what you see.
+              </div>
+              <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
+                  View Course
+              </div>
+          </div>
+      <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
+          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
+              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
+              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+                  drive on your skills on your own to achieve what you see.
+              </div>
+              <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
+                  View Course
+              </div>
+          </div>
+      <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
+          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
+              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
+              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+                  drive on your skills on your own to achieve what you see.
+              </div>
+              <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
+                  View Course
+              </div>
+          </div>
+  </div>
+
+  <div class="swiper-pagination"></div>
+</div>
+
+<div class="mt-12 text-xl flex items-center justify-between">
+  <div class="">
+    <i class='bx bxs-star text-yellow-400 mr-2' ></i>
+    <div class="font-semibold">Emath Class</div>
+  </div>
+  <a href="#">
+      <div class="view_all text-xs rounded-full mr-4 cursor-pointer">View all</div>
+  </a>
+</div>
+<div class="home_class swiper class_swiper grid grid-cols-3 mt-4 gap-4 p-2 pb-12">
+  <div class="swiper-wrapper">
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
       </div>
-    </h3>
-    <div>
-      {% cache 3600 'blog_summary' blog.id %}
-      {{ blog.description|markdown('blog', 'svg', lazy_load=True)|reference|str|safe }}
-      {% endcache %}
-    </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
+          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
+          
+          <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
+          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          
+          <div class="class_detail flex justify-between mt-2">
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-task'></i>
+                  <span class="text-sm font-medium ml-1">24</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bxs-star text-yellow-400'></i>
+                  <span class="text-sm font-medium ml-1">2308</span>
+              </div>
+              <div class="task flex text-gray-400 items-center">
+                  <i class='bx bx-user'></i>
+                  <span class="text-sm font-medium ml-1">120</span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-1">
+              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='bx bx-home-alt icon mr-1' ></i>
+                  Ranking
+              </di2 sm:gap-1>
+
+              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  Join now
+                  <i class='bx bxs-chevron-right ml-1'></i>
+              </div>
+          </div>
+      </div>
+          
   </div>
-  {% endfor %}
+
+  <div class="swiper-pagination"></div>
 </div>
-<div class="ui four wide computer sixteen wide tablet column">
-  {% if current_contests %}
-  <div class="ui row">
-    <table class="ui single table">
-      <thead>
-        <tr>
-          <th>Ongoing Contests</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for contest in current_contests %}
-        <tr>
-          <td class="center aligned">
-            <a class="header" href="{{ contest.get_absolute_url() }}">
-              <h3>{{ contest.name }}</h3>
-            </a>
-            <div class="description">
-              <span class="time">
-                {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
-              </span>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% endif %}
-  {% if future_contests %}
-  <div class="ui row">
-    <table class="ui single table" style="padding: 2px;">
-      <thead>
-        <tr>
-          <th>Upcomming Contests</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for contest in future_contests %}
-        <tr>
-          <td class="center aligned">
-            <a class="header" href="{{ contest.get_absolute_url() }}">
-              <h3>{{ contest.name }}</h3>
-            </a>
-            <div class="description">
-              <span class="time">
-                {{ _('Starts in %(countdown)s', countdown=contest.time_before_start|as_countdown) }}
-              </span>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% endif %}
-  <div class="ui row" style="margin-top: 10px">
-    <table class="ui tiny single unstackable celled structured table">
-      <thead>
-        <tr>
-          <th colspan="3">Ranking</th>
-        </tr>
-        <tr>
-          <th class="two wide center aligned">#</th>
-          <th class="twelve wide">Username</th>
-          <th class="two wide">Point</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in ranking %}
-        <tr class="user">
-          <td class="center aligned">{{ user.rank }}</td>
-          <td>
-            {% if user.user %}
-            {{ link_user(user.user) }}
-            {% else %}
-            {{ _('???') }}
-            {% endif %}
-          </td>
-          <td class="center aligned">
-            {% if user.user %}
-            {{ user.user.point }}
-            {% else %}
-            {{ _('???') }}
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
+
 {% endblock content %}

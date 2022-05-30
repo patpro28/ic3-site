@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" integrity="sha512-pbLYRiE96XJxmJgF8oWBfa9MdKwuXhlV7vgs2LLlapHLXceztfcta0bdeOgA4reIf0WH67ThWzA684JwkM3zfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js" integrity="sha512-t5mAtfZZmR2gl5LK7WEkJoyHCfyzoy10MlerMGhxsXl3J7uSSNTAW6FK/wvGBC8ua9AFazwMaC0LxsMTMiM5gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <form action="" class="ui form" method="post">
+    {% csrf_token %}
+    <div class="field">
+      <div class="ui selection dropdown">
+        <input type="hidden" name="level" value="" onChange='getNewType()'>
+        <i class="dropdown icon"></i>
+        <div class="default text">Select level</div>
+        <div class="menu">
+          {% for item in class %}
+          <div class="item" data-value="{{ item.id }}">{{ item.name }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui selection dropdown">
+        <input type="hidden" name="type" value="">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="default-type">Select type</div>
+        <div class="menu" id="types"></div>
+      </div>
+    </div>
+    <div class="field">
+      <button class="ui fluid primary button">Practice</button>
+    </div>
+  </form>
+  <script>
+    function getNewType() {
+      var value = $('input[name=level]').val()
+      $.ajax({
+        url: '{{ url("education:get_types") }}',
+        type: 'GET',
+        data: {
+          level: value
+        },
+        dataType: 'json',
+        success: function(data) {
+          $('#default-type').addClass('default').html('Select type')
+          $('#types').html(data.data)
+        }
+      })
+    }
+    getNewType()
+    $('.ui.dropdown').dropdown({
+      on: 'hover'
+    })
+  </script>
+</body>
+</html>

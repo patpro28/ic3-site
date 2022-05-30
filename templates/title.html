@@ -1,1 +1,17 @@
-<h3 class="ui block header">{{ _(content_title or title) }}</h3>
+<div class="flex justify-between items-center">
+  <div class="block ml-4 -mt-2 sm:ml-0 sm:mt-0">
+      <div class="text-2xl font-semibold">{{ title or content_title }}!✋🏻</div>
+      <div class="text-sm text-gray-400 font-medium lg:text-base">Let's learn something new today!</div>
+  </div>
+
+  <div class="hidden md:flex">
+      <div class="h-10 w-96 bg-white flex items-center rounded-lg text-gray-400 shadow-md">
+          <i class='bx bx-search icon bx-sm m-2'></i>
+          <input class="w-80 text-sm outline-none font-medium" type="text" placeholder="Search something here...">
+      </div>
+  
+      <div class="shadow-md ml-2 text-gray-400 h-10 w-10 bg-white rounded-lg flex justify-center items-center">
+          <i class='bx bx-bell bx-sm'></i>
+      </div>
+  </div>
+</div>

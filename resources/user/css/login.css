@@ -1,0 +1,657 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root{
+    /* ===== Colors ===== */
+    --body-color: rgb(246, 246, 246);
+    --sidebar-color: #FFF;
+    --primary-color: #36383E;
+    --primary-color-light: #F6F6F6;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+}
+
+body{
+    min-height: 100vh;
+    background-color: var(--body-color);
+    transition: var(--tran-05);
+}
+
+::selection{
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+body.dark{
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+}
+
+/* ===== Sidebar ===== */
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background: var(--sidebar-color);
+    transition: var(--tran-05);
+    z-index: 100;  
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+}
+.sidebar.close{
+    width: 80px;
+}
+
+/*===== Others setting =====*/
+.view_all {
+    background: #242526;
+    color: #fff;
+    padding: 0.4rem 1.2rem;
+    transition: 0.5s;
+}
+
+.view_all:hover {
+    background: #707070;
+}
+
+/* ===== Reusable code - Here ===== */
+.sidebar li{
+    height: 50px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.sidebar header .image,
+.sidebar .icon{
+    min-width: 54px;
+    border-radius: 6px;
+}
+
+.sidebar .icon{
+    min-width: 54px;
+    border-radius: 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.sidebar .text,
+.sidebar .icon{
+    color: var(--text-color);
+    transition: var(--tran-03);
+}
+
+.sidebar .text{
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 1;
+}
+.sidebar.close .text{
+    opacity: 0;
+}
+/* =========================== */
+
+.sidebar header{
+    position: relative;
+}
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+.sidebar header .logo-text{
+    margin-left: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+header .image-text .name {
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+header .image-text .profession{
+    font-size: 16px;
+    margin-top: -2px;
+    display: block;
+}
+
+.sidebar header .image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar header .image img{
+    width: 40px;
+    border-radius: 6px;
+}
+
+.sidebar header .toggle{
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%) rotate(180deg);
+    height: 20px;
+    width: 20px;
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: var(--tran-05);
+}
+
+body.dark .sidebar header .toggle{
+    color: var(--text-color);
+}
+
+.sidebar.close .toggle{
+    transform: translateY(-50%) rotate(0deg);
+}
+
+.sidebar .menu{
+    margin-top: 10px;
+}
+
+.sidebar li.search-box{
+    border-radius: 6px;
+    background-color: var(--primary-color-light);
+    cursor: pointer;
+    transition: var(--tran-05);
+}
+
+.sidebar li.search-box input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: var(--primary-color-light);
+    color: var(--text-color);
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: var(--tran-05);
+}
+.sidebar li a{
+    list-style: none;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: var(--tran-03);
+}
+
+.sidebar li a:hover{
+    background-color: var(--primary-color);
+}
+.sidebar li a:hover .icon,
+.sidebar li a:hover .text{
+    color: var(--sidebar-color);
+}
+body.dark .sidebar li a:hover .icon,
+body.dark .sidebar li a:hover .text{
+    color: var(--text-color);
+}
+
+.sidebar .menu-bar{
+    height: calc(100% - 55px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: scroll;
+}
+.menu-bar::-webkit-scrollbar{
+    display: none;
+}
+.sidebar .menu-bar .mode{
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: var(--primary-color-light);
+    position: relative;
+    transition: var(--tran-05);
+}
+
+.menu-bar .mode .sun-moon{
+    height: 50px;
+    width: 60px;
+}
+
+.mode .sun-moon i{
+    position: absolute;
+}
+.mode .sun-moon i.sun{
+    opacity: 0;
+}
+body.dark .mode .sun-moon i.sun{
+    opacity: 1;
+}
+body.dark .mode .sun-moon i.moon{
+    opacity: 0;
+}
+
+.menu-bar .bottom-content .toggle-switch{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    min-width: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.toggle-switch .switch{
+    position: relative;
+    height: 22px;
+    width: 40px;
+    border-radius: 25px;
+    background-color: var(--toggle-color);
+    transition: var(--tran-05);
+}
+
+.switch::before{
+    content: '';
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    background-color: var(--sidebar-color);
+    transition: var(--tran-04);
+}
+
+body.dark .switch::before{
+    left: 20px;
+}
+
+.home{
+    position: absolute;
+    top: 0;
+    top: 0;
+    left: 250px;
+    height: 100vh;
+    width: calc(100% - 250px);
+    background-color: var(--body-color);
+    transition: var(--tran-05);
+}
+.home .text{
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 12px 60px;
+}
+
+.sidebar.close ~ .home{
+    left: 78px;
+    height: 100vh;
+    width: calc(100% - 78px);
+}
+body.dark .home .text{
+    color: var(--text-color);
+}
+
+
+/*===== RightBar =====*/
+.rightbar__container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-left: auto;
+    width: 30%;
+    height: 100vh;
+    overflow: auto;
+    background: var(--sidebar-color);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+    padding: 30px;
+}
+
+.rightbar__container::-webkit-scrollbar {
+    display: none;
+}
+
+/*===== Login =====*/
+.login_container {
+    background-repeat: no-repeat;
+    background-image: url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.login {
+    width: 1120px;
+}
+.login_page {
+    height: 90%;
+}
+
+.login_btn, .register_btn {
+    background: rgb(36, 37, 38);
+    color: #fff;
+}
+
+.login_btn:hover, .register_btn:hover {
+    background: #3a3b3c;
+}
+
+.login_form {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+.user_img, .email, .password , .btn {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+.form_container{
+    background: #ffffff;
+    width: 380px;
+    height: 520px;
+    position: relative;
+    text-align: center;
+    margin: auto;
+    padding: 20px 0;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.form_container form{
+    background: #fff;
+    width: 100%;
+    padding: 0 40px;
+    position: absolute;
+    top: 240px;
+    transition: transform 0.75s;
+}
+
+
+#LoginForm{
+    left: -360px;
+}
+#RegisterForm{
+    left: 0;
+}
+#Indicator{
+    width: 100px;
+    border: none;
+    height: 3px;
+    border-radius: 30px;
+    margin-top: 8px;
+    transform: translate(220px);
+    transition: transform 0.75s;
+}
+
+
+/*===== Notification =====*/
+.notifications__container {
+    height: 360px;
+    width: 100%;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.class_register {
+    background: #242526;
+    color: white
+}
+
+.recent_contest_board {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+/*===== Home =====*/
+.home_container {
+    width: 64%;
+}
+
+.home_banner {
+    background-repeat: no-repeat;
+    background-image: url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png);
+}
+
+.emath_class, .search_bar, .notification_box {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login__container {
+    background: var(--sidebar-color);
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login_btn, .register_btn {
+    background: #242526;
+    color: #fff;
+}
+
+.login_btn:hover, .register_btn:hover {
+    background: #3a3b3c;
+}
+
+/*===== Submissions =====*/
+.submissions_container, .submissions_container_detail {
+    display: grid;
+    grid-template-columns: 80px 120px 180px auto 50px;
+    gap: 1px;
+}
+
+.result-ts, .time-ts, .user-ts, .contest-ts, .detail-ts {
+    background: #242526;
+    color: #ccc;
+    font-size: 14px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.result, .time, .user, .contest, .detail {
+    background: #fff;
+    color: #242526;
+    font-size: 14px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+
+/*===== Class List =====*/
+.classlist_container, .classlist_container_detail {
+    display: grid;
+    grid-template-columns: 40px auto 120px 120px 120px 80px;
+    gap: 1px;
+}
+
+/*===== Contest =====*/
+.active {
+    background-repeat: no-repeat;
+    background-image: url(https://www.enjpg.com/img/2020/ios-14-11.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.upcoming {
+    background-repeat: no-repeat;
+    background-image: url(https://wallpapercave.com/wp/wp8216868.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.rightbar__container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-left: auto;
+    width: 30%;
+    height: 100vh;
+    overflow: auto;
+    background: var(--sidebar-color);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1));
+    padding: 30px;
+}
+
+.rightbar__container::-webkit-scrollbar {
+    display: none;
+}
+
+.active, .list, .active_contest , .joining, .upcoming_contest {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+  }
+
+/*===== Task =====*/
+.task_container {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+
+/*========== Mobile version ==========*/
+
+/*===== Login =====*/
+@media only screen and (max-width: 820px) {
+    .home_container {
+        width: 100%;
+    }
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper_banner {
+    background-repeat: no-repeat;
+    background-image: url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png);
+}
+
+.swiper-slide {
+
+    /* Center slide text vertically */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+
+@media only screen and (min-width: 1024px) {
+    .login_content {
+        top: 45%;
+        right: 5%;
+    }
+}
+
+@media only screen and (max-width: 540px) {
+    .sidebar{
+        padding: 0px 5px;
+    }
+    .sidebar.close{
+        width: 60px;
+    }
+    .sidebar header .toggle{
+        right: -18px;
+    }
+    .submissions_container, .submissions_container_detail {
+        display: grid;
+        grid-template-columns: 80px 180px auto 50px;
+        gap: 1px;
+    }
+}
+
+@media only screen and (max-width: 414px) {
+    .submissions_container, .submissions_container_detail {
+        display: grid;
+        grid-template-columns: 60px 120px auto 40px;
+        gap: 1px;
+    }
+}
+
+
+
+
+
+
+.questions{
+    background-color: var(--first-color-lighten);
+  }
+  
+
+  
+  
+  .questions__description{
+    font-size: var(--smaller-font-size);
+    padding: 0 1.25rem 1.25rem 2.5rem;
+  }
+  
+  
+  .questions__content{
+    overflow: hidden;
+    height: 0;
+  }
+  
+  .questions__item,
+  .questions__header,
+  .questions__item-title,
+  .questions__icon,
+  .questions__description,
+  .questions__content{
+    transition: .3s;
+  }
+  
+  .questions__item:hover{
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+    
+  }
+  
+  /*Rotate icon, change color of titles and background*/
+
+
+  
+  .accordion-open .question__icon{
+    transform: rotate(45deg);
+  }
+
+

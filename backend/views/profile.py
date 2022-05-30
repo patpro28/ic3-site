@@ -131,7 +131,7 @@ class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):
 
 class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
     form_class = RegisterForm
-    template_name = 'user/registration_form.html'
+    template_name = 'user/login_form.html'
     success_url = '/accounts/login/'
     success_message = _('Your user registration was successful.')
     model = Profile
@@ -147,6 +147,11 @@ class LoginView(TitleMixin, BaseLoginView):
     template_name = 'user/login_form.html'
     title = _('Login')
     success_url = '/user/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['login'] = True
+        return context
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

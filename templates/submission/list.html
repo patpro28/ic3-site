@@ -9,35 +9,51 @@
 {% endblock content_title %}
 
 {% block content %}
-<div class="column">
+<div class="w-full">
 {% if page_obj and page_obj.has_other_pages() %}
-  <div class="ui segment">
     {% include 'list-page.html' %}
-  </div>
 {% endif %}
-<div class="ui row segment" style="overflow-x: auto; white-space:nowrap;">
-  <table class="ui celled striped unstackable table" style="width: 100%">
-    <thead>
-      <tr>
-        <th class="one wide center aligned">{{ _('Result') }}</th>
-        <th class="one wide center aligned">{{ _('Time') }}</th>
-        <th class="three wide center aligned">{{ _('User') }}</th>
-        <th class="center aligned">{{ _('Contest') }}</th>
-        <th class="three wide center aligned date_field">{{ _('Date') }}</th>
-        <th class="two wide"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for submission in submissions %}
-        {% include 'submission/row.html' %}
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="grid grid-cols-[80px_120px_200px_auto_50px] gap-px">
+  <div class="col-start-1 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 rounded-tl-2xl flex justify-center items-center">
+      Result
+  </div>
+  <div class="col-start-2 col-span-1 sm:flex hidden bg-slate-400 font-bold text-xs md:text-sm w-full h-10 justify-center items-center">
+      Time
+  </div>
+  <div class="col-start-3 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 sm:h-10 flex justify-center items-center">
+      Username
+  </div>
+
+  <div class="col-start-4 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 sm:h-10 flex justify-center items-center">
+      Contest
+  </div>
+
+  <div class="col-start-5 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 flex rounded-tr-2xl justify-center items-center">
+
+  </div>
+  {% for submission in submissions %}
+    {% include 'submission/row.html' %}
+  {% endfor %}
+  <div class="col-start-1 col-span-1 w-full h-10 bg-slate-400 rounded-bl-2xl  ">
+        
+  </div>
+  <div class="col-start-2 col-span-1 sm:inline hidden w-full h-10 bg-slate-400 ">
+      
+  </div>
+  <div class="col-start-3 col-span-1 w-full h-10 bg-slate-400 sm:h-10  ">
+      
+  </div>
+
+  <div class="col-start-4 col-span-1 w-full h-10 bg-slate-400 sm:h-10  ">
+      
+  </div>
+
+  <div class="col-start-5 col-span-1 w-full h-10 bg-slate-400  rounded-br-2xl ">
+
+  </div>
 </div>
 {% if page_obj and page_obj.has_other_pages() %}
-  <div class="ui segment">
     {% include 'list-page.html' %}
-  </div>
 {% endif %}
 </div>
 {% endblock content %}

@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from education.views.problem import ProblemDetail, ProblemList, ProblemLevelList
+from education.views.problem import ProblemDetail, ProblemList, ProblemLevelList, ProblemPractice, get_types_problem
 from education.views import submission, contest
 
 from .views import *
@@ -16,7 +16,8 @@ urlpatterns = [
     path('problems/<slug:level>/', paged_list_view(ProblemLevelList, 'problem_level_list')),
     path('problem/<slug:problem>/', include([
         path('', ProblemDetail.as_view(), name='problem_detail')
-    ]))
+    ])),
+    path('practice/', ProblemPractice.as_view(), name="practice"),
 ]
 
 urlpatterns += [
@@ -34,4 +35,10 @@ urlpatterns += [
 urlpatterns += [
     path('submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
     path('submission/<int:pk>/', submission.SubmissionStatus.as_view(), name='submission_status')
+]
+
+urlpatterns += [
+    path('ajax/', include([
+        path('types/', get_types_problem, name="get_types"),
+    ]))
 ]

@@ -12,6 +12,7 @@ from martor.widgets import AdminMartorWidget
 
 from education.models import Problem, ProblemGroup, Answer#, Level
 from backend.utils.models import AlwaysChangedModelForm
+from education.models.problem import Level
 
 
 
@@ -74,22 +75,38 @@ class ProblemForm(forms.ModelForm):
             'authors': widgets.SemanticSelectMultiple,
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
             'organizations': widgets.SemanticSelectMultiple,
-            'group': widgets.SemanticSelect
+            'types': widgets.SemanticSelectMultiple,
+            'group': widgets.SemanticSelect,
+            'level': widgets.SemanticSelect,
         }
 
 
-class GroupFilter(admin.SimpleListFilter):
-    title = _('group')
-    parameter_name = 'group'
+class TypesFilter(admin.SimpleListFilter):
+    title = _('types')
+    parameter_name = 'types'
 
     def lookups(self, request, model_admin):
-        groups = ProblemGroup.objects.all()
-        return [(group.id, group.name) for group in groups]
+        groups = ProblemGroup.objects.values_list('id', 'name')
+        return [(id, name) for id, name in groups]
 
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset
-        return queryset.filter(group__id=self.value())
+        return queryset.filter(types__id=self.value())
+
+
+class LevelFilter(admin.SimpleListFilter):
+    title = _('level')
+    parameter_name = 'level'
+
+    def lookups(self, request, model_admin):
+        levels = Level.objects.values_list('id', 'name')
+        return [(id, name) for id, name in levels]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        return queryset.filter(level__id=self.value())
 
 
 class ProblemAdmin(VersionAdmin):
@@ -102,14 +119,14 @@ class ProblemAdmin(VersionAdmin):
         }),
         (_('Description'), {
             'fields': (
-                'is_full_markup', 'description', 'difficult', 'group', 'level'
+                'is_full_markup', 'description', 'difficult', 'types', 'level'
             ),
         })
     )
     
-    list_display = ['code', 'name', 'is_public', 'group', 'show_public']
+    list_display = ['code', 'name', 'is_public', 'level', 'show_public']
     inlines = [AnswerInline]
-    list_filter = (GroupFilter,)
+    list_filter = (TypesFilter, LevelFilter)
     ordering = ('code',)
     search_fields = ('code', 'name')
     actions_on_top = True

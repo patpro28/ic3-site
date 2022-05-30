@@ -1,13 +1,14 @@
 import urllib
 
 from django.db import ProgrammingError
-from django.http import Http404
-from django.db.models import Q
-from django.views.generic import DetailView, ListView
+from django.http import Http404, JsonResponse
+from django.db.models import Q, Count
+from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from backend.utils.diggpaginator import DiggPaginator
+from django.template.loader import render_to_string
 
+from backend.utils.diggpaginator import DiggPaginator
 from education.models import Problem, ProblemGroup
 from backend.models import Profile
 from backend.utils.views import QueryStringSortMixin, TitleMixin, generic_message
@@ -183,4 +184,31 @@ class ProblemDetail(ProblemMixin, TitleMixin, DetailView):
         return context
 
 
+def get_types_problem(request):
+    level_id = request.GET.get('level', None)
+    print(level_id)
+    qs = ProblemGroup.objects.all()
+    if level_id:
+        qs = qs.filter(problem__level__id=level_id)
+    qs = qs.annotate(num_problems=Count('problem')).filter(num_problems__gt=0)
+    return JsonResponse({'data': render_to_string('utils/options.html', {'items': qs})})
 
+
+class ProblemPractice(TitleMixin, TemplateView):
+    template_name = 'problem/practice.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["class"] = Level.objects.all()
+        context['types'] = get_types_problem(self.request)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        print(request.POST.get('level'))
+        pass
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            return self.post(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
+    

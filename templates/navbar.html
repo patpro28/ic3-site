@@ -1,79 +1,132 @@
-<div class="sidebar">
-  <div class="logo-details">
-    <a href="/" class="ui mini image">
-      <img src="{{ static('icons/logo.png') }}" alt="logo">
+<div id="sidebar" class="w-20 fixed left-0 top-0 h-full bg-slate-900 py-1.5 px-3.5 z-50 transition-all duration-500 ease-in ease-out">
+  <div class="h-16 flex items-center relative" id='logo-details'>
+    <a href="/" class="h-10 w-10 m-1 opacity-0 transition duration-500">
+      <img src="{{ static('icons/emath.png') }}" alt="logo">
     </a>
-    <div class="logo_name">Emath</div>
-    <i class="bars icon" id="btn"></i>
+    <div class="text-white text-xl opacity-0 transition duration-500 font-semibold">Emath</div>
+    <span class="material-icons absolute w-12 h-12 text-2xl text-center transition-all duration-500 ease-in ease-out cursor-pointer text-white leading-[3rem] top-1/2 -translate-y-1/2" id="btn">
+      menu
+    </span>
   </div>
-  <ul class="nav-list">
-    <li>
-      <a href="/problems">
-        <i class="book open icon"></i>
-        <span class="links_name">Problems</span>
+  <ul class="nav-list mt-5 h-full">
+    <li class="group my-2 relative">
+      <a href="/problems" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in ease-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          menu_book
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Problems</span>
       </a>
-      <span class="tooltip">Problems</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Problems</span>
     </li>
-    <li>
-      <a href="/submissions">
-        <i class="book icon"></i>
-        <span class="links_name">Submissions</span>
+    <li class="group my-2 relative">
+      <a href="/submissions" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          checklist
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Submissions</span>
       </a>
-      <span class="tooltip">Submissions</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Submissions</span>
     </li>
-    <li>
-      <a href="/users">
-        <i class="users icon"></i>
-        <span class="links_name">Users</span>
+    <li class="group my-2 relative">
+      <a href="/users" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          people
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Users</span>
       </a>
-      <span class="tooltip">Users</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Users</span>
     </li>
-    <li>
-      <a href="/organizations">
-        <i class="asia globe icon"></i>
-        <span class="links_name">Organizations</span>
+    <li class="group my-2 relative">
+      <a href="/organizations" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          public
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Organizations</span>
       </a>
-      <span class="tooltip">Organizations</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Organizations</span>
     </li>
-    <li>
-      <a href="/contests">
-        <i class="trophy icon"></i>
-        <span class="links_name">Contest</span>
+    <li class="group my-2 relative">
+      <a href="/contests" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          emoji_events
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Contests</span>
       </a>
-      <span class="tooltip">Contest</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Contests</span>
     </li>
+    
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
-    <li>
-      <a href="{{ url('admin:index')}}">
-        <i class="cog icon"></i>
-        <span class="links_name">Admin</span>
+    <li class="group my-2 relative">
+      <a href="{{ url('admin:index') }}" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+          settings
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Admin</span>
       </a>
-      <span class="tooltip">Admin</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Admin</span>
     </li>
     {% endif %}
     {% if request.user.is_authenticated %}
-    <li class="profile">
-      <div class="profile-details">
-        <img {% if request.user.email %}
+    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
+      <div class="flex items-center flex-nowrap">
+        <img 
+        class="h-11 w-11 rounded-md mr-2.5 object-cover"
+        {% if request.user.email %}
         src="{{ gravatar(request.user, 40) }}"
         {% else %}
         src={{ static('user/image/avatar-none.png') }}
         {% endif %} alt="profileImg">
-        <div class="name_job">
-          <a href="{{ url('user_page') }}" class="name">{{ request.user.fullname }}</a>
-        </div>
+        <a href="{{ url('user_page') }}" class="font-normal text-white whitespace-nowrap">{{ request.user.fullname }}</a>
       </div>
-      <a href="{{ url('logout') }}">
-        <i class="sign out alternate icon" id="log_out"></i>
+      <a href="{{ url('logout') }}" class="flex h-full w-full rounded-sm items-center no-underline bg-slate-900 transition-all duration-400 ease-in ease-out">
+        <span id="log_out" class="material-icons absolute top-1/2 right-0 -translate-y-1/2 bg-slate-900 w-full h-16 leading-[4rem] transition-all duration-500 ease-in ease-out hover:bg-white hover:text-slate-900 text-center text-white">
+          logout
+        </span>
       </a>
     </li>
     {% else %}
-    <li class="profile">
-      <a href="{{ url('login') }}">
-        <i class="user lock icon"></i>
-        <span class="links_name">Sign In/Sign Up</span>
+    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
+      <a class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white" href="{{ url('login') }}">
+        <span class="material-icons material-icons text-xl group-hover:text-black w-12 h-12 text-center px-4 leading-[3rem] text-white">
+          lock_open
+        </span>
+        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
       </a>
     </li>
     {% endif %}
   </ul>
 </div>
+
+<script>
+  let sidebar = document.querySelector("#sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let link_names = document.querySelectorAll('.nav-list li');
+  let logo_details = document.querySelectorAll('#logo-details .opacity-0')
+  {% if request.user.is_authenticated %}
+  let log_out = document.querySelector('#log_out')
+  {% endif %}
+
+  closeBtn.addEventListener("click", () => {
+    sidebar.classList.toggle('w-20')
+    sidebar.classList.toggle('w-60')
+    closeBtn.classList.toggle('text-center')
+    closeBtn.classList.toggle('text-right')
+    closeBtn.classList.toggle('right-0')
+    {% if request.user.is_authenticated %}
+    log_out.classList.toggle('w-full')
+    log_out.classList.toggle('w-16')
+    {% endif %}
+    logo_details.forEach(function(item) {
+      item.classList.toggle('opacity-0')
+      item.classList.toggle('opacity-100')
+    })
+    for (i = 0; i < link_names.length {% if request.user.is_authenticated %} -1 {% endif %}; ++i) {
+      var y = link_names[i].querySelectorAll('a span')
+      y[1].classList.toggle('hidden')
+    }
+    for (i = 0; i < link_names.length - 1; ++i) 
+      link_names[i].querySelector(':scope > span').classList.toggle('md:block')
+    link_names[link_names.length - 1].classList.toggle('w-20')
+    link_names[link_names.length - 1].classList.toggle('w-60')
+  });
+</script>

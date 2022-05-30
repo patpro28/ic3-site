@@ -17,55 +17,60 @@
 {% endblock %}
 
 {% block content_title %}
-{% include 'title.html' %}
 {% endblock content_title %}
 
 {% block content %}
-<div class="column">
-    <div class="ui grid">
-        <div class="twelve wide column">
-            <div class="ui segment">
-                {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
-                    {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
-                {% endcache %}
-            </div>
-        </div>
-        <div class="four wide column">
-            <div class="ui vertical segment">
-                {% if request.user.is_authenticated %}
-                    {% if request.user in organization %}
-                        <form method='post' action="{{ url('leave_organization', organization.slug) }}" class="ui form">
-                            {% csrf_token %}
-                            <a type='submit' class="fluid ui primary button">{{ _('Leave organization') }}</a>
-                        </form>
-                    {% elif organization.is_open %}
-                        <form action="{{ url('join_organization', organization.slug) }}" method="post">
-                            {% csrf_token %}
-                            <a type='submit' class="fluid ui primary button">{{ _('Join organization') }}</a>
-                        </form>
-                    {% else %}
-                        <a href="{{ url('request_organization', organization.slug) }}"
-                        class="fluid ui primary button">{{ _('Request membership') }}</a>
-                    {% endif %}
-                {% endif %}
-            </div>
-            <div class="ui vertical segment">
-                <a href="{{ url('edit_organization', organization.slug) }}" class="fluid ui primary button">Edit organization</a>
-            </div>
-            {% if can_edit %}
-            <div class="ui vertical segment">
-                <a href="{{ url('admin:backend_organization_change', organization.id) }}" class="fluid ui primary button">Edit organization</a>
-            </div>
-                {% if not organization.is_open %}
-                    <div class="ui vertical segment">
-                        <a href="{{ url('organization_requests_pending', organization.slug) }}" class="fluid ui primary button">View request</a>
-                    </div>
-                {% endif %}
-            {% endif %}
-            <div class="ui vertical segment">
-                <a href="{{ url('organization_users', organization.slug) }}" class="fluid ui primary button">View member</a>
-            </div>
-        </div>
+<div class="home_container h-screen w-full bg-gray-100 p-6">
+    <div class="flex justify-between items-center">
+      <div class="contest_info">
+        <h1 class="text-2xl font-semibold">{{ organization.short_name }}</h1>
+        <h1 class="text-base font-semibold text-gray-500">{{ organization.name }}</h1>
+      </div>
+
+      <a href="{{ url('organization_users', organization.slug) }}" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800">View members</a>
     </div>
-</div>
+  
+    <div class="mt-8 flex h-12 rounded-lg bg-white shadow-lg">
+      <div class="flex h-12 w-28 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h1 class="ml-1 text-base font-medium">Info</h1>
+      </div>
+  
+      <div class="flex h-12 w-28 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <h1 class="ml-1 text-base font-medium">Ranking</h1>
+      </div>
+  
+    </div>
+  
+    <div class="mt-2 h-96 rounded-lg bg-white shadow-lg p-4 px-6">
+      <div class="text-sm font-medium">
+        {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
+            {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+        {% endcache %}
+      </div>
+    </div>
+  
+    {% if request.user.is_authenticated %}
+        {% if request.user in organization %}
+            <form method='post' action="{{ url('leave_organization', organization.slug) }}" class="ui form">
+                {% csrf_token %}
+                <a type='submit' class="flex justify-center text-white bg-black p-2 rounded-lg mt-4 font-medium hover:bg-gray-900 leave-organization">{{ _('Leave organization') }}</a>
+            </form>
+        {% elif organization.is_open %}
+            <form action="{{ url('join_organization', organization.slug) }}" method="post">
+                {% csrf_token %}
+                <a type='submit' class="flex justify-center text-white bg-black p-2 rounded-lg mt-4 font-medium hover:bg-gray-900">{{ _('Join organization') }}</a>
+            </form>
+        {% else %}
+            <a href="{{ url('request_organization', organization.slug) }}"
+            class="flex justify-center text-white bg-black p-2 rounded-lg mt-4 font-medium hover:bg-gray-900">{{ _('Request membership') }}</a>
+        {% endif %}
+    {% endif %}
+  </div>
+  
 {% endblock %}
