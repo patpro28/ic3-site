@@ -49,10 +49,13 @@ macro contest_head(contest) %} {% spaceless %}
     {{ time_left(contest) }}
   </div>
 </div>
-{% endspaceless %} {% endmacro %} {% macro time_left(contest) %} {{
-contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j,
-Y, G:i")) }} {% endmacro %} {% macro user_count(contest, user) %} {% if
-contest.can_see_own_scoreboard(user) %} {{ contest.user_count }} {% else %} {{
+{% endspaceless %} 
+{% endmacro %} 
+{% macro time_left(contest) %} 
+{{ contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j, Y, G:i")) }} 
+{% endmacro %} 
+{% macro user_count(contest, user) %} 
+{% if contest.can_see_own_scoreboard(user) %} {{ contest.user_count }} {% else %} {{
 contest.user_count }} {% endif %} {% endmacro %} 
 {% macro contest_join(contest, request) %} 
 {% if not request.in_contest %}
@@ -127,7 +130,7 @@ contest.user_count }} {% endif %} {% endmacro %}
 {% endif %}
 <div>
   {% if current_contests %}
-  <div class="grid grid-cols-2 mt-8 rounded-2xl gap-1">
+  <div class="grid md:grid-cols-2 grid-cols-1 mt-8 rounded-2xl gap-1">
     {% with contest = current_contests[0] %}
     <div class="relative bg-[url(https://www.enjpg.com/img/2020/ios-14-11.jpg)] bg-cover bg-center bg-no-repeat w-full h-64 rounded-2xl p-4 pl-6 pr-6">
       <div class="text-base font-semibold text-white">Ongoing Contests</div>

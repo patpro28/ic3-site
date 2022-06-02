@@ -1,17 +1,19 @@
-<div id="sidebar" class="w-20 fixed left-0 top-0 h-full bg-slate-900 py-1.5 px-3.5 z-50 transition-all duration-500 ease-in ease-out">
-  <div class="h-16 flex items-center relative" id='logo-details'>
-    <a href="/" class="h-10 w-10 m-1 opacity-0 transition duration-500">
-      <img src="{{ static('icons/emath.png') }}" alt="logo">
+<div id="sidebar" class="min-w-max fixed left-0 top-0 h-full bg-slate-900 py-1.5 px-3.5 z-50 transition-all duration-500 ease-in ease-out">
+  <div class="h-16 flex items-center justify-between relative" id='logo-details'>
+    <a href="/" id="logo_link" class="m-1 hidden items-center space-x-2 opacity-0 transition duration-500">
+      <img src="{{ static('icons/emath.png') }}" alt="logo" class="w-8 h-8">
+      <span class="text-white text-xl transition duration-500 font-semibold">Emath</span>
     </a>
-    <div class="text-white text-xl opacity-0 transition duration-500 font-semibold">Emath</div>
-    <span class="material-icons absolute w-12 h-12 text-2xl text-center transition-all duration-500 ease-in ease-out cursor-pointer text-white leading-[3rem] top-1/2 -translate-y-1/2" id="btn">
-      menu
-    </span>
+    <div class="mx-auto" id="menu">
+      <span class="material-icons sm:w-12 sm:h-12 sm:text-2xl text-center text-lg transition-all duration-500 ease-in ease-out cursor-pointer text-white leading-9 sm:leading-[3rem] px-2 sm:px-3" id="btn">
+        menu
+      </span>
+    </div>
   </div>
   <ul class="nav-list mt-5 h-full">
     <li class="group my-2 relative">
       <a href="/problems" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in ease-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           menu_book
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Problems</span>
@@ -20,7 +22,7 @@
     </li>
     <li class="group my-2 relative">
       <a href="/submissions" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           checklist
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Submissions</span>
@@ -29,7 +31,7 @@
     </li>
     <li class="group my-2 relative">
       <a href="/users" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           people
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Users</span>
@@ -38,7 +40,7 @@
     </li>
     <li class="group my-2 relative">
       <a href="/organizations" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           public
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Organizations</span>
@@ -47,7 +49,7 @@
     </li>
     <li class="group my-2 relative">
       <a href="/contests" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           emoji_events
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Contests</span>
@@ -58,7 +60,7 @@
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
     <li class="group my-2 relative">
       <a href="{{ url('admin:index') }}" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons text-xl group-hover:text-black w-12 h-12 text-center leading-[3rem] px-4 text-white">
+        <span class="material-icons sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           settings
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Admin</span>
@@ -85,9 +87,9 @@
       </a>
     </li>
     {% else %}
-    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
+    <li class="fixed h-16 sm:w-20 w-16 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
       <a class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white" href="{{ url('login') }}">
-        <span class="material-icons material-icons text-xl group-hover:text-black w-12 h-12 text-center px-4 leading-[3rem] text-white">
+        <span class="material-icons material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center sm:px-4 leading-9 sm:leading-[3rem] px-3 sm:text-white">
           lock_open
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
@@ -100,8 +102,10 @@
 <script>
   let sidebar = document.querySelector("#sidebar");
   let closeBtn = document.querySelector("#btn");
+  let menu = document.querySelector("#menu");
   let link_names = document.querySelectorAll('.nav-list li');
   let logo_details = document.querySelectorAll('#logo-details .opacity-0')
+  let logo_link = document.querySelector('#logo_link')
   {% if request.user.is_authenticated %}
   let log_out = document.querySelector('#log_out')
   {% endif %}
@@ -112,6 +116,10 @@
     closeBtn.classList.toggle('text-center')
     closeBtn.classList.toggle('text-right')
     closeBtn.classList.toggle('right-0')
+    logo_link.classList.toggle('hidden')
+    logo_link.classList.toggle('flex')
+    menu.classList.toggle('mx-auto')
+    menu.classList.toggle('ml-auto')
     {% if request.user.is_authenticated %}
     log_out.classList.toggle('w-full')
     log_out.classList.toggle('w-16')
@@ -126,7 +134,7 @@
     }
     for (i = 0; i < link_names.length - 1; ++i) 
       link_names[i].querySelector(':scope > span').classList.toggle('md:block')
-    link_names[link_names.length - 1].classList.toggle('w-20')
-    link_names[link_names.length - 1].classList.toggle('w-60')
+    link_names[link_names.length - 1].classList.toggle('sm:w-20')
+    link_names[link_names.length - 1].classList.toggle('sm:w-60')
   });
 </script>
