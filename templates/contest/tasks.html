@@ -81,9 +81,11 @@
     {{ time_left(contest) }}
   </div>
   <div class="text-xs text-white mt-8">
+    {% if not contest.ended %}
     <span class="time text-xl">
       {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
     </span>
+    {% endif %}
   </div>
   
 </div>
