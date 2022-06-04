@@ -1,0 +1,65 @@
+<script>
+  var current_problem = 1;
+  const number_problem = {{ count }}
+  let list_problem = document.querySelector('#list-problem')
+  const problems = document.querySelectorAll('.task')
+  let prevButton = document.querySelector('#prev')
+  let nextButton = document.querySelector('#next')
+  var positionX = 0
+  var nextDisable = current_problem == number_problem
+  var prevDisable = current_problem == 1
+
+  function updatePrev() {
+    prevButton.classList.toggle('cursor-pointer')
+    prevButton.classList.toggle('bg-blue-500')
+    prevButton.classList.toggle('hover:bg-blue-700')
+    prevButton.classList.toggle('bg-slate-500')
+    prevDisable = !prevDisable
+  }
+
+  function updateNext() {
+    nextButton.classList.toggle('cursor-pointer')
+    nextButton.classList.toggle('bg-blue-500')
+    nextButton.classList.toggle('hover:bg-blue-700')
+    nextButton.classList.toggle('bg-slate-500')
+    nextDisable = !nextDisable
+  }
+
+  function sliderTask() {
+    list_problem.style = `transform: translateX(${positionX}%)`
+    if ((current_problem == 1 && !prevDisable) || (current_problem > 1 && prevDisable)) {
+      updatePrev()
+    }
+    if ((current_problem == number_problem && !nextDisable) || (current_problem < number_problem && nextDisable)) {
+      updateNext()
+    }
+  }
+
+  prevButton.addEventListener('click', function() {
+    if (current_problem == 1) {
+      return
+    }
+    if (current_problem == number_problem) {
+      updateNext()
+    }
+    current_problem--
+    positionX += 100 
+    sliderTask()
+  })
+  nextButton.addEventListener('click', function() {
+    if (current_problem == number_problem) {
+      return
+    }
+    if (current_problem == 1) {
+      updatePrev()
+    }
+    positionX -= 100
+    current_problem++
+    sliderTask()
+  })
+  function changeProblem(index) {
+    current_problem = index
+    positionX = -100 * (index - 1);
+    sliderTask()
+  }
+</script>

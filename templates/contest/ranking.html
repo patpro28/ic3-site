@@ -5,17 +5,18 @@
 {% endblock content_title %}
 
 {% block content_media %}
-<link rel="stylesheet" href="{{ static('submission/rank.css') }}?v=13123">
 {% endblock content_media %}
 
 {% block content_js %}
 {% include 'contest/media-js.html' %}
 <script>
-  $(function () {
+  $(document).ready(function () {
     $('#show-username').click(function () {
       $('.username_column').toggle();
       localStorage.setItem('show-usernames', $('.username_column').is(':visible') ? 'true' : 'false');
     });
+
+    console.log(localStorage.getItem('show-usernames'))
   
     if (localStorage.getItem('show-usernames') == 'true') {
       $('.username_column').show();
@@ -36,29 +37,20 @@
 {% endblock content_js %}
 
 {% block content %}
-<div class="column">
-  {% include 'contest/contest-list-tab.html' %}
-  <div class="ui bottom attached segment">
-    <div class="ui equal width five column grid" style="margin-bottom: 1px;">
-      <div class="column">
-        <div class="ui checkbox">
-          <input type="checkbox" id="show-username">
-          <label for="show-username">{{ _('Show username') }}</label>
-        </div>
-      </div>
-      <div class="column">
-        <div class="ui checkbox">
-          <input type="checkbox" id="show-organization">
-          <label for="show-organization">{{ _('Show organization') }}</label>
-        </div>
-      </div>
-      <div class="column"></div>
-      <div class="column"></div>
-      <div class="column"></div>
+{% include 'contest/contest-list-tab.html' %}
+<div class="flex flex-col space-y-4 w-full mt-4 items-stretch">
+  <div class="flex">
+    <div class="basis-1/4 flex items-center space-x-2">
+      <input type="checkbox" class="w-5 h-5" id="show-username">
+      <label class="font-bold" for="show-username">{{ _('Show username') }}</label>
     </div>
-    <div style="overflow-x: auto; white-space:nowrap;">
-      {% include 'contest/ranking-table.html' %}
+    <div class="basis-1/4 flex items-center space-x-2">
+      <input type="checkbox" class="w-5 h-5" id="show-organization">
+      <label class="font-bold" for="show-organization">{{ _('Show organization') }}</label>
     </div>
+  </div>    
+  <div class="w-full overflow-x-auto whitespace-nowrap">
+    {% include 'contest/ranking-table.html' %}
   </div>
 </div>
 {% endblock content %}

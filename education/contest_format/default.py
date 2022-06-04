@@ -61,9 +61,9 @@ class DefaultContestFormat(BaseContestFormat):
 
         if format_data:
             return format_html(
-                u'<td class="problem_cell {state}"><i class="{result} icon"></i></td>',
-                state='pre_accept' if format_data['status'] else 'wrong3',
-                result='check circle outline green' if format_data['status'] else 'times circle outline secondary'
+                u'<td class="problem_cell text-white {state}"><div class="my-auto flex items-center justify-center"><span class="material-icons">{result}</span></div></td>',
+                state='bg-green-500' if format_data['status'] else 'bg-red-500',
+                result='done' if format_data['status'] else 'close'
             )
         else:
             return mark_safe('<td class="problem_cell"></td>')
@@ -71,7 +71,8 @@ class DefaultContestFormat(BaseContestFormat):
     def display_participation_result(self, participation):
         # print("display_result ",participation.virtual, participation.score)
         return format_html(
-            u'<td class="points center aligned"><h4 class="ui header">{points}<div class="sub header">{cumtime}</div></h4></td>',
+            u'<td class="py-1 px-3 text-center"><div class="flex flex-col items-center"> \
+                <div class="font-bold">{points}</div><div class="text-gray-500 text-xs">{cumtime}</div></div></td>',
             points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday'),
         )

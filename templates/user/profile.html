@@ -1,3 +1,5 @@
+{% if request.user.is_authenticated %}
+{% else %}
 <div class="bg-white shadow-md h-auto w-full rounded-xl p-4">
   <div class="flex items-center">
       <img class="h-12 w-12 mr-4 rounded-full" src="https://www.gravatar.com/avatar/61ed114b5efb6c8c179081e8efc00d90?d=identicon&s=80" alt="">
@@ -13,3 +15,4 @@
       <a href="{{ url('register') }}" class="bg-black text-white text-center text-sm p-2 rounded-lg cursor-pointer">Register</a>
   </div>
 </div>
+{% endif %}

@@ -67,11 +67,6 @@
   color:#747474;
 }
 
-#ranking, th, td {
-  border-collapse: separate;
-  border: 1px solid grey;
-}
-
 #ranking thead tr:first-child>th:first-child {
   border-radius: 0.28571429rem 0 0 0;
 }

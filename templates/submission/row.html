@@ -1,14 +1,14 @@
 <div class="col-start-1 col-span-1 result font-semibold w-full h-8 sm:h-10 flex justify-center items-center bg-white">
   {{ submission.result_class }}
 </div>
-<div class="col-start-2 col-span-1 time hidden sm:flex w-full h-10 justify-center items-center bg-white">
+<div class="col-start-2 col-span-1 time flex w-full h-10 justify-center items-center bg-white">
   {{ submission.time_excute|timedelta('simple') }}
 </div>
 <div class="col-start-3 col-span-1 user text-xs sm:text-sm w-full h-8 sm:h-10 flex justify-center bg-white items-center">
   {{ link_user(submission.user.user) }}
 </div>
 
-<a href="{{ url('education:contest_detail', submission.contest.key) }}"class="col-start-4 bg-white col-span-1 contest text-xs sm:text-sm w-full h-8 sm:h-10 flex justify-center items-center">
+<a href="{{ url('education:contest_detail', submission.contest.key) }}"class="col-start-4 font-bold bg-white col-span-1 contest text-xs sm:text-sm md:text-base w-full h-8 sm:h-10 flex justify-center items-center">
   {{ submission.contest }}
 </a>
 

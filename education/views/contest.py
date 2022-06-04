@@ -435,7 +435,7 @@ def get_participation(user, contest):
       user=user,
       contest=contest,
       virtual=(SPECTATE if spectate else LIVE)
-    )
+    )[0]
   else:
     participation = ContestParticipation.objects.filter(
       user=user,

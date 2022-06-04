@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% set count = problems|length %}
+
 {% block content_title %}
 {% include 'title.html' %}
 {% endblock content_title %}
@@ -10,99 +12,86 @@
     font-size: 18px !important;
   }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/segment.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/form.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/message.min.css" />
 {% endblock content_media %}
 
+{% block content_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/form.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".time-remaining").each(function () {
+      count_down($(this));
+    });
+  })
+</script>
+{% endblock content_js %}
+
 {% block content %}
-<div class="column">
-  <div class="ui grid" id="task">
-    <div class="thirteen wide column">
-      <div class="ui row segment">
-        <form action="" method="post" class="ui form" id="task_form" autocomplete="off">
-          {% csrf_token %}
-          <input type="hidden" id="refreshed" value="no">
-          <input type="hidden" name="contest" value="{{ contest.key }}">
-          <input type="hidden" name="submission" value="{{ submission.id }}">
-          {% for problem, answers in problems %}
-          <div class="ui segments" id="{{ problem.id }}">
-            <div class="ui top attached secondary black inverted menu">
-              <div class="ui header item">Problem {{ loop.index }}</div>
-            </div>
-            <div class="ui bottom attached segment">
-              <div style="font-size: 16px">
-                {% cache 3600 'exam_html' problem.problem.id MATH_ENGINE %} 
-                  {% with problem=problem.problem %}
-                    {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
-                  {% endwith %}
-                {% endcache %}
-              </div>
-            </div>
-            <div class="ui segment">
-              <h3 class="ui header">Answer</h3>
-              <div class="ui stackable two column grid segment fields">
-              {% for label, answer in answers %}
-                <div class="column field">
-                  <div class="ui toggle checkbox">
-                    <input 
-                      type="radio" 
-                      name="answer_{{- problem.id -}}" 
-                      id="{{- problem.id -}}_{{- loop.index -}}_answer" 
-                      value="{{ answer }}"
-                      label={{ label }}
-                    >
-                    <label class='answer' for="{{- problem.id -}}_{{- loop.index -}}_answer">
-                      <strong>{{ label }}</strong>. {{ answer|markdown(problem.problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
-                    </label>
-                  </div>
-                </div>
-              {% endfor %}
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-          <div class="fluid ui submit primary button" id="form_submit">Submit</div>
-          <div class="ui error message"></div>
-        </form>
+<div class="ui segment">
+  <form action="" method="post" class="ui form flex flex-col justify-between" id="task_form" autocomplete="off">
+    {% csrf_token %}
+    <input type="hidden" id="refreshed" value="no">
+    <input type="hidden" name="contest" value="{{ contest.key }}">
+    <input type="hidden" name="submission" value="{{ submission.id }}">
+    <div class="w-full overflow-hidden">
+      <div class="flex relative transition duration-300 ease-in-out" id="list-problem">
+        {% for problem, answers in problems %}
+          {% with index = loop.index, last = loop.last %}
+          {% include 'contest/task_detail.html' %}
+          {% endwith %}
+        {% endfor %}
       </div>
     </div>
-    <div class="three wide column">
-      <div class="ui sticky basic segment">
-        <div class="ui relaxed divided list">
-          {% for problem, answers in problems %}
-          <div class="item" id="answer_{{- problem.id -}}">
-            <i class="large question circle middle aligned icon"></i>
-            <div class="content">
-              <a href="#{{ problem.id }}" class="header">Problem {{ loop.index }}</a>
-              <div class="description"></div>
-            </div>
-          </div>
-          <script>
-            $('input[type=radio][name=answer_{{- problem.id -}}]').change(function() {
-              const answer = document.getElementById('answer_{{- problem.id -}}')
-              var icon = $(answer).find('i')
-              icon.removeClass('question')
-              icon.addClass('green check')
-              var subContent = $(answer).find('.description')
-              subContent.html('<strong>' + this.getAttribute('label') + '</strong>: ' + this.value)
-            })
-          </script>
-          {% endfor %}
-        </div>
-        <div class="ui divider"></div>
-        <script>
-          const formSubmitBtn = document.getElementById('form_submit')
-          function task_form() {
-            formSubmitBtn.click();
-          }
-        </script>
-        <div class="ui primary fluid button" id="submit" onclick="task_form()">Submit</div>
-      </div>
+    <div class="flex w-full justify-between mt-auto">
+      <div id="prev" class="px-4 py-2 rounded-md font-bold text-white bg-slate-500">Prev</div>
+      <div id="next" class="px-4 py-2 rounded-md font-bold text-white {% if count > 1 %}cursor-pointer bg-blue-500 hover:bg-blue-700 {% else %}bg-slate-500{% endif %}">Next</div>
     </div>
-  </div>
+    <input type="submit" value="Submit" class="hidden" id="submit_form">
+    <div class="ui error message"></div>
+  </form>
 </div>
 {% endblock content %}
 
+{% block extends_info %}
+<div class="w-full p-4 flex space-y-6 flex-col mt-4 ui segment">
+  <div class="px-4 py-2 bg-black text-white rounded-lg max-w-max">List of problems</div>
+  <div class="grid md-grid-col-sm-2 lg:grid-cols-3 xl:grid-cols-4 py-5 gap-3 border-b border-slate-500">
+    {% for item in problems %}
+      <div class="flex font-bold cursor-pointer text-white items-center rounded-md bg-gray-500 justify-between px-4 py-2" id="answer_problem_{{ loop.index }}" onClick="changeProblem({{ loop.index }})">
+        <div>{{ loop.index }}</div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="w-full">
+    <button class="w-full py-2 text-center bg-blue-500 text-white rounded-md font-bold hover:bg-blue-700" onClick="submitForm()">Submit</button>
+  </div>
+</div>
+{% endblock %}
+
+{% macro time_left(contest) %} 
+{{ contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j, Y, G:i")) }} 
+{% endmacro %} 
+
+{% block notification %}
+<div class="relative mt-6 bg-[url(https://www.enjpg.com/img/2020/ios-14-11.jpg)] bg-cover bg-center bg-no-repeat w-full rounded-2xl p-4 pl-6 pr-6">
+  <div class="text-white font-semibold text-3xl">{{ contest.name }}</div>
+  <div class="text-xs text-white mt-auto">
+    {{ time_left(contest) }}
+  </div>
+  <div class="text-xs text-white mt-8">
+    <span class="time text-xl">
+      {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
+    </span>
+  </div>
+  
+</div>
+{% endblock %}
+
 {% block extends_js %}
 <script type="text/javascript">
+  const submit = document.querySelector('#submit_form')
   $(".ui.form")
     .form({
       fields: {
@@ -127,9 +116,17 @@
       location.reload();
     }
   }
-  $('.ui.sticky').sticky({
-    context: '#task'
-  })
-
+  {% for problem, answers in problems %}
+    $('input[type=radio][name=answer_{{- problem.id -}}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ loop.index }}')
+      answer_problem.classList.add('bg-green-500')
+      answer_problem.classList.remove('bg-gray-500')
+      answer_problem.innerHTML = `<div>{{ loop.index }}</div>\n<div class='pl-5 border-l-2 border-white'>${this.getAttribute('label')}</div>`
+    })
+  {% endfor %}
+  function submitForm() {
+    submit.click()  
+  }
 </script>
+{% include 'contest/task_js.html' %}
 {% endblock extends_js %}

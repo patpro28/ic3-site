@@ -112,7 +112,7 @@
     {% include 'navbar.html' %}
     <div class="p-2 pr-4 pl-0 ml-20 mr-20 sm:p-8 pt-6" id='container'>
       {% block content_title %}{% endblock %} 
-      <div class="flex flex-col mr-2">
+      <div class="flex flex-col mr-2 mt-2">
         {% block content %} {% endblock content %}
       </div>
     </div>
@@ -229,7 +229,9 @@
           </div>
         </div>
         {% endblock notification %}
-      {% include 'contest/recent.html' %}
+        {% block extends_info %}
+        {% include 'contest/recent.html' %}
+        {% endblock extends_info %}
       {% endblock right_content %}
     </div>
     {% block extends_js %}{% endblock extends_js %}

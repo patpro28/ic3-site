@@ -1,13 +1,13 @@
-<tr>
-  <td class="rank center aligned">{{ rank }}</td>
+<tr class="divide-x divide-gray-500">
+  <td class="rank text-center">{{ rank }}</td>
   {{ user.result_cell }}
-  <td class="organization organization_column">
+  <td class="organization organization_column hidden px-2">
     {% if user.user.organization %}
       {{ user.user.organization.short_name }}
     {% endif %}
   </td>
-  <td class="username username_column">{{ user.username }}</td>
-  <td class="fullname">{{ link_user(user.user) }}</td>
+  <td class="username username_column hidden px-2">{{ user.username }}</td>
+  <td class="fullname px-2">{{ link_user(user.user) }}</td>
   {% for cell in user.problem_cells %}
     {{ cell }}
   {% endfor %}

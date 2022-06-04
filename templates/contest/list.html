@@ -186,16 +186,15 @@ contest.user_count }} {% endif %} {% endmacro %}
   {% if contests %}
   <div class="mt-8">
     <div class="font-semibold">Contest History ✋🏻</div>
-    {% if page_obj and page_obj.has_other_pages() %} {% include "list-page.html"
-    %} {% endif %}
+    {% if page_obj and page_obj.has_other_pages() %} 
+      {% include "list-page.html" %}
+    {% endif %}
     <div class="mt-4">
       {% for contest in contests %}
-      <div
-        class="joining h-16 w-full bg-white rounded-lg p-2 flex justify-between pl-3 pr-3 mb-2"
-      >
+      <div class="joining w-full bg-white rounded-lg p-2 flex justify-between pl-3 pr-3 mb-2">
         <div class="flex items-center">
           <img
-            class="h-12 w-12 object-cover rounded-lg"
+            class="h-12 w-12 hidden sm:inline object-cover rounded-lg"
             src="https://wallpapercave.com/wp/wp8216868.jpg"
             alt=""
           />
@@ -203,10 +202,11 @@ contest.user_count }} {% endif %} {% endmacro %}
         </div>
         <a
           href="{{ url('education:contest_ranking', contest.key)}}"
-          class="bg-black my-auto h-9 cursor-pointer text-white p-2 w-24 rounded-lg text-xs flex items-center justify-between"
+          class="bg-black my-auto h-9 cursor-pointer text-white p-2 rounded-lg text-xs flex items-center justify-between"
         >
           <i class="bx bxs-user mr-0.5"></i>
-          <span> {{ user_count(contest, request.user) }} | View </span>
+          <span> {{ user_count(contest, request.user) }} </span>
+          <span class="hidden sm:inline">| View </span>
         </a>
       </div>
       {% endfor %}

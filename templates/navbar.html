@@ -60,7 +60,7 @@
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
     <li class="group my-2 relative">
       <a href="{{ url('admin:index') }}" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
-        <span class="material-icons sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           settings
         </span>
         <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Admin</span>
