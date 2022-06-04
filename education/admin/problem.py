@@ -75,7 +75,7 @@ class ProblemForm(forms.ModelForm):
             'authors': widgets.SemanticSelectMultiple,
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
             'organizations': widgets.SemanticSelectMultiple,
-            'types': widgets.SemanticSelectMultiple,
+            # 'types': widgets.SemanticSelectMultiple,
             'group': widgets.SemanticSelect,
             'level': widgets.SemanticSelect,
         }
@@ -119,7 +119,7 @@ class ProblemAdmin(VersionAdmin):
         }),
         (_('Description'), {
             'fields': (
-                'is_full_markup', 'description', 'difficult', 'types', 'level'
+                'is_full_markup', 'description', 'difficult', 'group', 'level'
             ),
         })
     )
