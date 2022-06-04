@@ -1,0 +1,12 @@
+<div
+  class="flex flex-col mt-4 p-8 w-full sm:flex-row space-x-4 items-center"
+>
+  <label class="font-bold basis-1/6 text-xl" for="{{- index -}}_answer">Answer</label>
+  <input
+    type="text"
+    name="answer_{{- index -}}"
+    id="{{- index -}}_answer"
+    maxlength="{{ max_length }}"
+    class="basis-5/6"
+  />
+</div>

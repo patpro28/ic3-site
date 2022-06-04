@@ -102,8 +102,13 @@
           identifier: 'answer_{{- problem.id -}}',
           rules: [
             {
+              {% if problem.problem.answer_type == 'mc' %}
               type: 'checked',
               prompt: 'Please select one answer for Problem {{ loop.index }}'
+              {% elif problem.problem.answer_type == 'fill' %}
+              type: 'empty',
+              prompt: 'Please fill answer for Problem {{ loop.index }}'
+              {% endif %}
             }
           ]
         },
@@ -119,12 +124,30 @@
     }
   }
   {% for problem, answers in problems %}
+    {% if problem.problem.answer_type == 'mc' %}
     $('input[type=radio][name=answer_{{- problem.id -}}]').change(function() {
       let answer_problem = document.querySelector('#answer_problem_{{ loop.index }}')
       answer_problem.classList.add('bg-green-500')
       answer_problem.classList.remove('bg-gray-500')
       answer_problem.innerHTML = `<div>{{ loop.index }}</div>\n<div class='pl-5 border-l-2 border-white'>${this.getAttribute('label')}</div>`
     })
+    {% elif problem.problem.answer_type == 'fill' %}
+    $('input[type=text][name=answer_{{- problem.id -}}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ loop.index }}')
+      let answer = this.value
+      if (answer.trim().length == 0) {
+        answer_problem.classList.remove('bg-green-500')
+        answer_problem.classList.add('bg-gray-500')
+        answer_problem.innerHTML = `<div>{{ loop.index }}</div>`
+      } else {
+        answer_problem.classList.add('bg-green-500')
+        answer_problem.classList.remove('bg-gray-500')
+        answer_problem.innerHTML = `<div>{{ loop.index }}</div><span class="material-icons">
+          check_circle
+          </span>`
+      }
+    })
+    {% endif %}
   {% endfor %}
   function submitForm() {
     submit.click()  

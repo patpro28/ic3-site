@@ -16,6 +16,11 @@ def disallowed_characters_validator(text):
         raise ValidationError(_('Disallowed characters: %(value)s'),
                               params={'value': ''.join(common_disallowed_characters)})
 
+ANSWER_TYPE = (
+    ('mc', _('Multiple-choice')),
+    ('fill', _('Fill in the answer')),
+)
+
 class Level(models.Model):
     code = models.CharField(_("code"), max_length=10, unique=True)
     name = models.CharField(_("name"), max_length=50)
@@ -69,14 +74,15 @@ class Problem(models.Model):
                                            help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
-    group = models.ForeignKey(ProblemGroup, verbose_name=_("group"), 
-                            help_text=_('The group of problem, shown under Category in the problem list.'), on_delete=models.CASCADE)
+    types = models.ManyToManyField(ProblemGroup, verbose_name=_("group"), blank=True, related_name='problem',
+                                    help_text=_('The group of problem, shown under Category in the problem list.'))
     
-    level = models.ForeignKey("education.Level", verbose_name=_("level"), null=True, on_delete=models.CASCADE)
+    level = models.ForeignKey("education.Level", verbose_name=_("level"), on_delete=models.SET_NULL, null=True)
     difficult = models.CharField(_("Difficult of problem"), max_length=10, default='newbie', choices=DIFFICULT)
     
     is_full_markup = models.BooleanField(verbose_name=_('allow full markdown access'), default=False)
 
+    answer_type = models.CharField(_('Type of answer'), max_length=10, default='mc', choices=ANSWER_TYPE)
 
     def __str__(self):
         return self.name
@@ -195,6 +201,7 @@ class Problem(models.Model):
 
 
 class Answer(models.Model):
+    types = models.CharField(_("Answer type"), max_length=10, default='mc')
     problem = models.ForeignKey(Problem, verbose_name=_("problem"), related_name='answers', null=True, on_delete=models.CASCADE)
     description = models.CharField(_("Content"), max_length=100, blank=False)
     is_correct = models.BooleanField(_("Correct answer"), default=False)

@@ -7,7 +7,7 @@ from mptt.utils import get_cached_trees
 from statici18n.templatetags.statici18n import inlinei18n
 
 from . import (datetime, gravatar, markdown, reference, render,
-               spaceless, timedelta)
+               spaceless, timedelta, answer)
 from . import registry
 
 registry.function('str', str)

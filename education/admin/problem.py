@@ -47,13 +47,27 @@ class LevelAdmin(VersionAdmin):
 class AnswerInlineFormset(forms.BaseInlineFormSet):
     def clean(self):
         super().clean()
-        count = 0
-        for form in self.forms:
-            count += form.cleaned_data['is_correct'] == True
-        if count < 1:
-            raise forms.ValidationError('You must have at least one Correct answer')
-        if count > 1:
-            raise forms.ValidationError('You can only get one correct answer')
+        type = self.instance.answer_type
+        if type == 'mc':
+            count = 0
+            for form in self.forms:
+                count += form.cleaned_data['is_correct'] == True
+                print(form)
+                form.cleaned_data['types'] = 'mc'
+            if count < 1:
+                raise forms.ValidationError('You must have at least one Correct answer')
+            if count > 1:
+                raise forms.ValidationError('You can only get one correct answer')
+        if type == 'fill':
+            count = 0
+            for form in self.forms:
+                form.cleaned_data['types'] = 'fill'
+                if form.cleaned_data['DELETE'] == False:
+                    count += 1
+            if count > 1:
+                raise forms.ValidationError('You can only fill one answer')
+            if count < 1:
+                raise forms.ValidationError('You must have at least one Correct answer')
 
 
 class AnswerInline(admin.TabularInline):
@@ -75,9 +89,9 @@ class ProblemForm(forms.ModelForm):
             'authors': widgets.SemanticSelectMultiple,
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
             'organizations': widgets.SemanticSelectMultiple,
-            # 'types': widgets.SemanticSelectMultiple,
-            'group': widgets.SemanticSelect,
+            'types': widgets.SemanticSelectMultiple,
             'level': widgets.SemanticSelect,
+            'answer_type': widgets.SemanticSelect,
         }
 
 
@@ -119,7 +133,7 @@ class ProblemAdmin(VersionAdmin):
         }),
         (_('Description'), {
             'fields': (
-                'is_full_markup', 'description', 'difficult', 'group', 'level'
+                'is_full_markup', 'description', 'difficult', 'types', 'level', 'answer_type'
             ),
         })
     )

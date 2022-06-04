@@ -105,7 +105,10 @@ class SubmissionProblem(models.Model):
     output = models.TextField(_("student's answer"), blank=True)
 
     def calculator(self):
-        answer = Answer.objects.get(problem=self.problem.problem, is_correct=True)
+        if self.problem.problem.answer_type == 'mc':
+            answer = Answer.objects.get(problem=self.problem.problem, is_correct=True)
+        if self.problem.problem.answer_type == 'fill':
+            answer = Answer.objects.filter(problem=self.problem.problem).first()
         self.result = answer.description == self.output
         if self.result:
             self.points = self.problem.points
