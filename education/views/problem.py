@@ -61,7 +61,7 @@ class ProblemList(TitleMixin, ListView):
         if self.request.user.is_authenticated:
             filter |= Q(authors=self.profile)
         
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description')
+        queryset = Problem.objects.filter(filter)
         if not self.request.user.has_perm('education.see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.profile is not None:
@@ -98,7 +98,7 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
     template_name = 'problem/level_list.html'
     paginate_by = 1
     sql_sort = frozenset(('difficult', 'code', 'name'))
-    manual_sort = frozenset(('group'))
+    manual_sort = frozenset(('types'))
     all_sorts = sql_sort | manual_sort
     default_desc = frozenset(('-difficult'))
     default_sort = 'code'
@@ -119,7 +119,7 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
         sort_key = self.order.lstrip('-')
         if sort_key in self.sql_sort:
             queryset = queryset.order_by(self.order, 'id')
-        elif sort_key == 'group':
+        elif sort_key == 'types':
             queryset = queryset.order_by(self.order + '__name', 'id')
         
         paginator.object_list = queryset
@@ -136,7 +136,7 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
         if self.user is not None:
             filter |= Q(authors=self.user)
         
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description')
+        queryset = Problem.objects.filter(filter)
 
         if not self.user.has_perm('education:see_organization_problem'):
             filter = Q(is_organization_private=False)

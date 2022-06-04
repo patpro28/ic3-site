@@ -38,7 +38,7 @@
           {% for problem in item.problems %}
           <tr>
             <td><a href="{{ url('education:problem_detail', problem.code) }}">{{ problem.name }}</a></td>
-            <td class="category">{{ problem.group }}</td>
+            <td class="category">{{ problem.types.all()|join(', ')}}</td>
             <td>{{ problem.difficult }}</td>
           </tr>
           {% endfor %}
