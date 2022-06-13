@@ -28,7 +28,8 @@ urlpatterns += [
         path('join/', contest.ContestJoin.as_view(), name='contest_join'),
         path('leave/', contest.ContestLeave.as_view(), name='contest_leave'),
         path('task/', contest.ContestTaskView.as_view(), name='contest_task'),
-        path('pdf/', contest.ContestTaskPdfView.as_view(), name='contest_pdf')
+        path('pdf/', contest.ContestTaskPdfView.as_view(), name='contest_pdf'),
+        path('editorial/', contest.ContestSolutionView.as_view(), name='contest_editorial'),
     ]))
 ]
 
