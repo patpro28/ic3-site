@@ -84,6 +84,10 @@ class ContestMixin(object):
     context['tab'] = self.get_tab()
     context['has_solution'] = ContestSolution.objects.filter(contest=self.object).exists()
 
+    if context['has_solution']:
+      solution = ContestSolution.objects.get(contest=self.object)
+      context['has_solution'] = solution.is_accessible_by(self.request.user) and not self.request.in_contest
+
     if self.request.user.is_authenticated:
       try:
         context['live_participation'] = (
