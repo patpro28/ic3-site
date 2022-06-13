@@ -401,3 +401,20 @@ class ContestProblem(models.Model):
         verbose_name = _('contest problem')
         verbose_name_plural = _('contest problems')
         ordering = ('order',)
+
+
+class ContestSolution(models.Model):
+    contest = models.ForeignKey("education.Contest", verbose_name=_("contest"), on_delete=models.SET_NULL, 
+                                related_name='solution', null=True, blank=True)
+    authors = models.ManyToManyField("backend.Profile", verbose_name=_("authors"))
+    publish_on = models.DateTimeField(verbose_name=_('publish date'))
+    is_full_markup = models.BooleanField(_('markup full'), default=False)
+    is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
+    content = models.TextField(_("editorial content"))
+
+    @property
+    def markdown_style(self):
+        return 'description-full' if self.is_full_markup else 'description'
+    
+    def __str__(self):
+        return _('Editorial for %s') % self.contest.name

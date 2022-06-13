@@ -9,17 +9,33 @@ from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.utils.html import format_html
 
 from semantic_admin import widgets
-from semantic_admin.admin import SemanticTabularInline, SemanticModelAdmin
+from semantic_admin.admin import SemanticTabularInline, SemanticModelAdmin, SemanticStackedInline
 from backend.models.profile import Profile
 
 from backend.widgets.martor import AdminMartorWidget, MartorWidget
 
 from education.models import ContestProblem
-from education.models.contest import Contest, ContestParticipation
+from education.models.contest import Contest, ContestParticipation, ContestSolution
 
 class ContestProblemInline(SemanticTabularInline, SortableInlineAdminMixin):
   model = ContestProblem
   fields = ('problem', 'points', 'order')
+
+
+class ContestSolutionForm(forms.ModelForm):
+  model = ContestSolution
+
+  class Meta:
+    widgets = {
+      'content': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')})
+    }
+
+class ContestSolutionInline(SemanticStackedInline):
+  model = ContestSolution
+  fields = ('authors', 'is_public', 'publish_on', 'is_full_markup', 'content')
+  extra = 0
+  max_num = 1
+  form = ContestSolutionForm
 
 
 class ContestAdminForm(forms.ModelForm):
@@ -44,7 +60,7 @@ class ContestAdminForm(forms.ModelForm):
       'end_time': widgets.SemanticDateTimeInput,
       'private_contestants': widgets.SemanticSelectMultiple,
       'view_contest_scoreboard': widgets.SemanticSelectMultiple,
-      # 'description': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')})
+      'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')})
     }
 
 
@@ -71,7 +87,7 @@ class ContestAdmin(SemanticModelAdmin):
       (_('Scheduling'), {'fields': ('start_time', 'end_time', )}),
   )
   list_display = ['key', 'name', 'is_visible', 'show_public']
-  inlines = [ContestProblemInline]
+  inlines = [ContestProblemInline, ContestSolutionInline]
   ordering = ('key',)
   search_fields = ('key', 'name',)
   date_hierarchy = 'start_time'
