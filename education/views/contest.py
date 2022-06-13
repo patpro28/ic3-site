@@ -77,34 +77,35 @@ class ContestMixin(object):
     return self.object.is_editable_by(self.request.user)
 
   def get_context_data(self, **kwargs):
-      context = super().get_context_data(**kwargs)
-      context["now"] = timezone.now()
-      context['is_editor'] = self.is_editor
-      context['can_edit'] = self.can_edit
-      context['tab'] = self.get_tab()
+    context = super().get_context_data(**kwargs)
+    context["now"] = timezone.now()
+    context['is_editor'] = self.is_editor
+    context['can_edit'] = self.can_edit
+    context['tab'] = self.get_tab()
+    context['has_solution'] = ContestSolution.objects.filter(contest=self.object).exists()
 
-      if self.request.user.is_authenticated:
-        try:
-          context['live_participation'] = (
-            self.request.user.contest_history.get(
-              contest=self.object,
-              virtual=ContestParticipation.LIVE
-            )
+    if self.request.user.is_authenticated:
+      try:
+        context['live_participation'] = (
+          self.request.user.contest_history.get(
+            contest=self.object,
+            virtual=ContestParticipation.LIVE
           )
-        except ContestParticipation.DoesNotExist:
-          context['live_participation'] = None
-          context['has_joined'] = False
-        else:
-          context['has_joined'] = True
-      else:
+        )
+      except ContestParticipation.DoesNotExist:
         context['live_participation'] = None
         context['has_joined'] = False
-      context['logo_override_image'] = self.object.logo_override_image
-      if not context['logo_override_image'] and self.object.organizations.count() == 1:
-        context['logo_override_image'] = self.object.organizations.first().logo
-      
-      return context
-  
+      else:
+        context['has_joined'] = True
+    else:
+      context['live_participation'] = None
+      context['has_joined'] = False
+    context['logo_override_image'] = self.object.logo_override_image
+    if not context['logo_override_image'] and self.object.organizations.count() == 1:
+      context['logo_override_image'] = self.object.organizations.first().logo
+    
+    return context
+
 
   def get(self, request, *args, **kwargs):
     try:
