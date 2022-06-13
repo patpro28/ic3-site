@@ -86,7 +86,7 @@ class ContestMixin(object):
 
     if context['has_solution']:
       solution = ContestSolution.objects.get(contest=self.object)
-      context['has_solution'] = solution.is_accessible_by(self.request.user) and not self.request.in_contest
+      context['has_solution'] = solution.is_accessiable_by(self.request.user) and not self.request.in_contest
 
     if self.request.user.is_authenticated:
       try:
