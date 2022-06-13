@@ -10,7 +10,7 @@ from django import forms
 from django.conf import settings
 from django.db import IntegrityError
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -27,7 +27,7 @@ from backend.utils.ranker import ranker
 from backend.utils.views import generic_message, QueryStringSortMixin, TitleMixin, DiggPaginatorMixin, add_file_response
 from backend.pdf import HAS_PDF, DefaultPdfMaker
 from education.models import Contest
-from education.models.contest import ContestParticipation, ContestProblem
+from education.models.contest import ContestParticipation, ContestProblem, ContestSolution
 from education.models.problem import Answer
 from education.models.submission import Submission, SubmissionProblem
 
@@ -567,3 +567,27 @@ class ContestTaskPdfView(ContestMixin, SingleObjectMixin, View):
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=%s.pdf' % (contest.key)
     return response
+
+
+class ContestSolutionView(LoginRequiredMixin, ContestMixin, TitleMixin, DetailView):
+  context_object_name = 'contest'
+  template_name = 'contest/editorial.html'
+
+  def get_title(self):
+    return _('Editorial for %s') % self.object.name
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+
+    solution = get_object_or_404(ContestSolution, contest=self.object)
+
+    if not solution.is_accessiable_by(self.request.user) or self.request.in_contest:
+      raise Http404()
+    
+    context['solution'] = solution
+    return context
+
+  def no_such_contest(self):
+    key = self.kwargs.get(self.slug_url_kwarg, None)
+    return generic_message(self.request, _('No such editorial'),
+                          _('Could not find a editorial with the key "%s".') % key, status=404)

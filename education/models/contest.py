@@ -418,3 +418,10 @@ class ContestSolution(models.Model):
     
     def __str__(self):
         return _('Editorial for %s') % self.contest.name
+
+    def is_accessiable_by(self, user):
+        if self.is_public and self.publish_on < timezone.now():
+            return True
+        if self.contest.is_editable_by(user):
+            return True
+        return False
