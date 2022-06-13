@@ -1453,6 +1453,10 @@ video {
   min-width: 4.5rem;
 }
 
+.max-w-none {
+  max-width: none;
+}
+
 .max-w-\[5rem\] {
   max-width: 5rem;
 }
