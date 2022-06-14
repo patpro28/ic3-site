@@ -1,11 +1,13 @@
-{% extends "base.html" %} {% block content_title %}
-{% include 'title.html' %}
+{% extends "base.html" %} 
+{% load variable %}
+{% block content_title %}
+{% title %}
 {% endblock %} {% block content %}
 <div class="column">
   <form action="" method="post" class="ui form">
     {% csrf_token %}
     <div class="field {% if form.username.errors %}error{% endif %}">
-      {{ form.username.label_tag() }}
+      {{ form.username.label_tag }}
       {% if form.username.errors %}
         {% for error in form.username.errors %}
           <div class="ui negative message">
@@ -17,7 +19,7 @@
       {{ form.username }}
     </div>
     <div class="field {% if form.fullname.errors %}error{% endif %}">
-      {{ form.fullname.label_tag() }}
+      {{ form.fullname.label_tag }}
       {% if form.fullname.errors %}
         {% for error in form.fullname.errors %}
           <div class="ui negative message">
@@ -31,13 +33,13 @@
   
     <div class="field {% if form.password1.errors %}error{% endif %}">
       <label
-        >{{ _('Password') -}}
+        >Password
         <small>(<a href="#" class="pass-req-link">?</a>)</small>
       </label>
       <div style="display: none" class="pass-req alert alert-info">
         <ul>
           {% for validator in password_validators %}
-          <li>{{ validator.get_help_text() }}</li>
+          <li>{{ validator.get_help_text }}</li>
           {% endfor %}
         </ul>
       </div>
@@ -53,10 +55,10 @@
     </div>
     <div class="field {% if form.password2.errors %}error{% endif %}">
       <label
-        >{{ _('Password') }}<sup style="font-size: 0.7em; padding-left: 0.2em"
+        >Password<sup style="font-size: 0.7em; padding-left: 0.2em"
           >2</sup
         >{# -#}
-        <small>{{ _('(again, for confirmation)') }}</small>
+        <small>(again, for confirmation)</small>
       </label>
       
       {% if form.password2.errors %}
@@ -70,7 +72,7 @@
       {{ form.password2 }} 
     </div>
   
-    <button class="fluid ui button" type="submit">{{ _('Register!') }}</button>
+    <button class="fluid ui button" type="submit">Register!</button>
   </form>
 </div>
 {% endblock %}

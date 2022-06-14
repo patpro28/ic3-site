@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static  %}
 <html lang="en">
   <head>
     <title>{% block title %}{{ title }} - {{ SITE_LONG_NAME }}{% endblock %}</title>
@@ -12,16 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFBB33">
     <meta property="og:site_name" content="{{ SITE_LONG_NAME }}">
-    <link rel="icon" type="image/png" href="{{ static('icons/logo.png') }}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{% static 'icons/logo.png' %}" sizes="32x32">
     {% block media %}
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static PYGMENT_THEME %}">
     {% block content_media %} {% endblock content_media %}
     <style>
-      h3.ui.block {
-        background-color: #00008B !important;
-        color: white;
-      }
       body {
         font-family: 'Radio Canada', 'Roboto', sans-serif;
       }
@@ -34,7 +33,7 @@
         }
       }
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
       }
     
       ::-webkit-scrollbar-thumb {
@@ -56,15 +55,11 @@
           -webkit-align-items: center;
           align-items: center;
       }
-      html {
-          font-size: 16px !important;
-      }
     </style>
     {% endblock %} {% block js_media %}
-    <script src="{{ static('plugins/js/jquery.min.js') }}"></script>
-    <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
+    <script src="{% static 'plugins/js/jquery.min.js' %}"></script>
+    <script src="{% url 'javascript-catalog' %}"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <!-- <script src="https://kit.fontawesome.com/bbe894510c.js" crossorigin="anonymous"></script> -->
@@ -110,118 +105,118 @@
 
   <body class="bg-stone-100">
     {% include 'navbar.html' %}
-    <div class="p-2 pr-4 pl-0 ml-20 mr-20 sm:p-8 pt-6" id='container'>
+    <div class="p-2 pt-6 pl-0 pr-4 ml-20 mr-20 sm:p-8" id='container'>
       {% block content_title %}{% endblock %} 
-      <div class="flex flex-col mr-2 mt-2">
+      <div class="flex flex-col mt-2 mr-2">
         {% block content %} {% endblock content %}
       </div>
     </div>
-    <div id="right-content" class="hidden lg:inline fixed overflow-auto top-0 right-0 ml-auto w-1/3 p-7 shadow-lg h-screen bg-white">
+    <div id="right-content" class="fixed top-0 right-0 hidden w-1/3 h-screen ml-auto overflow-auto bg-white shadow-lg lg:inline p-7">
       {% block right_content %}
         {% include 'user/profile.html' %}
         {% block notification %}
         <div>
           <div class="flex mt-6 mb-3">
-              <div class="font-semibold flex items-center">
-                  <i class='bx bxs-bell-ring text-yellow-400 mr-1'></i>
+              <div class="flex items-center font-semibold">
+                  <i class='mr-1 text-yellow-400 bx bxs-bell-ring'></i>
                   Notifications
               </div>
-              <div class="text-gray-400 ml-auto cursor-pointer font-medium text-sm">See all</div>
+              <div class="ml-auto text-sm font-medium text-gray-400 cursor-pointer">See all</div>
           </div>
 
           <div class="h-[360px] shadow-md rounded-xl p-4 pl-4 pr-2 pb-12">
-              <div class="notifications__title flex">
+              <div class="flex notifications__title">
                   <div class="text-base font-semibold">Online classes for newbie</div>
               </div>
 
-              <div class="classroom_list h-full overflow-auto pr-2">
+              <div class="h-full pr-2 overflow-auto classroom_list">
 
                   <div class="classroom">
                       <hr class="mt-3 mb-2">
-                      <div class="class_name text-sm font-semibold flex">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <div class="flex text-sm font-semibold class_name">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                               <path d="M12 14l9-5-9-5-9 5 9 5z" />
                               <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                           </svg>
                           Class A1 (Coding)
                       </div>
-                      <div class="class_time text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_time">
                           Time: 19h30, Wenesday and Friday.
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Teacher: Nguyen Duc Toan
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Tutors: Ho Thi Hien
                       </div>
-                      <div class="user_login_register grid grid-cols-2 gap-2 mt-2">
+                      <div class="grid grid-cols-2 gap-2 mt-2 user_login_register">
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Join class</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Join class</div>
                           </a>
                           
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Register</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Register</div>
                           </a>
                       </div>
                   </div>
 
                   <div class="classroom">
                       <hr class="mt-3 mb-2">
-                      <div class="class_name text-sm font-semibold flex">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <div class="flex text-sm font-semibold class_name">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                               <path d="M12 14l9-5-9-5-9 5 9 5z" />
                               <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                           </svg>
                           Class A1 (Coding)
                       </div>
-                      <div class="class_time text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_time">
                           Time: 19h30, Wenesday and Friday.
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Teacher: Nguyen Duc Toan
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Tutors: Ho Thi Hien
                       </div>
-                      <div class="user_login_register grid grid-cols-2 gap-2 mt-2">
+                      <div class="grid grid-cols-2 gap-2 mt-2 user_login_register">
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Join class</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Join class</div>
                           </a>
                           
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Register</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Register</div>
                           </a>
                       </div>
                   </div>
 
                   <div class="classroom">
                       <hr class="mt-3 mb-2">
-                      <div class="class_name text-sm font-semibold flex">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <div class="flex text-sm font-semibold class_name">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                               <path d="M12 14l9-5-9-5-9 5 9 5z" />
                               <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                           </svg>
                           Class A1 (Coding)
                       </div>
-                      <div class="class_time text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_time">
                           Time: 19h30, Wenesday and Friday.
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Teacher: Nguyen Duc Toan
                       </div>
-                      <div class="class_teacher text-xs font-medium text-gray-400 mt-1">
+                      <div class="mt-1 text-xs font-medium text-gray-400 class_teacher">
                           Tutors: Ho Thi Hien
                       </div>
-                      <div class="user_login_register grid grid-cols-2 gap-2 mt-2">
+                      <div class="grid grid-cols-2 gap-2 mt-2 user_login_register">
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Join class</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Join class</div>
                           </a>
                           
                           <a href="#">
-                              <div class="text-white bg-black text-center text-sm p-2 rounded-lg cursor-pointer">Register</div>
+                              <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Register</div>
                           </a>
                       </div>
                   </div>

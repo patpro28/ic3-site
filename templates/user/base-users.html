@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
+{% load static variable %}
 {% block content_media %}
-<link rel="stylesheet" href="{{ static('user/css/style.css') }}">
+<link rel="stylesheet" href="{% static 'user/css/style.css' %}">
 {% endblock content_media %}
 
 {% block content_title %}
-  {% include 'title.html' %}
+  {% title %}
 {% endblock content_title %}
 
 {% block content %}
 <div class="column">
   <div class="ui row segment">
 
-    {% if page_obj and page_obj.has_other_pages() %}
-    <div class="ui grid segment">
+    {% if page_obj and page_obj.has_other_pages %}
+    <div class="grid ui segment">
       <div class="left floated eight wide column">
       {% include 'list-page.html' %}
       </div>
@@ -32,7 +33,7 @@
     {% block table_user %}
     {% include 'user/user-table.html' %}
     {% endblock table_user %}
-    {% if page_obj and page_obj.has_other_pages() %}
+    {% if page_obj and page_obj.has_other_pages %}
     <div class="ui segment">
       {% include 'list-page.html' %}
     </div>
@@ -49,7 +50,7 @@
       type          : 'category',
       minCharacters : 3,
       apiSettings   : {
-        url: '{{ url("backend:select_profile") }}?term={query}',
+        url: '{% url "backend:select_profile"  %}?term={query}',
         onResponse: function(backendResponse) {
           var response = {
             results : {}
@@ -66,7 +67,7 @@
             response.results[display_rank].results.push({
               title: item.user,
               image: item.gravatar_url,
-              url: '{{ url("user_page") }}' + item.user
+              url: '{% url "user_page" %}' + item.user
             });
           });
           return response;

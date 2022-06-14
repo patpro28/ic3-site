@@ -1,19 +1,20 @@
-<table class="w-full border table border-gray-500">
-  <thead class="bg-indigo-500 text-white">
+{% load contest %}
+<table class="table w-full border border-gray-500">
+  <thead class="text-white bg-indigo-500">
     <tr class="divide-x divide-gray-500">
-      <th class="text-center px-2">{{_('Rank')}}</th>
-      <th class="w-12 text-center px-2">{{ _('Points') }}</th>
-      <th class="organization_column hidden text-center px-2">{{ _('Organization') }}</th>
-      <th class="username_column hidden text-center px-2">{{ _('Username') }}</th>
-      <th class="text-center px-2">{{ _('Fullname') }}</th>
+      <th class="w-12 px-2 text-center">Rank</th>
+      <th class="w-12 px-2 text-center">Points</th>
+      <th class="hidden w-32 px-2 text-center organization_column">Organization</th>
+      <th class="hidden px-2 text-center username_column">Username</th>
+      <th class="px-2 text-center">Fullname</th>
       {% for problem in problems %}
-        <th class="py-1 text-center">
-          <div class="flex min-w-[80%] w-16 flex-col my-auto items-center">
+        <th class="py-1 text-center min-w-[4.5rem] max-w-[5rem]">
+          <div class="flex flex-col items-center m-auto">
             {% if can_edit %}
-            <a href="{{ url('education:problem_detail', problem.problem.code)}}">
+            <a href="{% url 'education:problem_detail' problem.problem.code %}">
             {% endif %}
             <div class="text-xl">
-              {{- contest.get_label_for_problem(loop.index0) }}
+              {% label contest forloop.counter0 %}
             </div>
             {% if can_edit %}
             </a>

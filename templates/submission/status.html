@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
+{% extends 'base.html' %} 
+{% load timedelta %}
+{% block content_title %} {% include 'title.html' %}
 {% endblock content_title %} {% block content_media %}
 <style>
   .wrong {
@@ -14,15 +16,15 @@
 {% endblock content_js %}
 {% block content %}
 <div class="column">
-  <div class="ui two column equal width grid segment">
+  <div class="grid ui two column equal width segment">
     <div class="column">
       <canvas id="myChart" width="100px" height="100px"></canvas>
-      <div class="ui segment two column equal width grid">
+      <div class="grid ui segment two column equal width">
         <div class="column">
-          <strong>Point: </strong>{{ point|floatformat(2) }}
+          <strong>Point: </strong>{{ point|floatformat:2 }}
         </div>
         <div class="column">
-          <strong>Time: </strong>{{ submission.time_excute|timedelta('simple') }}
+          <strong>Time: </strong>{{ submission.time_excute|timedelta:'simple' }}
         </div>
       </div>
     </div>
@@ -30,12 +32,11 @@
       <div class="fluid ui styled accordion">
         {% for output, result in status %}
         <div class="title {% if not output %}disable{% endif %}">
-          {{ _('Problem ') }}{{- loop.index -}}:
+          Problem {{ forloop.counter }}:
           <span class="{{ result|lower }}">{{ result }}</span>
         </div>
         <div class="content">
-          {% if output and perms.education.view_output_submission %} {{_('User
-          answer:')}}{{ output }} {% endif %}
+          {% if output and perms.education.view_output_submission %} User answer:{{ output }} {% endif %}
         </div>
         {% endfor %}
       </div>

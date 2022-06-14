@@ -1,0 +1,14 @@
+{% load contest %}
+{% spaceless %}
+<div class="mt-auto mb-auto ml-2">
+  <a
+    class="font-semibold name"
+    href="{% url 'education:contest_detail' contest.key %}"
+  >
+    {{ contest.name }}
+  </a>
+  <div class="text-xs text-gray-500 contest_contest_time">
+    {{ contest|time_left:_("M j, Y, G:i") }}
+  </div>
+</div>
+{% endspaceless %} 

@@ -6,7 +6,7 @@
 {% block body %}
     <form action="" method="post" class="form-area">
         {% csrf_token %}
-        <table border="0" style="text-align:left">{{ form.as_table() }}</table>
-        <button type="submit">{{ _('Create') }}</button>
+        <table border="0" style="text-align:left">{{ form.as_table }}</table>
+        <button type="submit">Create</button>
     </form>
 {% endblock %}

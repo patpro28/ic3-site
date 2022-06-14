@@ -1,13 +1,14 @@
+{% load profile %}
 <tr class="divide-x divide-gray-500">
-  <td class="text-center">{{ rank }}</td>
+  <td class="py-1 text-center">{{ rank }}</td>
   <td class="px-4">
     <div class="flex justify-between">
       <div class="">
-        {{ link_user(user) }}
+        {% link_user user %}
       </div>
       {% if user.organization %}
         <div class="">
-          <p class="text-gray-400 font-semibold"> {{ user.organization }} </p>
+          <p class="font-semibold text-gray-400"> {{ user.organization }} </p>
         </div>
       {% endif %}
     </div>

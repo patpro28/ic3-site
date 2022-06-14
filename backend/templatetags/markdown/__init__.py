@@ -4,19 +4,22 @@ from html import unescape
 from urllib.parse import urlparse
 
 import mistune
-# from bleach.sanitizer import Cleaner
+from bleach.sanitizer import Cleaner
 from django.conf import settings
-from jinja2 import Markup
+from markupsafe import Markup
 from lxml import html
 from lxml.etree import ParserError, XMLSyntaxError
 
-# from judge.highlight_code import highlight_code
+from backend.highlight_code import highlight_code
 from .lazy_load import lazy_load as lazy_load_processor
 from .math import MathInlineGrammar, MathInlineLexer, MathRenderer
 # from judge.utils.camo import client as camo_client
 # from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 from .bleach_whitelist import all_styles, mathml_attrs, mathml_tags
-from .. import registry
+from django import template
+from django.utils.safestring import mark_safe
+
+register = template.Library()
 
 logger = logging.getLogger('judge.html')
 
@@ -149,7 +152,7 @@ def fragment_tree_to_str(tree):
     return html.tostring(tree, encoding='unicode')[len('<div>'):-len('</div>')]
 
 
-@registry.filter
+@register.simple_tag
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
     escape = styles.get('safe_mode', True)
@@ -175,4 +178,4 @@ def markdown(value, style, math_engine=None, lazy_load=False):
         result = fragment_tree_to_str(tree)
     if bleach_params:
         result = get_cleaner(style, bleach_params).clean(result)
-    return Markup(result)
+    return mark_safe(Markup(result))

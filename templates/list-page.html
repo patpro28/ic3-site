@@ -1,29 +1,29 @@
 <div class="inline-flex py-2">
-  {% if page_obj.has_previous() %}
-    {% if page_obj.previous_page_number() == 1 and first_page_href != None %}
-      <a href="{{ first_page_href }}" class="py-2 text-center w-10 h-10 rounded-l border border-solid border-gray-300">
-        <span class="material-icons w-full text-center">
+  {% if page_obj.has_previous %}
+    {% if page_obj.previous_page_number == 1 and first_page_href != None %}
+      <a href="{{ first_page_href }}" class="w-10 h-10 py-2 text-center border border-gray-300 border-solid rounded-l">
+        <span class="w-full text-center material-icons">
           keyboard_double_arrow_left
         </span>
       </a>
     {% else %}
-      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.previous_page_number() }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="py-2 text-center w-10 h-10 rounded-l border border-solid border-gray-300">
-        <span class="material-icons w-full text-center">
+      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.previous_page_number }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="w-10 h-10 py-2 text-center border border-gray-300 border-solid rounded-l">
+        <span class="w-full text-center material-icons">
           keyboard_double_arrow_left
         </span>
       </a>
     {% endif %}
   {% else %}
-    <a class="py-2 text-center w-10 h-10 rounded-l border border-solid border-gray-300" disabled>
-      <span class="material-icons w-full text-center text-gray-300">
+    <a class="w-10 h-10 py-2 text-center border border-gray-300 border-solid rounded-l" disabled>
+      <span class="w-full text-center text-gray-300 material-icons">
         keyboard_double_arrow_left
       </span>
     </a>
   {% endif %}
   {% for page in page_obj.page_range %}
     {% if not page %}
-      <a class="py-2 text-center w-10 h-10 border border-solid border-gray-300" disabled>
-        <span class="material-icons w-full text-center text-gray-600">
+      <a class="w-10 h-10 py-2 text-center border border-gray-300 border-solid" disabled>
+        <span class="w-full text-center text-gray-600 material-icons">
           more_horiz
         </span>
       </a>
@@ -35,19 +35,19 @@
       {% else %}
         <a href="{% if page == 1 and first_page_href != None %}{{ first_page_href }}{% else %}
             {% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}
-          {% endif %}" class="py-2 text-center w-10 h-10 border border-solid border-gray-300">{{ page }}</a>
+          {% endif %}" class="w-10 h-10 py-2 text-center border border-gray-300 border-solid">{{ page }}</a>
       {% endif %}
     {% endif %}
   {% endfor %}
-  {% if page_obj.has_next() %}
-      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.next_page_number() }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="py-2 text-center w-10 h-10 rounded-r border border-solid border-gray-300">
-        <span class="material-icons w-full text-center">
+  {% if page_obj.has_next %}
+      <a href="{% if page_prefix %}{{ page_prefix }}{% else %}{{''}}{% endif %}{{ page_obj.next_page_number }}{% if page_suffix %}{{ page_suffix }}{% else %}{{''}}{% endif %}" class="w-10 h-10 py-2 text-center border border-gray-300 border-solid rounded-r">
+        <span class="w-full text-center material-icons">
           keyboard_double_arrow_right
         </span>
       </a>
   {% else %}
-    <a class="py-2 text-center w-10 h-10 rounded-r border border-solid border-gray-300" disabled>
-      <span class="material-icons w-full text-center text-gray-300">
+    <a class="w-10 h-10 py-2 text-center border border-gray-300 border-solid rounded-r" disabled>
+      <span class="w-full text-center text-gray-300 material-icons">
         keyboard_double_arrow_right
       </span>
     </a>

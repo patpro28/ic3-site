@@ -1,9 +1,9 @@
 <tr>
   <td class="center aligned">{{ rank }}</td>
   <td>
-    <div class="ui grid">
+    <div class="grid ui">
       <div class="eight wide column">
-        <a class="left aligned user newbie" href="{{ url('user_page', user.username) }}">{{ user.fullname }}</a>
+        <a class="left aligned user newbie" href="{% url 'user_page' user.username %}">{{ user.fullname }}</a>
       </div>
       {% if user.organization %}
         <div class="eight wide column">
@@ -18,7 +18,7 @@
     <form action="{{ kick_url }}" method="POST" class="kick-form">
       {% csrf_token %}
       <input type="hidden" name="user" value="{{ user.id }}">
-      <a href="#" class="fluid ui inverted red button">{{ _('Kick') }}</a>
+      <a href="#" class="fluid ui inverted red button">Kick</a>
     </form>
   </td>
   {% endif %}

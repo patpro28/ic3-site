@@ -1,7 +1,8 @@
-from . import registry
+from django import template
 
-@registry.function
-@registry.render_with('problem/multiple_choices.html')
+register = template.Library()
+
+@register.inclusion_tag('problem/multiple_choices.html')
 def mc(problem, answers):
   return {
     'answers': answers,
@@ -9,8 +10,7 @@ def mc(problem, answers):
     'markdown': problem.problem.markdown_style
   }
 
-@registry.function
-@registry.render_with('problem/fill_answer.html')
+@register.inclusion_tag('problem/fill_answer.html')
 def fill(problem, answers):
   return {
     'index': problem.id,

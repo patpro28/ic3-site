@@ -1,7 +1,6 @@
 django>=4.0,<4.1
 django-mptt
 jsonfield
-django_jinja
 django_redis
 django-statici18n
 django_select2
@@ -18,3 +17,5 @@ ansi2html
 mistune==0.8.4
 mysqlclient
 websocket-client
+bleach==4.1.0
+pygments

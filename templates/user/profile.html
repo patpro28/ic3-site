@@ -1,18 +1,19 @@
+{% load static %}
 {% if request.user.is_authenticated %}
 {% else %}
-<div class="bg-white shadow-md h-auto w-full rounded-xl p-4">
+<div class="w-full h-auto p-4 bg-white shadow-md rounded-xl">
   <div class="flex items-center">
-      <img class="h-12 w-12 mr-4 rounded-full" src="https://www.gravatar.com/avatar/61ed114b5efb6c8c179081e8efc00d90?d=identicon&s=80" alt="">
+      <img class="w-12 h-12 mr-4 rounded-full" src="{% static 'icons/user.png' %}" alt="">
       <div class="">
           <div class="text-base font-semibold">Welcome!✋🏻</div>
           <div class="text-xs font-medium text-gray-400">Let's learn something new today</div>
       </div>
   </div>
-  <div class="user_login_register grid grid-cols-2 gap-2 mt-4">
-      <a href="{{ url('login') }}">
-          <div class="bg-black text-white text-center text-sm p-2 rounded-lg cursor-pointer">Login</div>
+  <div class="grid grid-cols-2 gap-2 mt-4 user_login_register">
+      <a href="{% url 'login' %}">
+          <div class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Login</div>
       </a>
-      <a href="{{ url('register') }}" class="bg-black text-white text-center text-sm p-2 rounded-lg cursor-pointer">Register</a>
+      <a href="{% url 'register' %}" class="p-2 text-sm text-center text-white bg-black rounded-lg cursor-pointer">Register</a>
   </div>
 </div>
 {% endif %}

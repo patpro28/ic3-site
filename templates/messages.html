@@ -2,13 +2,14 @@
   {% for message in messages %}
     <div class="ui message 
     {% if message.tags %}
-      {% set tags = message.tags %}
+      {% with message.tags as tags %}
       {% if tags == 'debug' %}
       {% elif tags == 'info' %}info
       {% elif tags == 'success' %}success
       {% elif tags == 'warning' %}warning
       {% elif tags == 'error' %}negative
       {% endif %}
+      {% endwith %}
     {% endif %}"
     >
     <i class="close icon"></i>

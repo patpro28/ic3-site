@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content_title %}
-<h3 class="ui header block">{{ title }}</h3>
+<h3 class="block ui header">{{ title }}</h3>
 {% endblock content_title %} {% block content_media %} {{ form.media.css }}
 <style>
   fieldset {
@@ -11,23 +11,23 @@
   <div class="ui row segment">
     <form action="" class="ui form" method="post">
       {% csrf_token %}
-      <div class="ui grid">
+      <div class="grid ui">
         <div class="row">
           <fieldset>
             <legend class="ui header">Information</legend>
             <div class="required field">
-              {{ form.fullname.label_tag() }} {{ form.fullname }}
+              {{ form.fullname.label_tag }} {{ form.fullname }}
             </div>
             <div class="field">
-              {{ form.email.label_tag() }} {{ form.email }}
+              {{ form.email.label_tag }} {{ form.email }}
             </div>
-            <div class="field">{{ form.about.label_tag() }} {{ form.about }}</div>
+            <div class="field">{{ form.about.label_tag }} {{ form.about }}</div>
           </fieldset>
         </div>
         {% if request.user.is_superuser %}
         <div class="row">
           <fieldset>
-            <legend class="ui header">{{ _('Permission') }}</legend>
+            <legend class="ui header">Permission</legend>
             <div class="equal width fields">
               <div class="{% if user==request.user %}disabled {% endif %} field">
                 <div class="ui checkbox">
@@ -57,7 +57,7 @@
             </div>
             <div class="equal width fields">
               <div class="field">
-                {{ form.groups.label_tag() }} {{ form.groups }}
+                {{ form.groups.label_tag }} {{ form.groups }}
               </div>
             </div>
           </fieldset>

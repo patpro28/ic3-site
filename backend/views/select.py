@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.encoding import smart_str
 from django.views.generic.list import BaseListView
 
-from backend.jinja2.gravatar import gravatar
+from backend.templatetags.gravatar import gravatar
 from backend.models import Profile, Organization
 from education.models import Problem, Contest
 

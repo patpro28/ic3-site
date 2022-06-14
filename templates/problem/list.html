@@ -1,4 +1,7 @@
-{% extends 'base.html' %} {% block content_title %} {% include 'title.html' %}
+{% extends 'base.html' %} 
+{% load variable %}
+{% block content_title %} 
+{% title %}
 {% endblock content_title %}
 {% block content_media %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/accordion.min.css" integrity="sha512-8K01LT5meQmw23TL3XDMR1YQyJA7sd2CSoof3zcQYA1q065OojNdYMhYQugDfU5v5KdsdMEuKOUY6nMOCwj1HA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -24,9 +27,9 @@
     <div class="content">
       <div class="ui message">
         <strong>Welcome to {{ item.level }}</strong>
-        <div><a href="{{ url('education:problem_level_list', item.level.code)}}"></a></div>
+        <div><a href="{% url 'education:problem_level_list' item.level.code %}"></a></div>
       </div>
-      <table class="ui celled unstackable table">
+      <table class="table ui celled unstackable">
         <thead>
           <tr>
             <th>Problem</th>
@@ -37,8 +40,8 @@
         <tbody>
           {% for problem in item.problems %}
           <tr>
-            <td><a href="{{ url('education:problem_detail', problem.code) }}">{{ problem.name }}</a></td>
-            <td class="category">{{ problem.types.all()|join(', ')}}</td>
+            <td><a href="{% url 'education:problem_detail'  problem.code  %}">{{ problem.name }}</a></td>
+            <td class="category">{{ problem.types.all|join:', '}}</td>
             <td>{{ problem.difficult }}</td>
           </tr>
           {% endfor %}

@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load profile variable %}
+
 {% block content_title %}
-{% include 'title.html' %}
+{% title %}
 {% endblock content_title %}
 
 {% block content %}
@@ -9,23 +11,23 @@
     <div class="ui row segment">
         <table class="ui single line table">
             <tr>
-                <th>{{ _('User:') }}</th>
-                <td>{{ link_user(object.user) }}</td>
+                <th>User:</th>
+                <td>{% link_user object.user %}</td>
             </tr>
             <tr>
-                <th>{{ _('Organization:') }}</th>
+                <th>Organization:</th>
                 <td>
                     {% with org=object.organization %}
-                        <a href="{{ org.get_absolute_url() }}">{{ org.name }}</a>
+                        <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
                     {% endwith %}
                 </td>
             </tr>
             <tr>
-                <th>{{ _('Time:') }}</th>
-                <td>{{ object.time|date(_("N j, Y, g:i a")) }}</td>
+                <th>Time:</th>
+                <td>{{ object.time|date:"N j, Y, g:i a" }}</td>
             </tr>
             <tr>
-                <th colspan="2">{{ _('Reason:') }}</th>
+                <th colspan="2">Reason:</th>
             </tr>
             <tr>
                 <td colspan="2" style="padding-left: 2em">{{ object.reason }}</td>

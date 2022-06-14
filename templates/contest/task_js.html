@@ -1,6 +1,6 @@
 <script>
   var current_problem = 1;
-  const number_problem = {{ count }}
+  const number_problem = {{ problems|length }}
   let list_problem = document.querySelector('#list-problem')
   const problems = document.querySelectorAll('.task')
   let prevButton = document.querySelector('#prev')
@@ -36,6 +36,7 @@
   }
 
   prevButton.addEventListener('click', function() {
+    console.log('prev')
     if (current_problem == 1) {
       return
     }
@@ -47,6 +48,7 @@
     sliderTask()
   })
   nextButton.addEventListener('click', function() {
+    console.log('next')
     if (current_problem == number_problem) {
       return
     }

@@ -1,14 +1,14 @@
 <div class="ui equal width grid">
     <div class="column">
         <a class="fluid ui {% if tab == 'pending' %}active {% endif %}button" 
-            href="{{ url('organization_requests_pending', object.slug) }}">
-            {{ _('Pending') }}
+            href="{% url 'organization_requests_pending' object.slug %}">
+            Pending
         </a>
     </div>
     <div class="column">
         <a class="fluid ui {% if tab == 'log' %}active {% endif %}button" 
-            href="{{ url('organization_requests_log', object.slug) }}">
-            {{ _('Log') }}
+            href="{% url 'organization_requests_log' object.slug %}">
+            Log
         </a>
     </div>
 </div>

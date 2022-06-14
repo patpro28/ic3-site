@@ -1,58 +1,58 @@
 {% extends 'base.html' %}
-
+{% load variable static %}
 {% block content_media %}
-<link rel="stylesheet" href="{{ static('submission/rank.css') }}?v=12312">
+<link rel="stylesheet" href="{% static 'submission/rank.css' %}">
 {% endblock content_media %}
 
 {% block content_title %}
-{% include 'title.html' %}
+{% title %}
 {% endblock content_title %}
 
 {% block content %}
 <div class="w-full">
-{% if page_obj and page_obj.has_other_pages() %}
+{% if page_obj and page_obj.has_other_pages %}
     {% include 'list-page.html' %}
 {% endif %}
 <div class="grid grid-cols-[80px_120px_200px_auto_50px] gap-px">
-  <div class="col-start-1 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 rounded-tl-2xl flex justify-center items-center">
+  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-1 text-xs font-bold bg-slate-400 md:text-sm rounded-tl-2xl">
       Result
   </div>
-  <div class="col-start-2 col-span-1 flex bg-slate-400 font-bold text-xs md:text-sm w-full h-10 justify-center items-center">
+  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-2 text-xs font-bold bg-slate-400 md:text-sm">
       Time
   </div>
-  <div class="col-start-3 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 sm:h-10 flex justify-center items-center">
+  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-3 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
       Username
   </div>
 
-  <div class="col-start-4 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 sm:h-10 flex justify-center items-center">
+  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-4 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
       Contest
   </div>
 
-  <div class="col-start-5 col-span-1 bg-slate-400 font-bold text-xs md:text-sm w-full h-10 flex rounded-tr-2xl justify-center items-center">
+  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-5 text-xs font-bold bg-slate-400 md:text-sm rounded-tr-2xl">
 
   </div>
   {% for submission in submissions %}
     {% include 'submission/row.html' %}
   {% endfor %}
-  <div class="col-start-1 col-span-1 w-full h-10 bg-slate-400 rounded-bl-2xl  ">
+  <div class="w-full h-10 col-span-1 col-start-1 bg-slate-400 rounded-bl-2xl ">
         
   </div>
-  <div class="col-start-2 col-span-1 w-full h-10 bg-slate-400 ">
+  <div class="w-full h-10 col-span-1 col-start-2 bg-slate-400 ">
       
   </div>
-  <div class="col-start-3 col-span-1 w-full h-10 bg-slate-400 sm:h-10  ">
-      
-  </div>
-
-  <div class="col-start-4 col-span-1 w-full h-10 bg-slate-400 sm:h-10  ">
+  <div class="w-full h-10 col-span-1 col-start-3 bg-slate-400 sm:h-10 ">
       
   </div>
 
-  <div class="col-start-5 col-span-1 w-full h-10 bg-slate-400  rounded-br-2xl ">
+  <div class="w-full h-10 col-span-1 col-start-4 bg-slate-400 sm:h-10 ">
+      
+  </div>
+
+  <div class="w-full h-10 col-span-1 col-start-5 bg-slate-400 rounded-br-2xl ">
 
   </div>
 </div>
-{% if page_obj and page_obj.has_other_pages() %}
+{% if page_obj and page_obj.has_other_pages %}
     {% include 'list-page.html' %}
 {% endif %}
 </div>

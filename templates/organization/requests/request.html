@@ -10,10 +10,10 @@
         <form action="" method="post" class="ui form">
             {% csrf_token %}
             <div class="field">
-                <label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label>
+                <label for="{{ form.reason.id_for_label }}"><b>Your reason for joining:</b></label>
                 {{ form.reason }}
             </div>
-            <button type="submit" class="fluid ui primary button">{{ _('Request') }}</button>
+            <button type="submit" class="fluid ui primary button">Request</button>
         </form>
     </div>
 </div>

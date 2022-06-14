@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" integrity="sha512-pbLYRiE96XJxmJgF8oWBfa9MdKwuXhlV7vgs2LLlapHLXceztfcta0bdeOgA4reIf0WH67ThWzA684JwkM3zfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<div class="ui grid" id="task">
+<div class="grid ui" id="task">
   <div class="column">
     <div class="ui row segment">
       {% for problem, answers in problems %}
       <div class="ui segments" id="{{ problem.id }}">
         <div class="ui top attached secondary black inverted menu">
-          <div class="ui header item">Problem {{ loop.index }}</div>
+          <div class="ui header item">Problem {{ forloop.counter }}</div>
         </div>
         <div class="ui bottom attached segment">
           <div style="font-size: 16px">
@@ -26,18 +26,18 @@
         </div>
         <div class="ui segment">
           <h3 class="ui header">Answer</h3>
-          <div class="ui stackable two column grid segment fields">
+          <div class="grid ui stackable two column segment fields">
           {% for label, answer in answers %}
             <div class="column field">
               <div class="ui toggle checkbox">
                 <input 
                   type="radio" 
-                  name="answer_{{- problem.id -}}" 
-                  id="{{- problem.id -}}_{{- loop.index -}}_answer" 
+                  name="answer_{{ problem.id }}" 
+                  id="{{ problem.id }}_{{ forloop.counter }}_answer" 
                   value="{{ answer }}"
                   label={{ label }}
                 >
-                <label class='answer' for="{{- problem.id -}}_{{- loop.index -}}_answer">
+                <label class='answer' for="{{ problem.id }}_{{ forloop.counter }}_answer">
                   <strong>{{ label }}</strong>. {{ answer }}
                 </label>
               </div>

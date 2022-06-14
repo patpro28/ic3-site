@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import tempfile
-from jinja2 import select_autoescape
-from django_jinja.builtins import DEFAULT_EXTENSIONS
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -95,10 +93,10 @@ INSTALLED_APPS = [
     'mptt',
     'martor',
     'django_select2',
-    'statici18n',
+    # 'statici18n',
     # 'ckeditor',
     # 'ckeditor_uploader',
-    'django_jinja',
+    # 'django_jinja',
     'reversion',
     'compressor',
     'sortedm2m',
@@ -122,39 +120,9 @@ ROOT_URLCONF = 'emath.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django_jinja.backend.Jinja2',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'match_extension': ('.html', '.txt'),
-            'match_regex': '^(?!admin/)',
-            'context_processors': [
-                'django.template.context_processors.media',
-                'django.template.context_processors.tz',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.request',
-                'django.contrib.messages.context_processors.messages',
-                'backend.template_context.get_resources',
-                'backend.template_context.general_info',
-                'backend.template_context.math_setting',
-                'backend.template_context.site_name',
-            ],
-            'autoescape': select_autoescape(['html', 'xml']),
-            'trim_blocks': True,
-            'lstrip_blocks': True,
-            'extensions': DEFAULT_EXTENSIONS + [
-                'compressor.contrib.jinja2ext.CompressorExtension',
-                'backend.jinja2.EmathExtension',
-                'backend.jinja2.spaceless.SpacelessExtension'
-            ],
-        },
-    },
-    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            BASE_DIR / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -166,6 +134,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'backend.template_context.get_resources',
+                'backend.template_context.general_info',
+                'backend.template_context.math_setting',
+                'backend.template_context.site_name',
             ],
         },
     },
@@ -252,7 +224,7 @@ USE_TZ = True
 CSRF_COOKIE_HTTPONLY = False
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
+    BASE_DIR / 'locale',
 ]
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -429,9 +401,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-RESOURCES = os.path.join(BASE_DIR, 'resources')
+RESOURCES = BASE_DIR / 'resources'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'resources'),
+    BASE_DIR / 'resources',
 ]
 STATIC_URL = 'static/'
 

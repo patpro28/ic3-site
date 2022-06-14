@@ -1,11 +1,11 @@
 <div
-  class="flex flex-col mt-4 p-8 w-full sm:flex-row space-x-4 items-center"
+  class="flex flex-col items-center w-full p-8 mt-4 space-x-4 sm:flex-row"
 >
-  <label class="font-bold basis-1/6 text-xl" for="{{- index -}}_answer">Answer</label>
+  <label class="text-xl font-bold basis-1/6" for="{{ index }}_answer">Answer</label>
   <input
     type="text"
-    name="answer_{{- index -}}"
-    id="{{- index -}}_answer"
+    name="answer_{{ index }}"
+    id="{{ index }}_answer"
     maxlength="{{ max_length }}"
     class="basis-5/6"
   />

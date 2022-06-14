@@ -27,7 +27,7 @@ else:
         def wrap(self, source, outfile):
             return self._wrap_div(self._wrap_pre(_wrap_code(source)))
 
-    def highlight_code(code, language, cssclass='codehilite'):
+    def highlight_code(code, language, cssclass='highlight'):
         try:
             lexer = pygments.lexers.get_lexer_by_name(language)
         except pygments.util.ClassNotFound:

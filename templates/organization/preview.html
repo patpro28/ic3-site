@@ -1,4 +1,5 @@
-{{ preview_data|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+{% load static markdown %}
+{% markdown preview_data 'organization-about' MATH_ENGINE %}
 {% if REQUIRE_JAX %}
-    <div data-config="{{ static('mathjax_config.js') }}" class="require-mathjax-support"></div>
+    <div data-config="{% static 'mathjax_config.js' %}" class="require-mathjax-support"></div>
 {% endif %}

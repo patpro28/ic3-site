@@ -1,30 +1,30 @@
 {% extends "base.html" %}
-
+{% load profile %}
 {% block body %}
     {% include "organization/requests/tabs.html" %}
 
     {% if requests %}
         <table>
             <tr>
-                <th>{{ _('User') }}</th>
-                <th>{{ _('Time') }}</th>
-                <th>{{ _('State') }}</th>
-                <th>{{ _('Reason') }}</th>
+                <th>User</th>
+                <th>Time</th>
+                <th>State</th>
+                <th>Reason</th>
             </tr>
             {% for r in requests %}
                 <tr id="request-{{ r.id }}">
-                    <td>{{ link_user(r.user) }}</td>
+                    <td>{% link_user r.user %}</td>
                     <td>
-                        <a href="{{ url('request_organization_detail', object.slug, r.id) }}">
-                            {{- r.time|date(_("N j, Y, H:i")) -}}
+                        <a href="{% url 'request_organization_detail' object.slug r.id %}">
+                            {{ r.time|date:"N j, Y, H:i" }}
                         </a>
                     </td>
                     <td>{{ r.state }}</td>
-                    <td>{{ r.reason|truncatechars(50) }}</td>
+                    <td>{{ r.reason|truncatechars:50 }}</td>
                 </tr>
             {% endfor %}
         </table>
     {% else %}
-        <p>{{ _('There are no requests to approve.') }}</p>
+        <p>There are no requests to approve.</p>
     {% endif %}
 {% endblock %}

@@ -1,17 +1,20 @@
-<div id="{{ index }}" class="task flex grow shrink-0 basis-full transition ease-in-out duration-400 flex-col">
-  <div class="mr-auto bg-black text-white w-12 h-12 flex items-center font-bold text-2xl rounded-md">
+{% load answer markdown cache %}
+<div id="{{ index }}" class="flex flex-col transition ease-in-out task grow shrink-0 basis-full duration-400">
+  <div class="flex items-center w-12 h-12 mr-auto text-2xl font-bold text-white bg-black rounded-md">
     <div class="mx-auto">
       {{ index }}
     </div>
   </div>
-  <div class="w-full p-4 font-semibold text-xl">
-    {% with problem=problem.problem %}
-      {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+  <div class="w-full p-4 text-xl font-semibold prose">
+    {% with problem.problem as problem %}
+    {% cache 3600 'problem_html' problem.id MATH_ENGINE %}
+      {% markdown problem.description problem.markdown_style MATH_ENGINE %}
+    {% endcache %}
     {% endwith %}
   </div>
   {% if problem.problem.answer_type == 'mc' %}
-    {{ mc(problem, answers) }}
+    {% mc problem answers  %}
   {% elif problem.problem.answer_type == 'fill' %}
-    {{ fill(problem, answers) }}
+    {% fill problem answers  %}
   {% endif %}
 </div>

@@ -1,0 +1,18 @@
+{% if not request.in_contest %}
+<form action="{% url 'education:contest_join' contest.key %}" method="post">
+  {% csrf_token %}
+  {% if request.user in contest.authors.all or request.user in contest.curators.all %}
+  <input
+    type="submit"
+    class="p-4 pt-1 pb-1 ml-auto text-xs text-white bg-black rounded-md cursor-pointer hover:opacity-50"
+    value="Spectate"
+  />
+  {% else %}
+  <input
+    type="submit"
+    class="p-4 pt-1 pb-1 ml-auto text-xs text-white bg-black rounded-md cursor-pointer hover:opacity-50 join-warning"
+    value="Join"
+  />
+  {% endif %}
+</form>
+{% endif %} 

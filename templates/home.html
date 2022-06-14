@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load variable %}
+
 {% block extends_js %}
 <script>
   $(document).ready(function () {
@@ -58,17 +60,16 @@
 {% endblock %}
 
 {% block content_title %}
-{% set title = 'Home' %}
-{% include 'title.html' %}
+{% title title='Home' %}
 {% endblock content_title %}
 
 {% block content %}
-<div class="swiper w-full mySwiper">
+<div class="w-full swiper mySwiper">
   <div class="swiper-wrapper">
       <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
-          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
-              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
-              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+          <div class="text-base font-medium text-white sm:text-lg md:text-2xl">Welcome to Emath</div>
+              <div class="text-lg font-medium leading-snug text-white sm:text-2xl md:text-5xl">Investing in Knowledge <br> and Your Future</div>
+              <div class="w-auto mt-2 text-xs font-normal leading-normal text-white md:text-sm sm:w-80">With the help of E-Learning, create your own path and
                   drive on your skills on your own to achieve what you see.
               </div>
               <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
@@ -76,9 +77,9 @@
               </div>
           </div>
       <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
-          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
-              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
-              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+          <div class="text-base font-medium text-white sm:text-lg md:text-2xl">Welcome to Emath</div>
+              <div class="text-lg font-medium leading-snug text-white sm:text-2xl md:text-5xl">Investing in Knowledge <br> and Your Future</div>
+              <div class="w-auto mt-2 text-xs font-normal leading-normal text-white md:text-sm sm:w-80">With the help of E-Learning, create your own path and
                   drive on your skills on your own to achieve what you see.
               </div>
               <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
@@ -86,9 +87,9 @@
               </div>
           </div>
       <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
-          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
-              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
-              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+          <div class="text-base font-medium text-white sm:text-lg md:text-2xl">Welcome to Emath</div>
+              <div class="text-lg font-medium leading-snug text-white sm:text-2xl md:text-5xl">Investing in Knowledge <br> and Your Future</div>
+              <div class="w-auto mt-2 text-xs font-normal leading-normal text-white md:text-sm sm:w-80">With the help of E-Learning, create your own path and
                   drive on your skills on your own to achieve what you see.
               </div>
               <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
@@ -96,9 +97,9 @@
               </div>
           </div>
       <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
-          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
-              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
-              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+          <div class="text-base font-medium text-white sm:text-lg md:text-2xl">Welcome to Emath</div>
+              <div class="text-lg font-medium leading-snug text-white sm:text-2xl md:text-5xl">Investing in Knowledge <br> and Your Future</div>
+              <div class="w-auto mt-2 text-xs font-normal leading-normal text-white md:text-sm sm:w-80">With the help of E-Learning, create your own path and
                   drive on your skills on your own to achieve what you see.
               </div>
               <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
@@ -106,9 +107,9 @@
               </div>
           </div>
       <div class="swiper-slide bg-no-repeat bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)] h-64 md:h-96 bg-cover bg-center rounded-2xl mt-6 p-6 md:p-12">
-          <div class="text-base sm:text-lg md:text-2xl font-medium text-white">Welcome to Emath</div>
-              <div class="text-lg sm:text-2xl md:text-5xl font-medium text-white leading-snug">Investing in Knowledge <br> and Your Future</div>
-              <div class="text-xs md:text-sm font-normal text-white w-auto sm:w-80 leading-normal mt-2">With the help of E-Learning, create your own path and
+          <div class="text-base font-medium text-white sm:text-lg md:text-2xl">Welcome to Emath</div>
+              <div class="text-lg font-medium leading-snug text-white sm:text-2xl md:text-5xl">Investing in Knowledge <br> and Your Future</div>
+              <div class="w-auto mt-2 text-xs font-normal leading-normal text-white md:text-sm sm:w-80">With the help of E-Learning, create your own path and
                   drive on your skills on your own to achieve what you see.
               </div>
               <div class="text-xs md:text-sm btn cursor-pointer mt-6 font-semibold rounded-lg bg-white w-fit p-1.5 pl-4 pr-4">
@@ -120,259 +121,259 @@
   <div class="swiper-pagination"></div>
 </div>
 
-<div class="mt-12 text-xl flex items-center justify-between">
+<div class="flex items-center justify-between mt-12 text-xl">
   <div class="">
-    <i class='bx bxs-star text-yellow-400 mr-2' ></i>
+    <i class='mr-2 text-yellow-400 bx bxs-star' ></i>
     <div class="font-semibold">Emath Class</div>
   </div>
   <a href="#">
-      <div class="view_all text-xs rounded-full mr-4 cursor-pointer">View all</div>
+      <div class="mr-4 text-xs rounded-full cursor-pointer view_all">View all</div>
   </a>
 </div>
-<div class="home_class swiper class_swiper grid grid-cols-3 mt-4 gap-4 p-2 pb-12">
+<div class="grid grid-cols-3 gap-4 p-2 pb-12 mt-4 home_class swiper class_swiper">
   <div class="swiper-wrapper">
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>
 
       <div class="swiper-slide emath_class bg-white rounded-2xl sm:rounded-xl p-4 sm:p-2.5 relative">
-          <img class="h-72 sm:h-32 w-full object-cover rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
+          <img class="object-cover w-full h-72 sm:h-32 rounded-xl" src="https://i.pinimg.com/originals/2d/b8/90/2db89065a7a423a8785f8c86e74152e5.jpg" alt="">
           <div class="class_level absolute top-7 right-7 sm:top-5 sm:right-5 bg-white text-xs font-medium text-black rounded-full p-1 pl-2.5 pr-2.5"> Level A</div>
           
           <div class="text-sm font-medium m-1 mt-2.5">Learning English animals and plants newwords.</div>
-          <div class="text-xs text-gray-400 m-1">Mr.William</div>
+          <div class="m-1 text-xs text-gray-400">Mr.William</div>
           
-          <div class="class_detail flex justify-between mt-2">
-              <div class="task flex text-gray-400 items-center">
+          <div class="flex justify-between mt-2 class_detail">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-task'></i>
-                  <span class="text-sm font-medium ml-1">24</span>
+                  <span class="ml-1 text-sm font-medium">24</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
-                  <i class='bx bxs-star text-yellow-400'></i>
-                  <span class="text-sm font-medium ml-1">2308</span>
+              <div class="flex items-center text-gray-400 task">
+                  <i class='text-yellow-400 bx bxs-star'></i>
+                  <span class="ml-1 text-sm font-medium">2308</span>
               </div>
-              <div class="task flex text-gray-400 items-center">
+              <div class="flex items-center text-gray-400 task">
                   <i class='bx bx-user'></i>
-                  <span class="text-sm font-medium ml-1">120</span>
+                  <span class="ml-1 text-sm font-medium">120</span>
               </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-1">
-              <di2 class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
-                  <i class='bx bx-home-alt icon mr-1' ></i>
+              <di2 class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+                  <i class='mr-1 bx bx-home-alt icon' ></i>
                   Ranking
               </di2 sm:gap-1>
 
-              <div class="login_btn btn cursor-pointer flex justify-center items-center mt-4 font-meidum text-white p-3 pl-4 pr-4 rounded-lg md:rounded-md text-sm sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
+              <div class="flex items-center justify-center p-3 pl-4 pr-4 mt-4 text-sm text-white rounded-lg cursor-pointer login_btn btn font-meidum md:rounded-md sm:text-xs sm:p-2 sm:pl-3 sm:pr-3">
                   Join now
-                  <i class='bx bxs-chevron-right ml-1'></i>
+                  <i class='ml-1 bx bxs-chevron-right'></i>
               </div>
           </div>
       </div>

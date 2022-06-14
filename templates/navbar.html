@@ -1,98 +1,99 @@
-<div id="sidebar" class="min-w-max fixed left-0 top-0 h-full bg-slate-900 py-1.5 px-3.5 z-50 transition-all duration-500 ease-in ease-out">
-  <div class="h-16 flex items-center justify-between relative" id='logo-details'>
-    <a href="/" id="logo_link" class="m-1 hidden items-center space-x-2 opacity-0 transition duration-500">
-      <img src="{{ static('icons/emath.png') }}" alt="logo" class="w-8 h-8">
-      <span class="text-white text-xl transition duration-500 font-semibold">Emath</span>
+{% load static gravatar %}
+<div id="sidebar" class="min-w-max fixed left-0 top-0 h-full bg-slate-900 py-1.5 px-3.5 z-50 transition-all duration-500 ease-in-out">
+  <div class="relative flex items-center justify-between h-16" id='logo-details'>
+    <a href="/" id="logo_link" class="items-center hidden m-1 space-x-2 transition duration-500 opacity-0">
+      <img src="{% static 'icons/emath.png' %}" alt="logo" class="w-8 h-8">
+      <span class="text-xl font-semibold text-white transition duration-500">Emath</span>
     </a>
     <div class="mx-auto" id="menu">
-      <span class="material-icons sm:w-12 sm:h-12 sm:text-2xl text-center text-lg transition-all duration-500 ease-in ease-out cursor-pointer text-white leading-9 sm:leading-[3rem] px-2 sm:px-3" id="btn">
+      <span class="material-icons sm:w-12 sm:h-12 sm:text-2xl text-center text-lg transition-all duration-500 ease-in-out cursor-pointer text-white leading-9 sm:leading-[3rem] px-2 sm:px-3" id="btn">
         menu
       </span>
     </div>
   </div>
-  <ul class="nav-list mt-5 h-full">
-    <li class="group my-2 relative">
-      <a href="/problems" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in ease-out hover:bg-white ">
+  <ul class="h-full mt-5 nav-list">
+    <li class="relative my-2 group">
+      <a href="/problems" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           menu_book
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Problems</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Problems</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Problems</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Problems</span>
     </li>
-    <li class="group my-2 relative">
-      <a href="/submissions" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+    <li class="relative my-2 group">
+      <a href="/submissions" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           checklist
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Submissions</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Submissions</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Submissions</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Submissions</span>
     </li>
-    <li class="group my-2 relative">
-      <a href="/users" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+    <li class="relative my-2 group">
+      <a href="/users" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           people
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Users</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Users</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Users</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Users</span>
     </li>
-    <li class="group my-2 relative">
-      <a href="/organizations" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+    <li class="relative my-2 group">
+      <a href="/organizations" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           public
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Organizations</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Organizations</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Organizations</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Organizations</span>
     </li>
-    <li class="group my-2 relative">
-      <a href="/contests" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+    <li class="relative my-2 group">
+      <a href="/contests" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           emoji_events
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Contests</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Contests</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Contests</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Contests</span>
     </li>
     
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
-    <li class="group my-2 relative">
-      <a href="{{ url('admin:index') }}" class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white ">
+    <li class="relative my-2 group">
+      <a href="{% url 'admin:index' %}" class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white ">
         <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
           settings
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Admin</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Admin</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in group-hover:ease-out">Admin</span>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Admin</span>
     </li>
     {% endif %}
     {% if request.user.is_authenticated %}
-    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
+    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in-out overflow-hidden">
       <div class="flex items-center flex-nowrap">
         <img 
         class="h-11 w-11 rounded-md mr-2.5 object-cover"
         {% if request.user.email %}
-        src="{{ gravatar(request.user, 40) }}"
+        src="{% gravatar request.user size=40 %}"
         {% else %}
-        src={{ static('user/image/avatar-none.png') }}
+        src={% static 'user/image/avatar-none.png' %}
         {% endif %} alt="profileImg">
-        <a href="{{ url('user_page') }}" class="font-normal text-white whitespace-nowrap">{{ request.user.fullname }}</a>
+        <a href="{% url 'user_page' %}" class="font-normal text-white whitespace-nowrap">{{ request.user.fullname }}</a>
       </div>
-      <a href="{{ url('logout') }}" class="flex h-full w-full rounded-sm items-center no-underline bg-slate-900 transition-all duration-400 ease-in ease-out">
-        <span id="log_out" class="material-icons absolute top-1/2 right-0 -translate-y-1/2 bg-slate-900 w-full h-16 leading-[4rem] transition-all duration-500 ease-in ease-out hover:bg-white hover:text-slate-900 text-center text-white">
+      <a href="{% url 'logout' %}" class="flex items-center w-full h-full no-underline transition-all ease-in-out rounded-sm bg-slate-900 duration-400">
+        <span id="log_out" class="material-icons absolute top-1/2 right-0 -translate-y-1/2 bg-slate-900 w-full h-16 leading-[4rem] transition-all duration-500 ease-in-out hover:bg-white hover:text-slate-900 text-center text-white">
           logout
         </span>
       </a>
     </li>
     {% else %}
-    <li class="fixed h-16 sm:w-20 w-16 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in ease-out overflow-hidden">
-      <a class="group flex h-full w-full rounded-xl items-center no-underline bg-slate-900 transition duration-400 ease-in-out hover:bg-white" href="{{ url('login') }}">
+    <li class="fixed h-16 sm:w-20 w-16 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-500 ease-in-out overflow-hidden">
+      <a class="flex items-center w-full h-full no-underline transition ease-in-out group rounded-xl bg-slate-900 duration-400 hover:bg-white" href="{% url 'login' %}">
         <span class="material-icons material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center sm:px-4 leading-9 sm:leading-[3rem] px-3 sm:text-white">
           lock_open
         </span>
-        <span class="text-white text-base hidden transition duration-400 pointer-event-none font-normal whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
+        <span class="hidden text-base font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
       </a>
     </li>
     {% endif %}

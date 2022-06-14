@@ -1,6 +1,7 @@
+{% load variable profile %}
 {% extends "base.html" %}
 {% block content_title %}
-{% include 'title.html' %}
+{% title %}
 {% endblock content_title %}
 {% block content %}
 <div class="column">
@@ -14,33 +15,33 @@
             {{ formset.management_form }}
             <table class='ui celled table'>
                 <tr>
-                    <th class="two wide center aligned">{{ _('User') }}</th>
-                    <th class="three wide center aligned">{{ _('Time') }}</th>
-                    <th class="two wide center aligned">{{ _('State') }}</th>
-                    <th class="center aligned">{{ _('Reason') }}</th>
+                    <th class="two wide center aligned">User</th>
+                    <th class="three wide center aligned">Time</th>
+                    <th class="two wide center aligned">State</th>
+                    <th class="center aligned">Reason</th>
                     {% if formset.can_delete %}
-                        <th class="one wide center aligned">{{ _('Delete?') }}</th>
+                        <th class="one wide center aligned">Delete?</th>
                     {% endif %}
                 </tr>
                 {% for form in formset %}
                     <tr id="request-{{ form.instance.id }}">
-                        <td>{{ form.id }}{{ link_user(form.instance.user) }}</td>
-                        <td><a href="{{ url('request_organization_detail', object.slug, form.instance.id) }}">
-                            {{ form.instance.time|date(_("N j, Y, H:i")) }}
+                        <td>{{ form.id }}{% link_user form.instance.user %}</td>
+                        <td><a href="{% url 'request_organization_detail' object.slug form.instance.id %}">
+                            {{ form.instance.time|date:"N j, Y, H:i" }}
                         </a></td>
                         <td>{{ form.state }}</td>
-                        <td>{{ form.instance.reason|truncatechars(50) }}</td>
+                        <td>{{ form.instance.reason|truncatechars:50 }}</td>
                         {% if formset.can_delete %}
                             <td>{{ form.DELETE }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
             </table>
-            <button type="submit" class="fluid ui button">{{ _('Update') }}</button>
+            <button type="submit" class="fluid ui button">Update</button>
         </form>
     </div>
     {% else %}
-        <p>{{ _('There are no requests to approve.') }}</p>
+        <p>There are no requests to approve.</p>
     {% endif %}
 </div>
 {% endblock %}

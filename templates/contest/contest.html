@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n timedelta utils datetime contest %}
 
 {% block content_js %}
 <script type="text/javascript">
@@ -13,78 +13,78 @@
 {% endblock content_js %}
 
 {% block content %}
+{% in_contest contest request.user as in_contest %}
 <div class="flex justify-between">
     <div class="contest_info">
-        <h1 class="text-2xl font-semibold">{{ title or content_title }}</h1>
+        <h1 class="text-2xl font-semibold">{% firstof title content_title %}</h1>
         <h1 class="text-base font-semibold text-gray-500">
-            <a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote('') }}&amp;iso=
-            {{- contest.start_time|utc|date('Y-m-d\TH:i:s') }}" class="date">
-        {%- if contest.is_in_contest(request.user) and not request.participation.live -%}
-            {% if request.participation.spectate %}
-                {{- _('Spectating, contest ends in %(countdown)s.', countdown=contest.time_before_end|as_countdown) -}}
-            {% elif request.participation.end_time %}
-                {{- _('Participating virtually, %(countdown)s remaining.', countdown=request.participation.time_remaining|as_countdown) -}}
+            <a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote:'' }}&amp;iso={{ contest.start_time|utc|date:'Y-m-d\TH:i:s' }}" class="date">
+            {% if in_contest and not request.participation.live %}
+                {% if request.participation.spectate %}
+                    Spectating, contest ends in {% as_countdown contest.time_before_end %}.
+                {% elif request.participation.end_time %}
+                    Participating virtually, {% as_countdown request.participation.time_remaining %} remaining.
+                {% else %}
+                    Participating virtually.
+                {% endif %}
             {% else %}
-                {{- _('Participating virtually.') -}}
-            {% endif %}
-        {%- else -%}
-            {% if contest.start_time > now %}
-                {{- _('Starting in %(countdown)s', countdown=contest.time_before_start|as_countdown) -}}
-            {% elif contest.end_time < now %}
-                {{- _('Contest is over.') -}}
-            {% else %}
-                {%- if has_joined -%}
-                    {% if live_participation.ended %}
-                        {{- _('Your time is up! Contest ends in %(countdown)s.', countdown=contest.time_before_end|as_countdown) -}}
+                {% if contest.start_time > now %}
+                    Starting in {% as_countdown contest.time_before_start %}
+                {% elif contest.end_time < now %}
+                    Contest is over.
+                {% else %}
+                    {% if has_joined %}
+                        {% if live_participation.ended %}
+                            Your time is up! Contest ends in {% as_countdown contest.time_before_end %}.
+                        {% else %}
+                            You have {% as_countdown live_participation.time_remaining %} remaining.
+                        {% endif %}
                     {% else %}
-                        {{- _('You have %(countdown)s remaining.', countdown=live_participation.time_remaining|as_countdown) -}}
+                        Contest ends in {% as_countdown contest.time_before_end %}.
                     {% endif %}
-                {%- else -%}
-                    {{ _('Contest ends in %(countdown)s.', countdown=contest.time_before_end|as_countdown) }}
-                {%- endif -%}
+                {% endif %}
             {% endif %}
-        {%- endif -%}
             </a>
         </h1>
     </div>
 
     {% if contest.can_join or is_editor %}
-        {% set in_contest = contest.is_in_contest(request.user) %}
         {% if contest.ended %}
         {# virtual participation #}
         {% if in_contest %}
-            <form action="{{ url('education:contest_leave', contest.key) }}" method="post" class="ui form">
+            <form action="{% url 'education:contest_leave'  contest.key  %}" method="post" class="ui form">
             {% csrf_token %}
-                <input type="submit" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800 leaving-forever" value="{{ _('Leave contest') }}">
+                <input type="submit" class="p-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 leaving-forever" value="Leave contest">
             </form>
         {% else %}
-            <form action="{{ url('education:contest_join', contest.key)}}" method="post" class="ui form">
+            <form action="{% url 'education:contest_join'  contest.key %}" method="post" class="ui form">
             {% csrf_token %}
-                <input type="submit" value="{{ _('Join contest') }}" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+                <input type="submit" value="{% trans 'Join contest' %}" class="p-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800">
             </form>
         {% endif %}
         {% else %}
         {# live participation #}
         {% if in_contest %}
-            <form action="{{ url('education:contest_leave', contest.key) }}" method="post" class="ui form">
+            <form action="{% url 'education:contest_leave' contest.key %}" method="post" class="ui form">
             {% csrf_token %}
-                <input type="submit" value="
-                {%- if request.participation.spectate %}
-                    {{- _('Stop spectating') -}}
-                {% else %}
-                    {{- _('Leave contest') -}}
-                {% endif %}" 
-                class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+            <input type="submit" value="{% spaceless %}
+            {% if request.participation.spectate %}
+                Stop spectating
+            {% else %}
+                Leave contest
+            {% endif %}
+            {% endspaceless %}" 
+            class="p-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800">
             </form>
         {% elif is_editor or live_participation.ended %}
-            <form action="{{ url('education:contest_join', contest.key) }}" method="post" class="ui form">
+            <form action="{% url 'education:contest_join' contest.key %}" method="post" class="ui form">
             {% csrf_token %}
-                <input type="submit" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800" value="{{ _('Spectate contest') }}">
+                <input type="submit" class="p-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800" value="Spectate contest">
             </form>
         {% else %}
-            <form action="{{ url('education:contest_join', contest.key) }}" method="post">
+            <form action="{% url 'education:contest_join' contest.key %}" method="post">
             {% csrf_token %}
-                <input type="submit" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800 {% if not has_joined %}first-join{% endif %}" value="{{ _('Join contest') }}">
+                <input type="submit" class="rounded-lg bg-black p-4 py-2 text-sm font-medium text-white hover:bg-gray-800 {% if not has_joined %}first-join{% endif %}" value="Join contest">
             </form>
         {% endif %}
         {% endif %}
@@ -102,14 +102,14 @@
               {% if contest.description %}
               {{ contest.description }}
               {% else %}
-              {{ _('There is no information for this contest') }}
+              {% trans 'There is no information for this contest' %}
               {% endif %}
           </div>
-          {% if contest.is_in_contest(request.user) %}
+          {% if in_contest %}
           
-          <a class="w-full" href="{{ url('education:contest_task', contest.key) }}">
-            <div class="flex justify-center text-white bg-black p-2 rounded-lg mt-4 font-medium hover:bg-gray-900">
-                {{ _('Take a test') }}
+          <a class="w-full" href="{% url 'education:contest_task' contest.key %}">
+            <div class="flex justify-center p-2 mt-4 font-medium text-white bg-black rounded-lg hover:bg-gray-900">
+                {% trans 'Take a test' %}
             </div>
           </a>
           {% endif %}

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% set count = problems|length %}
+{% load contest timedelta variable %}
 
 {% block content_title %}
-{% include 'title.html' %}
+{% title %}
 {% endblock content_title %}
 
 {% block content_media %}
@@ -30,23 +30,23 @@
 
 {% block content %}
 <div class="ui segment">
-  <form action="" method="post" class="ui form flex flex-col justify-between" id="task_form" autocomplete="off">
+  <form action="" method="post" class="flex flex-col justify-between ui form" id="task_form" autocomplete="off">
     {% csrf_token %}
     <input type="hidden" id="refreshed" value="no">
     <input type="hidden" name="contest" value="{{ contest.key }}">
     <input type="hidden" name="submission" value="{{ submission.id }}">
     <div class="w-full overflow-hidden">
-      <div class="flex relative transition duration-300 ease-in-out" id="list-problem">
+      <div class="relative flex transition duration-300 ease-in-out" id="list-problem">
         {% for problem, answers in problems %}
-          {% with index = loop.index, last = loop.last %}
+          {% with index=forloop.counter last=forloop.last %}
           {% include 'contest/task_detail.html' %}
           {% endwith %}
         {% endfor %}
       </div>
     </div>
-    <div class="flex w-full justify-between mt-auto">
-      <div id="prev" class="px-4 py-2 rounded-md font-bold text-white bg-slate-500">Prev</div>
-      <div id="next" class="px-4 py-2 rounded-md font-bold text-white {% if count > 1 %}cursor-pointer bg-blue-500 hover:bg-blue-700 {% else %}bg-slate-500{% endif %}">Next</div>
+    <div class="flex justify-between w-full mt-auto">
+      <div id="prev" class="px-4 py-2 font-bold text-white rounded-md bg-slate-500">Prev</div>
+      <div id="next" class="px-4 py-2 rounded-md font-bold text-white {% if problems|length > 1 %}cursor-pointer bg-blue-500 hover:bg-blue-700 {% else %}bg-slate-500{% endif %}">Next</div>
     </div>
     <input type="submit" value="Submit" class="hidden" id="submit_form">
     <div class="ui error message"></div>
@@ -55,35 +55,31 @@
 {% endblock content %}
 
 {% block extends_info %}
-<div class="w-full p-4 flex space-y-6 flex-col mt-4 ui segment">
-  <div class="px-4 py-2 bg-black text-white rounded-lg max-w-max">List of problems</div>
-  <div class="grid md-grid-col-sm-2 lg:grid-cols-3 xl:grid-cols-4 py-5 gap-3 border-b border-slate-500">
+<div class="flex flex-col w-full p-4 mt-4 space-y-6 ui segment">
+  <div class="px-4 py-2 text-white bg-black rounded-lg max-w-max">List of problems</div>
+  <div class="grid gap-3 py-5 border-b md-grid-col-sm-2 lg:grid-cols-3 xl:grid-cols-4 border-slate-500">
     {% for item in problems %}
-      <div class="flex font-bold cursor-pointer text-white items-center rounded-md bg-gray-500 justify-between px-4 py-2" id="answer_problem_{{ loop.index }}" onClick="changeProblem({{ loop.index }})">
-        <div>{{ loop.index }}</div>
+      <div class="flex items-center justify-between px-4 py-2 font-bold text-white bg-gray-500 rounded-md cursor-pointer" id="answer_problem_{{ forloop.counter }}" onClick="changeProblem({{ forloop.counter }})">
+        <div>{{ forloop.counter }}</div>
       </div>
     {% endfor %}
   </div>
   <div class="w-full">
-    <button class="w-full py-2 text-center bg-blue-500 text-white rounded-md font-bold hover:bg-blue-700" onClick="submitForm()">Submit</button>
+    <button class="w-full py-2 font-bold text-center text-white bg-blue-500 rounded-md hover:bg-blue-700" onClick="submitForm()">Submit</button>
   </div>
 </div>
 {% endblock %}
 
-{% macro time_left(contest) %} 
-{{ contest.start_time|date(_("M j, Y, G:i")) }} - {{ contest.end_time|date(_("M j, Y, G:i")) }} 
-{% endmacro %} 
-
 {% block notification %}
 <div class="relative mt-6 bg-[url(https://www.enjpg.com/img/2020/ios-14-11.jpg)] bg-cover bg-center bg-no-repeat w-full rounded-2xl p-4 pl-6 pr-6">
-  <div class="text-white font-semibold text-3xl">{{ contest.name }}</div>
-  <div class="text-xs text-white mt-auto">
-    {{ time_left(contest) }}
+  <div class="text-3xl font-semibold text-white">{{ contest.name }}</div>
+  <div class="mt-auto text-xs text-white">
+    {{ contest|time_left:_("M j, Y, G:i") }}
   </div>
-  <div class="text-xs text-white mt-8">
+  <div class="mt-8 text-xs text-white">
     {% if not contest.ended %}
-    <span class="time text-xl">
-      {{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}
+    <span class="text-xl time">
+      Ends in {% as_countdown contest.time_before_end %}
     </span>
     {% endif %}
   </div>
@@ -98,16 +94,16 @@
     .form({
       fields: {
         {% for problem, answers in problems %}
-        answer_{{- problem.id -}}: {
-          identifier: 'answer_{{- problem.id -}}',
+        answer_{{ problem.id }}: {
+          identifier: 'answer_{{ problem.id }}',
           rules: [
             {
               {% if problem.problem.answer_type == 'mc' %}
               type: 'checked',
-              prompt: 'Please select one answer for Problem {{ loop.index }}'
+              prompt: 'Please select one answer for Problem {{ forloop.counter }}'
               {% elif problem.problem.answer_type == 'fill' %}
               type: 'empty',
-              prompt: 'Please fill answer for Problem {{ loop.index }}'
+              prompt: 'Please fill answer for Problem {{ forloop.counter }}'
               {% endif %}
             }
           ]
@@ -125,24 +121,24 @@
   }
   {% for problem, answers in problems %}
     {% if problem.problem.answer_type == 'mc' %}
-    $('input[type=radio][name=answer_{{- problem.id -}}]').change(function() {
-      let answer_problem = document.querySelector('#answer_problem_{{ loop.index }}')
+    $('input[type=radio][name=answer_{{ problem.id }}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ forloop.counter }}')
       answer_problem.classList.add('bg-green-500')
       answer_problem.classList.remove('bg-gray-500')
-      answer_problem.innerHTML = `<div>{{ loop.index }}</div>\n<div class='pl-5 border-l-2 border-white'>${this.getAttribute('label')}</div>`
+      answer_problem.innerHTML = `<div>{{ forloop.counter }}</div>\n<div class='pl-5 border-l-2 border-white'>${this.getAttribute('label')}</div>`
     })
     {% elif problem.problem.answer_type == 'fill' %}
-    $('input[type=text][name=answer_{{- problem.id -}}]').change(function() {
-      let answer_problem = document.querySelector('#answer_problem_{{ loop.index }}')
+    $('input[type=text][name=answer_{{ problem.id }}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ forloop.counter }}')
       let answer = this.value
       if (answer.trim().length == 0) {
         answer_problem.classList.remove('bg-green-500')
         answer_problem.classList.add('bg-gray-500')
-        answer_problem.innerHTML = `<div>{{ loop.index }}</div>`
+        answer_problem.innerHTML = `<div>{{ forloop.counter }}</div>`
       } else {
         answer_problem.classList.add('bg-green-500')
         answer_problem.classList.remove('bg-gray-500')
-        answer_problem.innerHTML = `<div>{{ loop.index }}</div><span class="material-icons">
+        answer_problem.innerHTML = `<div>{{ forloop.counter }}</div><span class="material-icons">
           check_circle
           </span>`
       }

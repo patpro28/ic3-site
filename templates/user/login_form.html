@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -6,12 +7,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
         <!----========== Favicon ========== -->
-        <link rel="icon" type="image/x-icon" href="{{ static('icons/emath.png') }}">
+        <link rel="icon" type="image/x-icon" href="{% static 'icons/emath.png' %}">
     
         <!----========== Boxicons CSS ========== -->
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="{{ static('user/css/login.css') }}">
+        <link rel="stylesheet" href="{% static 'user/css/login.css' %}">
     
         <!----========== Script ========== -->
      
@@ -20,88 +21,87 @@
     </head>
 <body>
     <div class="login_container">
-        <div class="login lg:grid lg:grid-cols-2 m-auto w-full h-screen">
-            <div class="login_banner bg-cover bg-center w-full lg:h-screen relative rounded-l-3xl">
-                <a href="{{ url('education:home') }}">
-                    <div class="image-text flex items-center p-2 pb-0 md:pt-8 md:pl-8 lg:mt-4 lg:pt-0">
-                        <img class="m-2 mb-0 h-6 w-6 md:h-10 md:w-10 " src="{{ static('icons/emath.png') }}" alt="">
-                        <div class="text-white text-lg md:text-2xl mt-2 font-semibold">Emath</div>
+        <div class="w-full h-screen m-auto login lg:grid lg:grid-cols-2">
+            <div class="relative w-full bg-center bg-cover login_banner lg:h-screen rounded-l-3xl">
+                <a href="{% url 'education:home' %}">
+                    <div class="flex items-center p-2 pb-0 image-text md:pt-8 md:pl-8 lg:mt-4 lg:pt-0">
+                        <img class="w-6 h-6 m-2 mb-0 md:h-10 md:w-10 " src="{% static 'icons/emath.png' %}" alt="">
+                        <div class="mt-2 text-lg font-semibold text-white md:text-2xl">Emath</div>
                     </div>
                 </a>
 
-                <div class="login_content hidden mt-4 md:block lg:absolute md:mt-20 lg:mt-0">
-                    <div class=" flex justify-center text-5xl font-semibold text-white">
+                <div class="hidden mt-4 login_content md:block lg:absolute md:mt-20 lg:mt-0">
+                    <div class="flex justify-center text-5xl font-semibold text-white ">
                         Welcome To Emath
                     </div>
-                    <div class=" flex text-lg mt-2 justify-center text-white">
+                    <div class="flex justify-center mt-2 text-lg text-white ">
                         Sign in to continue acess
                     </div>
                 </div>
             </div>
 
-            <div class="login_page flex m-auto ml-4 mr-4 md:m-0 md:h-auto md:mt-20 lg:mt-0 mt-auto mb-auto">
-                <div class="relative py-10 bg-white text-center m-auto overflow-hidden w-96 shadow-md shadow rounded-md h-[40rem] min-h-max">
+            <div class="flex m-auto mt-auto mb-auto ml-4 mr-4 login_page md:m-0 md:h-auto md:mt-20 lg:mt-0">
+                <div class="relative py-10 bg-white text-center m-auto overflow-hidden w-96 shadow-md rounded-md h-[40rem] min-h-max">
                     <div class="user_login">
-                        <img class="user_img h-24 w-24 ml-auto mr-auto rounded-full mt-4 mb-2" src="{{ static('icons/user.png') }}" alt="">
+                        <img class="w-24 h-24 mt-4 mb-2 ml-auto mr-auto rounded-full user_img" src="{% static 'icons/user.png' %}" alt="">
                         <div class="block">
-                            <div class="text-lg font-semibold ml-6">Hi there!✋🏻</div>
-                            <div class="text-sm text-gray-400 font-medium">Let's learn something new today!</div>
+                            <div class="ml-6 text-lg font-semibold">Hi there!✋🏻</div>
+                            <div class="text-sm font-medium text-gray-400">Let's learn something new today!</div>
                         </div>
                     </div>
 
-                    <div class="inline-block mt-4 w-full">
+                    <div class="inline-block w-full mt-4">
                         <div class="grid grid-cols-2">
-                            <div class="w-full cursor-pointer font-medium pl-8 text-blue-500 border-r-2" onclick="login()">Login</div>
-                            <div class="w-full cursor-pointer font-medium pr-8 text-blue-500 " onclick="register()">Register</div>
+                            <div class="w-full pl-8 font-medium text-blue-500 border-r-2 cursor-pointer" onclick="login()">Login</div>
+                            <div class="w-full pr-8 font-medium text-blue-500 cursor-pointer " onclick="register()">Register</div>
                         </div>
                         
-                        <hr id="Indicator" class="bg-blue-500 hidden sm:block">
+                        <hr id="Indicator" class="hidden bg-blue-500 sm:block">
                     </div>
 
                     <form id="LoginForm" class="w-full bg-white absolute px-8 top-[240px] transition duration-500" action="" method="post">
                         {% csrf_token %}
-                        <div class="email h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-envelope m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" name="username" type="text" placeholder="Username">
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
+                            <i class='m-2 bx bx-envelope'></i>
+                            <input class="text-sm font-medium outline-none w-80" name="username" type="text" placeholder="Username">
                         </div>
-                        <div class="password h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-hide m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" name="password" type="password" placeholder="Password">
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
+                            <i class='m-2 bx bx-hide'></i>
+                            <input class="text-sm font-medium outline-none w-80" name="password" type="password" placeholder="Password">
                         </div>
-                        <div class="text-sm flex items-center ml-auto mr-auto text-blue-500 mt-4 font-medium">
+                        <div class="flex items-center mt-4 ml-auto mr-auto text-sm font-medium text-blue-500">
                             <input class="mr-1" type="checkbox" id="" name="" value="">
                             <label for=""> Remember me</label><br>
                         </div>
         
-                        <button type="submit" class="btn bg-blue-500 ml-auto mr-auto text-white flex justify-center p-2 mt-4 rounded-lg font-medium">
+                        <button type="submit" class="flex justify-center p-2 mt-4 ml-auto mr-auto font-medium text-white bg-blue-500 rounded-lg btn">
                             Log In
                         </button>
                         
                         
                     </form>
 
-                    <form id="RegisterForm" class="w-full bg-white absolute px-8 top-[240px] transition duration-500">
-                        <div class="email h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-user m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" name="username" type="text" placeholder="Username">
+                    <form id="RegisterForm" action="{% url 'register' %}" method=post class="w-full bg-white absolute px-8 top-[240px] transition duration-500">
+                        {% csrf_token %}
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
+                            <i class='m-2 bx bx-user'></i>
+                            <input class="text-sm font-medium outline-none w-80" name="username" type="text" placeholder="Username">
                         </div>
-                        <div class="email h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-envelope m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" name="fullname" type="text" placeholder="Fullname">
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
+                            <i class='m-2 bx bx-envelope'></i>
+                            <input class="text-sm font-medium outline-none w-80" name="fullname" type="text" placeholder="Fullname">
                         </div>
-                        <div class="password h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-hide m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" type="password1" placeholder="Password">
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
+                            <i class='m-2 bx bx-hide'></i>
+                            <input class="text-sm font-medium outline-none w-80" type="password1" placeholder="Password">
                         </div>
-                        <div class="password h-10 ml-auto mr-auto bg-white flex items-center rounded-lg text-gray-400 mt-4 p-1">
-                            <i class='bx bx-hide m-2'></i>
-                            <input class="w-80 text-sm outline-none font-medium" type="password2" placeholder="Re-password">
+                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
+                            <i class='m-2 bx bx-hide'></i>
+                            <input class="text-sm font-medium outline-none w-80" type="password2" placeholder="Re-password">
                         </div>
-                        <a href="#">
-                            <div class="btn bg-blue-500 ml-auto mr-auto text-white flex justify-center p-2 mt-4 rounded-lg font-medium">
-                                Register
-                            </div>
-                        </a>
+                        <button type="submit" class="flex justify-center p-2 mt-4 ml-auto mr-auto font-medium text-white bg-blue-500 rounded-lg btn">
+                            Register
+                        </button>
                     </form>
                 </div>
             </div>

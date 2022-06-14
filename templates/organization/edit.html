@@ -1,6 +1,14 @@
-{% extends "base.html" %} {% block content_js %} {{ form.media.js }}
-{% endblock %} {% block content_media %} {{ form.media.css }} {% endblock %} {%
-block content_title %} {% include 'title.html' %} {% endblock content_title %}
+{% extends "base.html" %} 
+{% load variable %}
+{% block content_js %} 
+{{ form.media.js }}
+{% endblock %} 
+{% block content_media %} 
+{{ form.media.css }} 
+{% endblock %} 
+{% block content_title %} 
+{% title %} 
+{% endblock content_title %}
 {% block content %}
 <div class="ui segment">
   <form action="" method="post" class="ui form">
@@ -27,7 +35,7 @@ block content_title %} {% include 'title.html' %} {% endblock content_title %}
         {{ form.admins }}
       </div>
     </div>
-    <button class="fluid ui button" type="submit">{{ _('Update') }}</button>
+    <button class="fluid ui button" type="submit">Update</button>
   </form>
 </div>
 {% endblock %}

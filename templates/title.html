@@ -1,16 +1,16 @@
-<div class="flex justify-between items-center">
+<div class="flex items-center justify-between">
   <div class="block ml-4 -mt-2 sm:ml-0 sm:mt-0">
-      <div class="text-2xl font-semibold">{{ title or content_title }}!✋🏻</div>
-      <div class="text-sm text-gray-400 font-medium lg:text-base">Let's learn something new today!</div>
+      <div class="text-2xl font-semibold">{% firstof title content_title "" %}!✋🏻</div>
+      <div class="text-sm font-medium text-gray-400 lg:text-base">Let's learn something new today!</div>
   </div>
 
   <div class="hidden md:flex">
-      <div class="h-10 w-96 bg-white flex items-center rounded-lg text-gray-400 shadow-md">
-          <i class='bx bx-search icon bx-sm m-2'></i>
-          <input class="w-80 text-sm outline-none font-medium" type="text" placeholder="Search something here...">
+      <div class="flex items-center h-10 text-gray-400 bg-white rounded-lg shadow-md w-96">
+          <i class='m-2 bx bx-search icon bx-sm'></i>
+          <input class="text-sm font-medium outline-none w-80" type="text" placeholder="Search something here...">
       </div>
   
-      <div class="shadow-md ml-2 text-gray-400 h-10 w-10 bg-white rounded-lg flex justify-center items-center">
+      <div class="flex items-center justify-center w-10 h-10 ml-2 text-gray-400 bg-white rounded-lg shadow-md">
           <i class='bx bx-bell bx-sm'></i>
       </div>
   </div>

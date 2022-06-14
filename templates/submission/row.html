@@ -1,19 +1,20 @@
-<div class="col-start-1 col-span-1 result font-semibold w-full h-8 sm:h-10 flex justify-center items-center bg-white">
+{% load timedelta profile %}
+<div class="flex items-center justify-center w-full h-8 col-span-1 col-start-1 font-semibold bg-white result sm:h-10">
   {{ submission.result_class }}
 </div>
-<div class="col-start-2 col-span-1 time flex w-full h-10 justify-center items-center bg-white">
-  {{ submission.time_excute|timedelta('simple') }}
+<div class="flex items-center justify-center w-full h-10 col-span-1 col-start-2 bg-white time">
+  {{ submission.time_excute|timedelta:'simple' }}
 </div>
-<div class="col-start-3 col-span-1 user text-xs sm:text-sm w-full h-8 sm:h-10 flex justify-center bg-white items-center">
-  {{ link_user(submission.user.user) }}
+<div class="flex items-center justify-center w-full h-8 col-span-1 col-start-3 text-xs bg-white user sm:text-sm sm:h-10">
+  {% link_user submission.user.user %}
 </div>
 
-<a href="{{ url('education:contest_detail', submission.contest.key) }}"class="col-start-4 font-bold bg-white col-span-1 contest text-xs sm:text-sm md:text-base w-full h-8 sm:h-10 flex justify-center items-center">
+<a href="{% url 'education:contest_detail'  submission.contest.key  %}"class="flex items-center justify-center w-full h-8 col-span-1 col-start-4 text-xs font-bold bg-white contest sm:text-sm md:text-base sm:h-10">
   {{ submission.contest }}
 </a>
 
-<a href="{{ url('education:submission_status', submission.pk) }}" class="col-start-5 col-span-1 bg-white" >
-  <div class="detail w-full h-8 sm:h-10 flex justify-center items-center">
+<a href="{% url 'education:submission_status'  submission.pk  %}" class="col-span-1 col-start-5 bg-white" >
+  <div class="flex items-center justify-center w-full h-8 detail sm:h-10">
       <i class='bx bx-window-open'></i>
   </div>
 </a>
