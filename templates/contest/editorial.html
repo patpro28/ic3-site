@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load variable %}
+{% load variable markdown %}
 
 {% block content_title %}
 {% title %}
@@ -9,5 +9,6 @@
 {% block content %}
 {% include 'contest/contest-list-tab.html' %}
 <div class="w-full p-2 mt-4 prose max-w-none">
+  {% markdown solution.content solution.markdown_style MATH_ENGINE %}
 </div>
 {% endblock content %}
