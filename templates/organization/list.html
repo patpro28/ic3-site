@@ -1,47 +1,27 @@
 {% extends "base.html" %}
 {% load static variable %}
 
-{% block content_media %}
-<style>
-  #name {
-    min-width: 200px;
-  }
-</style>
-{% endblock content_media %}
-
-{% block content_js %}
-<script src="{% static 'jquery/tablesort.js' %}" ></script>
-<script type="text/javascript">
-  $(function () {
-    $("table").tablesort();
-  });
-</script>
-{% endblock %} 
 {% block content_title %}
 {% title %}
 {% endblock %} 
 
 {% block content %}
-<div class="column">
-  <div class="ui row segment">
-    <table id="organization-table" class="table ui sortable unstackable celled">
-      <thead>
-        <tr>
-          <th class="ten wide sorted descending" id="name">Name</th>
-          <th class="center aligned two wide">Members</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for org in organizations %}
-        <tr>
-          <td><a href="{{ org.get_absolute_url }}">{{ org.name }}</a></td>
-          <td class="center aligned">
-            <a href="{{ org.get_users_url }}">{{ org.member_count }}</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
+<table class="w-full border divide-y">
+  <thead>
+    <tr class="divide-x bg-slate-700">
+      <th class="w-5/6 p-2 text-white min-w-fit" id="name">Name</th>
+      <th class="w-1/6 p-2 text-white">Members</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y">
+    {% for org in organizations %}
+    <tr class="divide-x hover:bg-gray-300">
+      <td class="p-2"><a class="text-blue-500 hover:text-blue-600 min-w-fit" href="{{ org.get_absolute_url }}">{{ org.name }}</a></td>
+      <td class="p-2 text-center">
+        <a class="text-blue-500 hover:text-blue-600" href="{{ org.get_users_url }}">{{ org.member_count }}</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

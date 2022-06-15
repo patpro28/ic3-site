@@ -1,45 +1,49 @@
 {% extends 'base.html' %}
 {% load static variable %}
-{% block content_media %}
-<link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-{% endblock content_media %}
-
 {% block content_title %}
   {% title %}
 {% endblock content_title %}
 
-{% block content %}
-<div class="column">
-  <div class="ui row segment">
+{% block content_media %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/search.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/dropdown.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/transition.min.css" />
+{% endblock content_media %}
 
-    {% if page_obj and page_obj.has_other_pages %}
-    <div class="grid ui segment">
-      <div class="left floated eight wide column">
-      {% include 'list-page.html' %}
+{% block content_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/search.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/transition.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/api.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/dropdown.min.js"></script>
+{% endblock content_js %}
+
+{% block content %}
+{% if page_obj and page_obj.has_other_pages %}
+<div class="flex items-center justify-between">
+  <div class="basis-1/2">
+  {% include 'list-page.html' %}
+  </div>
+  <div class="basis-1/4">
+    <div class="ui category search">
+      <div class="relative flex items-center">
+        <input class="w-full p-2 pl-10 text-sm font-medium border outline-none prompt !rounded-lg peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500" type="text" placeholder="Search username...">
+        <span class="absolute flex items-center w-10 h-full left-px peer-focus:text-black">
+          <i class="mx-auto fa-solid fa-magnifying-glass"></i>
+        </span>
       </div>
-      <div class="right floated four wide column">
-        <div class="ui secondary menu">
-          <div class="ui right aligned category search item">
-            <div class="ui transparent icon input">
-              <input class="prompt" type="text" placeholder="Search username...">
-              <i class="search link icon"></i>
-            </div>
-            <div class="results"></div>
-          </div>
-        </div>
-      </div>
+      <div class="results"></div>
     </div>
-    {% endif %}
-    {% block table_user %}
-    {% include 'user/user-table.html' %}
-    {% endblock table_user %}
-    {% if page_obj and page_obj.has_other_pages %}
-    <div class="ui segment">
-      {% include 'list-page.html' %}
-    </div>
-    {% endif %}
   </div>
 </div>
+{% endif %}
+{% block table_user %}
+{% include 'user/user-table.html' %}
+{% endblock table_user %}
+{% if page_obj and page_obj.has_other_pages %}
+<div class="ui segment">
+  {% include 'list-page.html' %}
+</div>
+{% endif %}
 {% endblock content %}
 
 {% block extends_js %}
