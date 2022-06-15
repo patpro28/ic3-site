@@ -411,7 +411,7 @@ PYGMENT_THEME = 'pygment-github.css'
 INLINE_JQUERY = True
 INLINE_FONTAWESOME = True
 JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
-FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+FONTAWESOME_CSS = '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css'
 MATERIAL_ICONS = '//fonts.googleapis.com/icon?family=Material+Icons'
 DMOJ_CANONICAL = ''
 

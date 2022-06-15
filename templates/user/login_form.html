@@ -1,137 +1,191 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-        <!----========== Favicon ========== -->
-        <link rel="icon" type="image/x-icon" href="{% static 'icons/emath.png' %}">
-    
-        <!----========== Boxicons CSS ========== -->
-        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="{% static 'user/css/login.css' %}">
-    
-        <!----========== Script ========== -->
-     
-      
-        <title>Login</title>
-    </head>
+{% load static %}
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'style.css' %}?v=123123" />
+  <title>Login</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    html {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+
 <body>
-    <div class="login_container">
-        <div class="w-full h-screen m-auto login lg:grid lg:grid-cols-2">
-            <div class="relative w-full bg-center bg-cover login_banner lg:h-screen rounded-l-3xl">
-                <a href="{% url 'education:home' %}">
-                    <div class="flex items-center p-2 pb-0 image-text md:pt-8 md:pl-8 lg:mt-4 lg:pt-0">
-                        <img class="w-6 h-6 m-2 mb-0 md:h-10 md:w-10 " src="{% static 'icons/emath.png' %}" alt="">
-                        <div class="mt-2 text-lg font-semibold text-white md:text-2xl">Emath</div>
-                    </div>
-                </a>
-
-                <div class="hidden mt-4 login_content md:block lg:absolute md:mt-20 lg:mt-0">
-                    <div class="flex justify-center text-5xl font-semibold text-white ">
-                        Welcome To Emath
-                    </div>
-                    <div class="flex justify-center mt-2 text-lg text-white ">
-                        Sign in to continue acess
-                    </div>
-                </div>
+  <div
+    class="bg-no-repeat h-full bg-cover bg-center bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)]">
+    <div class="w-full h-screen m-auto lg:grid lg:grid-cols-2">
+      <div class="grid w-full h-full grid-rows-3">
+        <div class="">
+          <a href="#" class="flex items-center p-2 pb-0 md:pt-8 md:pl-8 lg:mt-4 lg:pt-0">
+            <img class="w-6 h-6 m-2 mb-0 md:h-10 md:w-10" src="{% static 'icons/emath.png' %}" alt="" />
+            <div class="mt-2 text-lg font-semibold text-white md:text-2xl">
+              Emath
             </div>
-
-            <div class="flex m-auto mt-auto mb-auto ml-4 mr-4 login_page md:m-0 md:h-auto md:mt-20 lg:mt-0">
-                <div class="relative py-10 bg-white text-center m-auto overflow-hidden w-96 shadow-md rounded-md h-[40rem] min-h-max">
-                    <div class="user_login">
-                        <img class="w-24 h-24 mt-4 mb-2 ml-auto mr-auto rounded-full user_img" src="{% static 'icons/user.png' %}" alt="">
-                        <div class="block">
-                            <div class="ml-6 text-lg font-semibold">Hi there!✋🏻</div>
-                            <div class="text-sm font-medium text-gray-400">Let's learn something new today!</div>
-                        </div>
-                    </div>
-
-                    <div class="inline-block w-full mt-4">
-                        <div class="grid grid-cols-2">
-                            <div class="w-full pl-8 font-medium text-blue-500 border-r-2 cursor-pointer" onclick="login()">Login</div>
-                            <div class="w-full pr-8 font-medium text-blue-500 cursor-pointer " onclick="register()">Register</div>
-                        </div>
-                        
-                        <hr id="Indicator" class="hidden bg-blue-500 sm:block">
-                    </div>
-
-                    <form id="LoginForm" class="w-full bg-white absolute px-8 top-[240px] transition duration-500" action="" method="post">
-                        {% csrf_token %}
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
-                            <i class='m-2 bx bx-envelope'></i>
-                            <input class="text-sm font-medium outline-none w-80" name="username" type="text" placeholder="Username">
-                        </div>
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
-                            <i class='m-2 bx bx-hide'></i>
-                            <input class="text-sm font-medium outline-none w-80" name="password" type="password" placeholder="Password">
-                        </div>
-                        <div class="flex items-center mt-4 ml-auto mr-auto text-sm font-medium text-blue-500">
-                            <input class="mr-1" type="checkbox" id="" name="" value="">
-                            <label for=""> Remember me</label><br>
-                        </div>
-        
-                        <button type="submit" class="flex justify-center p-2 mt-4 ml-auto mr-auto font-medium text-white bg-blue-500 rounded-lg btn">
-                            Log In
-                        </button>
-                        
-                        
-                    </form>
-
-                    <form id="RegisterForm" action="{% url 'register' %}" method=post class="w-full bg-white absolute px-8 top-[240px] transition duration-500">
-                        {% csrf_token %}
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
-                            <i class='m-2 bx bx-user'></i>
-                            <input class="text-sm font-medium outline-none w-80" name="username" type="text" placeholder="Username">
-                        </div>
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg email">
-                            <i class='m-2 bx bx-envelope'></i>
-                            <input class="text-sm font-medium outline-none w-80" name="fullname" type="text" placeholder="Fullname">
-                        </div>
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
-                            <i class='m-2 bx bx-hide'></i>
-                            <input class="text-sm font-medium outline-none w-80" type="password1" placeholder="Password">
-                        </div>
-                        <div class="flex items-center h-10 p-1 mt-4 ml-auto mr-auto text-gray-400 bg-white rounded-lg password">
-                            <i class='m-2 bx bx-hide'></i>
-                            <input class="text-sm font-medium outline-none w-80" type="password2" placeholder="Re-password">
-                        </div>
-                        <button type="submit" class="flex justify-center p-2 mt-4 ml-auto mr-auto font-medium text-white bg-blue-500 rounded-lg btn">
-                            Register
-                        </button>
-                    </form>
-                </div>
-            </div>
+          </a>
         </div>
-        
+
+        <div class="hidden lg:m-auto md:mt-20 md:inline lg:flex lg:flex-col lg:items-center">
+          <div class="text-5xl font-semibold text-white ">
+            Welcome To Emath
+          </div>
+          <div class="mt-2 text-lg text-white">
+            Sign in to continue access
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col m-auto md:h-auto">
+        <div class="relative py-10 m-auto overflow-hidden text-center bg-white rounded-md shadow-md min-h-fit w-96">
+          <div class="">
+            <img class="w-24 h-24 mx-auto mt-4 mb-2 rounded-full" src="{% static 'icons/user.png' %}"
+              alt="" />
+            <div class="block">
+              <div class="ml-6 text-lg font-semibold">Hi there!✋🏻</div>
+              <div class="text-sm font-medium text-gray-400">
+                Let's learn something new today!
+              </div>
+            </div>
+          </div>
+
+          <div class="inline-block w-full mt-4">
+            <div class="grid grid-cols-2">
+              <div class="w-full pl-8 font-medium text-blue-500 border-r-2 cursor-pointer" onclick="transform(0)">
+                Login
+              </div>
+              <div class="w-full pr-8 font-medium text-blue-500 cursor-pointer" onclick="transform(-100)">
+                Register
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full overflow-hidden">
+            <div class="relative flex transition duration-500 ease-in-out" id="form">
+              <div class="basis-full grow shrink-0">
+                <form id="LoginForm" class="px-8" action="{% url 'login' %}" method="post">
+                  {% csrf_token %}
+                  {% if form.errors %}
+                  <div class="flex flex-col gap-1 py-2">
+                    {% for error in form.non_field_errors %}
+                    <div class="text-xs text-red-500">
+                      <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+                  <div class="relative flex items-center mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer invalid:border-red-500 focus:border-indigo-500"
+                      name="username" type="text" placeholder="Username" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-user fa-lg"></i>
+                    </span>
+                  </div>
+                  <div class="relative flex items-center mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer invalid:border-red-500 focus:border-indigo-500"
+                      name="password" type="password" placeholder="Password" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-lock fa-lg"></i>
+                    </span>
+                  </div>
+                  <div class="flex items-center p-1 mx-auto mt-4 text-sm font-medium text-blue-500">
+                    <input class="w-4 h-4 m-2" type="checkbox" id="" name="" value="" />
+                    <label for=""> Remember me</label><br />
+                  </div>
+                  <button type="submit"
+                    class="flex justify-center w-full p-2 mx-auto mt-4 font-medium text-white bg-blue-500 rounded-lg">
+                    Log In
+                  </button>
+                </form>
+              </div>
+
+              <div class="basis-full grow shrink-0">
+                <form id="RegisterForm" class="px-8" action="{% url 'register' %}" method="post">
+                  {% csrf_token %}
+                  <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                      name="username" type="text" placeholder="Username" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-user fa-lg"></i>
+                    </span>
+                    {% if form.username.errors %}
+                    <div class="flex flex-col items-start text-xs text-red-500">
+                      {% for error in form.username.errors %}
+                      <span class="text-start">{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                      name="fullname" type="text" placeholder="Fullname" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-id-card fa-lg"></i>
+                    </span>
+                    {% if form.fullname.errors %}
+                    <div class="flex flex-col items-start text-xs text-red-500">
+                      {% for error in form.fullname.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                      name="password1" type="password" placeholder="Password" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-lock fa-lg"></i>
+                    </span>
+                    {% if form.password1.errors %}
+                    <div class="flex flex-col items-start text-xs text-red-500">
+                      {% for error in form.password1.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                      name="password2" type="password" placeholder="Re-password" />
+                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
+                      <i class="m-auto fa-solid fa-lock fa-lg"></i>
+                    </span>
+                    {% if form.password2.errors %}
+                    <div class="flex flex-col items-start text-xs text-red-500">
+                      {% for error in form.password2.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
+                  <button type="submit"
+                    class="flex justify-center w-full p-2 mx-auto mt-4 font-medium text-white bg-blue-500 rounded-lg">
+                    Register
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    
-    <script>
-        
-        var LoginForm = document.getElementById("LoginForm");
-        var RegisterForm = document.getElementById("RegisterForm");
-        var Indicator = document.getElementById("Indicator");
-            
-            function register(){
-                RegisterForm.style.transform = "translateX(0px)";
-                LoginForm.style.transform = "translateX(0px)";
-                Indicator.style.transform = "translateX(220px)";
-            }
-
-            function login(){
-                RegisterForm.style.transform = "translateX(360px)";
-                LoginForm.style.transform = "translateX(360px)";
-                Indicator.style.transform = "translateX(60px)";
-            }
-        {% if login %}
-        login()
-        {% endif %}
-
-        </script>
-    
+  </div>
+  <script>
+    const form = document.querySelector('#form')
+    function transform(value) {
+      form.style = `transform: translateX(${value}%)`
+    }
+    {% if not login %}
+    transform(-100);
+    {% endif %}
+  </script>
 </body>
+
 </html>
