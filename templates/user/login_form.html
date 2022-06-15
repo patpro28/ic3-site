@@ -82,14 +82,14 @@
                   </div>
                   {% endif %}
                   <div class="relative flex items-center mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer invalid:border-red-500 focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="username" type="text" placeholder="Username" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-user fa-lg"></i>
                     </span>
                   </div>
                   <div class="relative flex items-center mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer invalid:border-red-500 focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="password" type="password" placeholder="Password" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-lock fa-lg"></i>
@@ -110,7 +110,7 @@
                 <form id="RegisterForm" class="px-8" action="{% url 'register' %}" method="post">
                   {% csrf_token %}
                   <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="username" type="text" placeholder="Username" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-user fa-lg"></i>
@@ -124,7 +124,7 @@
                     {% endif %}
                   </div>
                   <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="fullname" type="text" placeholder="Fullname" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-id-card fa-lg"></i>
@@ -138,7 +138,7 @@
                     {% endif %}
                   </div>
                   <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="password1" type="password" placeholder="Password" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-lock fa-lg"></i>
@@ -152,7 +152,7 @@
                     {% endif %}
                   </div>
                   <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:border-indigo-500"
+                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="password2" type="password" placeholder="Re-password" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-lock fa-lg"></i>
