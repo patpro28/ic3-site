@@ -138,7 +138,7 @@ class ProblemAdmin(VersionAdmin):
         }),
         (_('Description'), {
             'fields': (
-                'is_full_markup', 'description', 'difficult', 'level', 'answer_type', 'types'
+                'is_full_markup', 'description', 'difficult', 'level', 'answer_type'
             ),
         })
     )

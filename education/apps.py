@@ -8,12 +8,3 @@ class EducationConfig(AppConfig):
 
     def ready(self) -> None:
         from . import signals
-
-        from .models import Problem, ProblemType
-
-        try:
-            for problem in Problem.objects.all():
-                for group in problem.types.all():
-                    ProblemType.objects.get_or_create(problem=problem, group=group)
-        except DatabaseError:
-            pass

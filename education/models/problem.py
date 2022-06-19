@@ -76,8 +76,8 @@ class Problem(models.Model):
                                            help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
-    types = models.ManyToManyField(ProblemGroup, verbose_name=_("group"), blank=True, related_name='problem1',
-                                    help_text=_('The group of problem, shown under Category in the problem list.'))
+    # types = models.ManyToManyField(ProblemGroup, verbose_name=_("group"), blank=True, related_name='problem1',
+    #                                 help_text=_('The group of problem, shown under Category in the problem list.'))
 
     category = models.ManyToManyField(ProblemGroup, verbose_name=_("category"), through='ProblemType')
     
