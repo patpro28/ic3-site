@@ -102,7 +102,7 @@ class ProblemForm(forms.ModelForm):
 
 class TypesFilter(admin.SimpleListFilter):
     title = _('types')
-    parameter_name = 'types'
+    parameter_name = 'category'
 
     def lookups(self, request, model_admin):
         groups = ProblemGroup.objects.values_list('id', 'name')
@@ -111,7 +111,7 @@ class TypesFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset
-        return queryset.filter(types__id=self.value())
+        return queryset.filter(category__id=self.value())
 
 
 class LevelFilter(admin.SimpleListFilter):
