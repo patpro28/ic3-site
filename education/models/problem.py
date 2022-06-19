@@ -34,6 +34,15 @@ class Level(models.Model):
         verbose_name = _('problem level')
         verbose_name_plural = _('problem levels')
 
+DIFFICULT = (
+    ('newbie', _('Newbie')),
+    ('amateur', _('Amateur')),
+    ('expert', _('Expert')),
+    ('cmaster', _('Candidate Master')),
+    ('master', _('Master')),
+    ('gmaster', _('Grandmaster'))
+)
+
 
 class ProblemGroup(models.Model):
     name = models.CharField(_("Fullname"), max_length=100, unique=True)
@@ -47,15 +56,8 @@ class ProblemGroup(models.Model):
         verbose_name = _('problem group')
         verbose_name_plural = _('problem groups')
 
+
 class Problem(models.Model):
-    DIFFICULT = (
-        ('newbie', _('Newbie')),
-        ('amateur', _('Amateur')),
-        ('expert', _('Expert')),
-        ('cmaster', _('Candidate Master')),
-        ('master', _('Master')),
-        ('gmaster', _('Grandmaster'))
-    )
     code = models.CharField(_("problem code"), max_length=20, unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
                             help_text=_('A short, unique code for the problem, '
@@ -74,8 +76,10 @@ class Problem(models.Model):
                                            help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
-    types = models.ManyToManyField(ProblemGroup, verbose_name=_("group"), blank=True, related_name='problem',
+    types = models.ManyToManyField(ProblemGroup, verbose_name=_("group"), blank=True, related_name='problem1',
                                     help_text=_('The group of problem, shown under Category in the problem list.'))
+
+    category = models.ManyToManyField(ProblemGroup, verbose_name=_("category"), through='ProblemType')
     
     level = models.ForeignKey("education.Level", verbose_name=_("level"), on_delete=models.SET_NULL, null=True)
     difficult = models.CharField(_("Difficult of problem"), max_length=10, default='newbie', choices=DIFFICULT)
@@ -198,6 +202,15 @@ class Problem(models.Model):
         verbose_name = _("Problem")
         verbose_name_plural = _("Problems")
         ordering = ['code']
+
+
+class ProblemType(models.Model):
+    group = models.ForeignKey(ProblemGroup, verbose_name=_("group"), related_name='problems', on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_("problem"), related_name='problem_types', on_delete=models.CASCADE)
+    level = models.CharField(_("level"), max_length=10, default='newbie', choices=DIFFICULT)
+
+    class Meta:
+        unique_together = ('problem', 'group')
 
 
 class Answer(models.Model):

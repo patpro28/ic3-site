@@ -186,7 +186,6 @@ class ProblemDetail(ProblemMixin, TitleMixin, DetailView):
 
 def get_types_problem(request):
     level_id = request.GET.get('level', None)
-    print(level_id)
     qs = ProblemGroup.objects.all()
     if level_id:
         qs = qs.filter(problem__level__id=level_id)
@@ -204,7 +203,6 @@ class ProblemPractice(TitleMixin, TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        print(request.POST.get('level'))
         pass
 
     def dispatch(self, request, *args, **kwargs):

@@ -10,7 +10,7 @@ from semantic_admin.admin import SemanticTabularInline
 from semantic_admin import widgets
 from martor.widgets import AdminMartorWidget
 
-from education.models import Problem, ProblemGroup, Answer#, Level
+from education.models import Problem, ProblemGroup, Answer, ProblemType
 from backend.utils.models import AlwaysChangedModelForm
 from education.models.problem import Level
 
@@ -52,7 +52,6 @@ class AnswerInlineFormset(forms.BaseInlineFormSet):
             count = 0
             for form in self.forms:
                 count += form.cleaned_data['is_correct'] == True
-                print(form)
                 form.cleaned_data['types'] = 'mc'
             if count < 1:
                 raise forms.ValidationError('You must have at least one Correct answer')
@@ -81,6 +80,12 @@ class AnswerInline(admin.TabularInline):
         if obj:
             return extra - obj.answers.count()
         return extra
+
+
+class ProblemTypeInline(SemanticTabularInline):
+    model = ProblemType
+    fields = ('group', 'level')
+    extra = 0
 
 
 class ProblemForm(forms.ModelForm):
@@ -133,13 +138,13 @@ class ProblemAdmin(VersionAdmin):
         }),
         (_('Description'), {
             'fields': (
-                'is_full_markup', 'description', 'difficult', 'types', 'level', 'answer_type'
+                'is_full_markup', 'description', 'difficult', 'level', 'answer_type', 'types'
             ),
         })
     )
     
     list_display = ['code', 'name', 'is_public', 'level', 'show_public']
-    inlines = [AnswerInline]
+    inlines = [ProblemTypeInline, AnswerInline, ]
     list_filter = (TypesFilter, LevelFilter)
     ordering = ('code',)
     search_fields = ('code', 'name')

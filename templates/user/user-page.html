@@ -3,6 +3,11 @@
 
 {% block content_media %}
   <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+  <style>
+    #container1 {
+      width: calc(100% - 5rem);
+    }
+  </style>
 {% endblock content_media %}
 
 {% block content_title %}
@@ -14,119 +19,280 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 {% endblock content_js %}
 
-{% block content %}
-<div class="column">
-  <div class="row">
-    <div class="grid ui">
-      <div class="ui four wide column">
-        <div class="ui card">
-          <div class="image">
-            <img 
-            {% if user.email %}
-            src="{% gravatar user 500 %}"
-            {% else %}
-            src={% static 'user/image/avatar-none.png' %}
-            {% endif %} 
-            alt="">
+{% block full_content %}
+<div class="grid grid-cols-5 ml-auto max-w-screen-2xl bg-stone-200" id='container1'>
+  <div class="sticky top-0 flex h-screen col-span-4 p-8 bg-white rounded-r-3xl">
+    <div class="sticky top-0 left-0 flex flex-col pr-8 border-r border-gray-500 basis-1/3">
+      <div class="flex flex-col items-center my-8">
+        <div class="relative">
+          <img src="https://e.tmath.vn/static/icons/user.png" alt="" class="h-20 w-20 min-w-[5rem] rounded-full" />
+          <div
+            class="absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 space-x-1 rounded-full bg-white px-2 py-0.5 text-xs shadow">
+            <span class="text-red-400"><i class="fa-solid fa-clock"></i></span>
+            <span class="text-gray-400">28h</span>
           </div>
-          <div class="content">
-            <h3 class="header">{{ user.fullname }}</h3>
-            <div class="meta">
-              Last access at {{ user.last_login|date:_("M j, Y, G:i") }}
+        </div>
+        <div class="mt-6 text-center">
+          <div class="text-lg font-semibold">{{ user.username }}</div>
+          {% if user.email %}
+          <div class="text-gray-500">{{ user.email }}</div>
+          {% endif %}
+        </div>
+      </div>
+      <div
+        class="flex flex-col items-stretch mt-8 justify-center space-y-4 [&>*]:space-x-3 [&>*]:rounded-full [&>*]:py-2 [&>*]:px-4">
+        <a href="#" class="hover:bg-gray-300 line-clamp-1">
+          <span><i class="fa-solid fa-house"></i></span>
+          <span class="">Home</span>
+        </a>
+        <a href="#" class="hover:bg-gray-300 line-clamp-1">
+          <span><i class="fa-solid fa-list-check"></i></span>
+          <span class="">My submissions</span>
+        </a>
+        <a href="#" class="hover:bg-gray-300 line-clamp-1">
+          <span><i class="fa-solid fa-user-pen"></i></span>
+          <span class="">Edit profile</span>
+        </a>
+        <a href="#" class="hover:bg-gray-300 line-clamp-1">
+          <span><i class="fa-solid fa-lock-open"></i></span>
+          <span class="">Change password</span>
+        </a>
+        <a href="#" class="hover:bg-gray-300 line-clamp-1">
+          <span><i class="fa-solid fa-cog"></i></span>
+          <span class="">Admin profile</span>
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col w-full pl-8 overflow-y-auto">
+      <div class="flex justify-between">
+        <div class="">
+          <div class="text-xl font-bold">Hello, patpro28</div>
+          <div class="text-sm text-gray-400">Today is Monday, 20 October 2022</div>
+        </div>
+      </div>
+      <div class="flex w-full py-2 mt-10 space-x-6 overflow-scroll overflow-y-hidden min-h-[10rem] snap-x snap-mandatory list-card">
+        <div class="flex min-w-[18rem] shadow bg-gray-300 rounded-lg min-h-[10rem] card snap-start">
+          <div class="flex flex-col justify-between flex-1 p-4">
+            <div class="text-lg font-bold ">Dynamic Programming</div>
+            <div class="font-bold text-gray-600">Newbie</div>
+            <div class="text-gray-600">
+              10 task
             </div>
+          </div>
+          <div class="relative flex flex-col items-start justify-center mr-2 basis-1/2">
+            <div class="flex items-center justify-center w-20 h-20 mx-auto">
+              <div class="text-lg font-bold number">70%</div>
+            </div>
+            <svg
+              class="fill-transparent stroke-[0.5rem] m-auto w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-blue-800 absolute statistic">
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke-dasharray="224"
+                class="stroke-white"></circle>
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke="black" stroke-dasharray="224"
+                stroke-dashoffset="224" class="absolute duration-[2s] transition-[stroke-dashoffset] stroke-gray-600 "></circle>
+            </svg>
+          </div>
+        </div>
+        <div class="flex min-w-[18rem] shadow bg-gray-300 rounded-lg min-h-[10rem] card snap-start">
+          <div class="flex flex-col justify-between flex-1 p-4">
+            <div class="text-lg font-bold ">Math</div>
+            <div class="font-bold text-blue-800">
+              Expert
+            </div>
+            <div class="text-gray-600">
+              10 task
+            </div>
+          </div>
+          <div class="relative flex flex-col items-start justify-center mr-2 basis-1/2">
+            <div class="flex items-center justify-center w-20 h-20 mx-auto">
+              <div class="text-lg font-bold number">92%</div>
+            </div>
+            <svg
+              class="fill-transparent stroke-[0.5rem] m-auto w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-blue-800 absolute statistic">
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke-dasharray="224"
+                class="stroke-white"></circle>
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke-dasharray="224"
+                stroke-dashoffset="224" class="stroke-blue-800 absolute duration-[2s] transition-[stroke-dashoffset]">
+              </circle>
+            </svg>
+          </div>
+        </div>
+        <div class="flex min-w-[18rem] shadow bg-gray-300 rounded-lg min-h-[10rem] card snap-start">
+          <div class="flex flex-col justify-between flex-1 p-4">
+            <div class="text-lg font-bold ">Segment Tree</div>
+            <div class="font-bold text-red-500">
+              Grandmaster
+            </div>
+            <div class="text-gray-600">
+              10 task
+            </div>
+          </div>
+          <div class="relative flex flex-col items-start justify-center mr-2 basis-1/2">
+            <div class="flex items-center justify-center w-20 h-20 mx-auto">
+              <div class="text-lg font-bold number">30%</div>
+            </div>
+            <svg
+              class="fill-transparent stroke-[0.5rem] m-auto w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute statistic">
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-dasharray="224" class="stroke-white"></circle>
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke-dasharray="224"
+                stroke-dashoffset="224" class="stroke-red-500 absolute duration-[2s] transition-[stroke-dashoffset]">
+              </circle>
+            </svg>
+          </div>
+        </div>
+        <div class="flex min-w-[18rem] shadow bg-gray-300 rounded-lg min-h-[10rem] card snap-start">
+          <div class="flex flex-col justify-between flex-1 p-4">
+            <div class="text-lg font-bold ">Segment Tree</div>
+            <div class="font-bold text-red-500">
+              Grandmaster
+            </div>
+            <div class="text-gray-600">
+              10 task
+            </div>
+          </div>
+          <div class="relative flex flex-col items-start justify-center mr-2 basis-1/2">
+            <div class="flex items-center justify-center w-20 h-20 mx-auto">
+              <div class="text-lg font-bold number">30%</div>
+            </div>
+            <svg
+              class="fill-transparent stroke-[0.5rem] m-auto w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute statistic">
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-dasharray="224" class="stroke-white"></circle>
+              <circle cx="2.5rem" cy="2.5rem" r="2.25rem" stroke-linecap=round stroke-dasharray="224"
+                stroke-dashoffset="224" class="stroke-red-500 absolute duration-[2s] transition-[stroke-dashoffset]">
+              </circle>
+            </svg>
           </div>
         </div>
       </div>
-      <div class="ui twelve wide column">
-        <div class="grid ui">
-          <div class="four wide column">
-            <h1 class="ui header" style="padding-top: 5px">Information</h1>
-          </div>
-          <div class="four wide column"></div>
-          <div class="four wide column">
-            {% if request.user == user %}
-            <a href="{% url 'change_password' %}" class="ui fluid button">Change password </a>
-            {% endif %}
-          </div>
-          <div class="four wide column">
-            {% if can_edit %}
-            <a href="{% url 'user_edit' user.username %}" class="ui fluid button">Edit profile </a>
-            {% endif %}
-          </div>
-        </div>
-        <table class="table ui very basic" style="font-size: 16px;">
-          <tbody>
-            <tr>
-              <td  class="left aligned four wide column">
-                <i class="university icon"></i>
-                Organization
-              </td>
-              <td  class="left aligned twelve wide column">
-                {% with orgs=user.organizations.all %}
-                {% if orgs %}
-                <div class="ui horizontal list">
-                  {% for org in orgs %}
-                    <a class="item" href="{{ org.get_absolute_url }}">{{ org.short_name }}</a>
-                  {% endfor %}
-                </div>
-                {% endif %}
-                {% endwith %}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="envelope outline icon"></i>
-                Email
-              </td>
-              <td>
-                {% if user.email %}
-                {{ user.email }}
-                {% endif %}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="google icon"></i>
-                Google
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <i class="twitter icon"></i>
-                Twitter
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <i class="facebook icon"></i>
-                Facebook
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="flex-1 w-full p-4 mt-8 mb-2 bg-gray-100 rounded-md shadow-md shadow-gray-600">
+        <canvas id="rate-chart" class="h-full"></canvas>
       </div>
     </div>
   </div>
-  <div class="row">
-    <h3 class="block ui header">About</h3>
-  <div class="ui segment">
-    {{ user.about }}
+  <div class="col-span-1 px-4 my-8 ml-4">
+    <div class="sticky p-2 text-lg font-bold text-white bg-gray-500 rounded-md top-8">Your activity</div>
+    <div class="overflow-y-auto">
+      <div class="flex flex-col mt-6 space-y-2">
+        <div class="mb-4">Oct 20, 2021</div>
+        <div class="flex">
+          <div class="pr-4 font-bold">10:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-green-500">
+            <div class="font-bold text-blue-500">Submission</div>
+            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
+            <div class="font-bold text-blue-500">Join contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-red-500">
+            <div class="font-bold text-blue-500">Leave contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col mt-6 space-y-2">
+        <div class="mb-4">Oct 20, 2021</div>
+        <div class="flex">
+          <div class="pr-4 font-bold">10:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-green-500">
+            <div class="font-bold text-blue-500">Submission</div>
+            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
+            <div class="font-bold text-blue-500">Join contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-red-500">
+            <div class="font-bold text-blue-500">Leave contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col mt-6 space-y-2">
+        <div class="mb-4">Oct 20, 2021</div>
+        <div class="flex">
+          <div class="pr-4 font-bold">10:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-green-500">
+            <div class="font-bold text-blue-500">Submission</div>
+            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
+            <div class="font-bold text-blue-500">Join contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-red-500">
+            <div class="font-bold text-blue-500">Leave contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col mt-6 space-y-2">
+        <div class="mb-4">Oct 20, 2021</div>
+        <div class="flex">
+          <div class="pr-4 font-bold">10:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-green-500">
+            <div class="font-bold text-blue-500">Submission</div>
+            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
+            <div class="font-bold text-blue-500">Join contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pr-4 font-bold">12:00</div>
+          <div class="flex flex-col pl-4 border-l-4 border-red-500">
+            <div class="font-bold text-blue-500">Leave contest</div>
+            <div class="line-clamp-1">Luyen tap tong hop </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <h3 class="block ui header">Rate history</h3>
-  <div class="ui segment">
-    <canvas id="rate-chart"></canvas>
-  </div>
-</div>
 </div>
 {% endblock %}
 
 {% block extends_js %}
 <script>
+  let card = document.querySelectorAll('.card')
+    window.addEventListener('load', function () {
+      card.forEach(item => {
+        let number = item.querySelector('.number')
+        let num = parseInt(number.innerHTML)
+        let count = 0
+        let time = 2000 / num
+        setInterval(() => {
+          if (count == num) {
+            clearInterval()
+          } else {
+            count++
+            number.innerHTML = count + '%'
+          }
+        }, time)
+        let circle = item.querySelectorAll('circle')[1]
+        circle.style.strokeDashoffset = 224 - 224 * (num / 100)
+      })
+    })
   var rating_history = [];
   $.each(rating_history, function (index, item) {
     item.x = item.timestamp;
@@ -135,7 +301,7 @@
   });
   const data = {
     datasets: [{
-      label: 'Rating',
+      label: 'Problem',
       backgroundColor: 'rgb(0, 0, 0, 0)',
       borderColor: 'rgb(168, 85, 85)',
       pointBackgroundColor: '#FFF',

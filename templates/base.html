@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{% static 'style.css' %}?v=313">
+    <link rel="stylesheet" href="{% static 'style.css' %}?v=5434">
     <link rel="stylesheet" href="{% static PYGMENT_THEME %}">
     <link rel="stylesheet" href="{{ FONTAWESOME_CSS }}">
     {% block content_media %} {% endblock content_media %}
@@ -105,6 +105,7 @@
 
   <body class="bg-stone-100">
     {% include 'navbar.html' %}
+    {% block full_content %}
     <div class="p-2 pt-6 pl-0 pr-4 ml-20 mr-20 sm:p-8" id='container'>
       {% block content_title %}{% endblock %} 
       <div class="flex flex-col mt-2 mr-2">
@@ -229,6 +230,7 @@
         {% endblock extends_info %}
       {% endblock right_content %}
     </div>
+    {% endblock full_content %}
     {% block extends_js %}{% endblock extends_js %}
   </body>
 </html>
