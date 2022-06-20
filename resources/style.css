@@ -2035,6 +2035,11 @@ video {
   background-color: rgb(203 213 225 / var(--tw-bg-opacity));
 }
 
+.bg-slate-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
 .bg-\[url\(https\:\/\/media\.idownloadblog\.com\/wp-content\/uploads\/2021\/10\/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample\.png\)\] {
   background-image: url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png);
 }

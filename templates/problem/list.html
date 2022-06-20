@@ -48,7 +48,7 @@
         </thead>
         <tbody class="divide-y divide-slate-500">
           {% for problem in item.problems %}
-          <tr class="[&>*]:p-2 {% cycle 'bg-inherit' 'bg-slate-400' %} divide-x divide-slate-500">
+          <tr class="[&>*]:p-2 {% cycle 'bg-inherit' 'bg-slate-100' %} divide-x divide-slate-500">
             <td><a href="{% url 'education:problem_detail' problem.code  %}" class="font-bold text-blue-500 hover:text-blue-700">{{ problem.name }}</a></td>
             <td class="category">{{ problem.types.all|join:', '}}</td>
             <td class="text-center">{{ problem.difficult }}</td>
