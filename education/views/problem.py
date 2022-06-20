@@ -1,12 +1,11 @@
-import urllib
-
-from django.db import ProgrammingError
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.db.models import Q, Count
+from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from backend.utils.diggpaginator import DiggPaginator
 from education.models import Problem, ProblemGroup
@@ -14,6 +13,7 @@ from backend.models import Profile
 from backend.utils.views import QueryStringSortMixin, TitleMixin, generic_message
 from backend.utils.strings import safe_int_or_none, safe_float_or_none
 from education.models.problem import Answer, Level
+from education.models.submission import Submission, SubmissionProblem
 
 class ProblemMixin(object):
     context_object_name = 'problem'
@@ -177,9 +177,7 @@ class ProblemDetail(ProblemMixin, TitleMixin, DetailView):
         # authed = user.is_authenticated
         context['can_edit'] = self.object.is_editable_by(user)
         context['description'] = self.object.description
-
-        if user.is_staff or user.is_superuser:
-            context['answers'] = get_answer(self.object)
+        context['answers'] = get_answer(self.object)
 
         return context
 
@@ -210,3 +208,39 @@ class ProblemPractice(TitleMixin, TemplateView):
             return self.post(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
     
+
+def problemSubmit(request, *args, **kwargs):
+    if request.method == 'POST':
+        code = kwargs['problem']
+        if code is None:
+            raise Http404()
+        user = request.user
+        problem = Problem.objects.get(code=code)
+        if Submission.objects.filter(profile=user, problem=problem, time__gt=timezone.now() - timezone.timedelta(seconds=300)).exists():
+            submission = Submission.objects.filter(
+                profile=user, 
+                problem=problem, 
+                time__gt=timezone.now() - timezone.timedelta(seconds=300)
+            ).first()
+            return generic_message(
+                request,
+                _("Restrict to submit problem"),
+                _('You need at least %ss to submit this problem.') % round((submission.time + timezone.timedelta(seconds=300) - timezone.now()).total_seconds()),
+            )
+        ans = request.POST.get('answer_' + str(problem.id))
+        submission = Submission.objects.create(
+            profile=user,
+            problem=problem, 
+            is_contest=False,
+            time=timezone.now()
+        )
+        submissionProblem = SubmissionProblem.objects.get_or_create(
+            submission=submission,
+            task=problem
+        )[0]
+        submissionProblem.output = ans
+        submissionProblem.save()
+        submission.judge()
+        return HttpResponseRedirect(reverse('education:all_submissions'))
+    else:
+        raise Http404()

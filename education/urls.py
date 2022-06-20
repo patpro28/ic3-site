@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from education.views.problem import ProblemDetail, ProblemList, ProblemLevelList, ProblemPractice, get_types_problem
-from education.views import submission, contest
+from education.views import submission, contest, problem
 
 from .views import *
 from emath.urls import paged_list_view
@@ -15,7 +15,8 @@ urlpatterns = [
     path('problems/', paged_list_view(ProblemList, 'problem_list')),
     path('problems/<slug:level>/', paged_list_view(ProblemLevelList, 'problem_level_list')),
     path('problem/<slug:problem>/', include([
-        path('', ProblemDetail.as_view(), name='problem_detail')
+        path('', ProblemDetail.as_view(), name='problem_detail'),
+        path('submit/', problem.problemSubmit, name='problem_submit'),
     ])),
     path('practice/', ProblemPractice.as_view(), name="practice"),
 ]

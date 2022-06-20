@@ -1,31 +1,27 @@
 {% extends 'base.html' %} 
-{% load variable cache markdown %}
+{% load variable cache markdown answer %}
 {% block content_title %} 
 {% title %}
 {% endblock content_title %}
 {% block content %}
-<div class="column">
-  <div class="ui row segment">
-    <fieldset>
-      <legend class="ui header">Description</legend>
-      <div class="ui segment" style="font-weight: 800; margin-top: 0">
-        {% cache 3600 'problem_html' problem.id MATH_ENGINE %} 
-          {% markdown description problem.markdown_style MATH_ENGINE %} 
-        {% endcache %}
-      </div>
-    </fieldset>
-    {% if answers %}
-    <fieldset>
-      <legend class="ui header">Answer</legend>
-      <div class="grid ui" style="padding: 5px">
-        {% for label, answer in answers %}
-        <div class="eight wide column">
-          <strong>{{ label }}</strong>.&nbsp;&nbsp; {% markdown answer problem.markdown_style MATH_ENGINE %}
-        </div>
-        {% endfor %}
-      </div>
-    </fieldset>
-    {% endif %}
+<div class="flex flex-col bg-white rounded-md shadow-md">
+  <div class="p-8 text-lg font-bold prose max-w-none">
+    {% cache 3600 'problem_html' problem.id MATH_ENGINE %} 
+      {% markdown description problem.markdown_style MATH_ENGINE %} 
+    {% endcache %}
   </div>
+  <form action="{% url 'education:problem_submit' problem.code %}" method=post>
+    {% if request.user.is_authenticated %}
+    {% csrf_token %}
+    {% endif %}
+    {% if problem.answer_type == 'mc' %}
+    {% mc problem answers %}
+    {% elif problem.answer_type == 'fill' %}
+    {% fill problem answers %}
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <button class='w-full p-4 text-xl text-white bg-blue-600 rounded-md hover:bg-blue-800'>Submit</button>
+    {% endif %}
+  </form>
 </div>
 {% endblock content %}

@@ -36,8 +36,11 @@ class Submission(models.Model):
     RESULT = SUBMISSION_RESULT
 
     user = models.ForeignKey("education.ContestParticipation", verbose_name=_("user"), 
-                             related_name='submissions', on_delete=models.CASCADE)
-    contest = models.ForeignKey("education.Contest", verbose_name=_("contest"), on_delete=models.CASCADE)
+                             related_name='submissions', on_delete=models.CASCADE, null=True)
+    profile = models.ForeignKey("backend.Profile", verbose_name=_("profile"), related_name='submissions', on_delete=models.CASCADE, null=True)
+    contest = models.ForeignKey("education.Contest", verbose_name=_("contest"), on_delete=models.CASCADE, null=True)
+    problem = models.ForeignKey("education.Problem", verbose_name=_("problem"), on_delete=models.CASCADE, null=True)
+    is_contest = models.BooleanField(_('is contest'), default=True)
     date = models.DateTimeField(_('submission time'), auto_now_add=True, db_index=True)
     time = models.DateTimeField(_("completion time"), null=True, db_index=True)
     points = models.FloatField(_("points granted"), null=True, db_index=True, default=0.0)
@@ -75,12 +78,19 @@ class Submission(models.Model):
     def judge(self):
         self.points = 0.0
         self.max_points = 0.0
-        for problem in self.contest.contest_problems.all():
-            self.max_points += problem.points
-        for problem in self.problems.all():
-            problem.calculator()
-            self.points += problem.points
-        self.result = 'AC' if self.points == self.max_points else 'WA'
+        if self.is_contest:
+            for problem in self.contest.contest_problems.all():
+                self.max_points += problem.points
+            for problem in self.problems.all():
+                problem.calculator()
+                self.points += problem.points
+            self.result = 'AC' if self.points == self.max_points else 'WA'
+        else:
+            self.max_points = 100
+            for problem in self.problems.all():
+                problem.calculatorTask()
+                self.points += problem.points
+            self.result = 'AC' if self.points == 100 else 'WA'
         self.save(update_fields=['points', 'max_points', 'result'])
     judge.alters_data = True
     
@@ -99,7 +109,8 @@ class Submission(models.Model):
 class SubmissionProblem(models.Model):
     submission = models.ForeignKey("education.Submission", verbose_name=_("submission"), 
                                    related_name='problems', on_delete=models.CASCADE)
-    problem = models.ForeignKey("education.ContestProblem", verbose_name=_("problem"), on_delete=models.CASCADE)
+    problem = models.ForeignKey("education.ContestProblem", verbose_name=_("contest problem"), on_delete=models.CASCADE, null=True)
+    task = models.ForeignKey("education.Problem", verbose_name=_("problem"), on_delete=models.CASCADE, null=True)
     result = models.BooleanField(_("result"), default=False)
     points = models.FloatField(_("points granted"), null=True)
     output = models.TextField(_("student's answer"), blank=True)
@@ -116,6 +127,19 @@ class SubmissionProblem(models.Model):
             self.points = 0
         self.save(update_fields=['result', 'points'])
     calculator.alters_data = True
+    
+    def calculatorTask(self):
+        if self.task.answer_type == 'mc':
+            answer = Answer.objects.get(problem=self.task, is_correct=True)
+        if self.task.answer_type == 'fill':
+            answer = Answer.objects.filter(problem=self.task).first()
+        self.result = answer.description == self.output
+        if self.result:
+            self.points = 100
+        else:
+            self.points = 0
+        self.save(update_fields=['result', 'points'])
+    calculatorTask.alters_data = True
 
     @cached_property
     def get_long_status(self):

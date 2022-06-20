@@ -17,7 +17,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/accordion.min.js" integrity="sha512-QHden+jR94AVti4Gt2HcaEbLGDzdgTtSPg82N21vfCCp2gNLcYcPPuG7S77bQzSts4ujSQeg9orK7bbC1GPdlg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock content_js %}
 {% block content %}
-<div class="w-full">
+<div class="flex flex-col w-full space-y-4">
+  <div class="grid grid-cols-10 [&>*]:py-3 [&>*]:px-4 w-full rounded-lg [&>*]:font-bold bg-white [&>*]:shadow-lg divide-x">
+    <div class="text-white bg-blue-500 rounded-lg">Emath</div>
+    <a href="#" class="text-center text-gray-600 rounded-lg bg-slate-300">Toán</a>
+  </div>
   <div class="fluid ui styled accordion">
     {% for item in levels %}
     <div class="title">
@@ -25,28 +29,36 @@
       {{ item.level }}
     </div>
     <div class="content">
-      <div class="ui message">
+      <div class="flex items-center justify-between ui message">
         <strong>Welcome to {{ item.level }}</strong>
-        <div><a href="{% url 'education:problem_level_list' item.level.code %}"></a></div>
+        {% if item.problems|length %}
+        <div class="p-2 text-white bg-indigo-500 rounded-lg shadow-lg hover:bg-indigo-700">
+          <a href="{% url 'education:problem_level_list' item.level.code %}">View all</a>
+        </div>
+        {% endif %}
       </div>
-      <table class="table ui celled unstackable">
+      {% if item.problems|length %}
+      <table class="w-full mt-2 divide-y">
         <thead>
-          <tr>
-            <th>Problem</th>
-            <th class="category">Category</th>
-            <th class="two wide column">Difficult</th>
+          <tr class="[&>*]:bg-indigo-500 [&>*]:text-white [&>*]:p-2 divide-x divide-slate-500">
+            <th class="rounded-tl-md">Problem</th>
+            <th class="w-1/3 category">Category</th>
+            <th class="w-1/6 rounded-tr-md">Difficult</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-slate-500">
           {% for problem in item.problems %}
-          <tr>
-            <td><a href="{% url 'education:problem_detail'  problem.code  %}">{{ problem.name }}</a></td>
+          <tr class="[&>*]:p-2 {% cycle 'bg-inherit' 'bg-slate-400' %} divide-x divide-slate-500">
+            <td><a href="{% url 'education:problem_detail' problem.code  %}" class="font-bold text-blue-500 hover:text-blue-700">{{ problem.name }}</a></td>
             <td class="category">{{ problem.types.all|join:', '}}</td>
-            <td>{{ problem.difficult }}</td>
+            <td class="text-center">{{ problem.difficult }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      <div class="p-4 text-lg font-bold">Sign up for this class to see class problems</div>
+      {% endif %}
     </div>
     {% endfor %}
   </div>

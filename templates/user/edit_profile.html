@@ -1,12 +1,17 @@
-{% extends 'base.html' %} {% block content_title %}
-<h3 class="block ui header">{{ title }}</h3>
-{% endblock content_title %} {% block content_media %} {{ form.media.css }}
+{% extends 'base.html' %} 
+{% load variable %}
+{% block content_title %}
+{% title %}
+{% endblock content_title %} 
+{% block content_media %} 
+{{ form.media.css }}
 <style>
   fieldset {
     width: 100%;
   }
 </style>
-{% endblock content_media %} {% block content %}
+{% endblock content_media %} 
+{% block content %}
 <div class="column">
   <div class="ui row segment">
     <form action="" class="ui form" method="post">
@@ -29,7 +34,7 @@
           <fieldset>
             <legend class="ui header">Permission</legend>
             <div class="equal width fields">
-              <div class="{% if user==request.user %}disabled {% endif %} field">
+              <div class="{% if user == request.user %}disabled {% endif %} field">
                 <div class="ui checkbox">
                   {{ form.is_active }}
                   <label>{{ form.is_active.label }}</label>
@@ -71,5 +76,7 @@
   </div>
 </div>
 
-{% endblock content %} {% block extends_js %} {{ form.media.js }} {% endblock
-extends_js %}
+{% endblock content %} 
+{% block extends_js %} 
+{{ form.media.js }} 
+{% endblock extends_js %}

@@ -1,4 +1,5 @@
 from django import template
+from education.models import ContestProblem
 
 register = template.Library()
 
@@ -7,7 +8,7 @@ def mc(problem, answers):
   return {
     'answers': answers,
     'index': problem.id,
-    'markdown': problem.problem.markdown_style
+    'markdown': problem.problem.markdown_style if isinstance(problem, ContestProblem) else problem.markdown_style
   }
 
 @register.inclusion_tag('problem/fill_answer.html')
