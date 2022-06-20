@@ -8,9 +8,3 @@ class EducationConfig(AppConfig):
 
     def ready(self) -> None:
         from . import signals
-
-        from .models import Problem
-
-        for problem in Problem.objects.all():
-            problem.is_public = True
-            problem.save()
