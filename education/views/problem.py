@@ -96,7 +96,7 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
     model = Level
     context_object_name = 'problems'
     template_name = 'problem/level_list.html'
-    paginate_by = 1
+    paginate_by = 30
     sql_sort = frozenset(('difficult', 'code', 'name'))
     manual_sort = frozenset(('types'))
     all_sorts = sql_sort | manual_sort
