@@ -132,11 +132,12 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
         return None
     
     def get_queryset(self):
+        queryset = Problem.objects.filter(level=self.object)
         filter = Q(is_public=True)
         if self.user is not None:
             filter |= Q(authors=self.user)
         
-        queryset = Problem.objects.filter(filter)
+        queryset = queryset.filter(filter)
 
         if not self.user.has_perm('education:see_organization_problem'):
             filter = Q(is_organization_private=False)
@@ -151,8 +152,13 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
         
         context.update(self.get_sort_paginate_context())
         context.update(self.get_sort_context())
-        context['level'] = self.get_object()
+        context['level'] = self.object
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+    
 
 
 def get_answer(problem):
