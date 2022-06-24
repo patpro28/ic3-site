@@ -1,4 +1,3 @@
-from email.quoprimime import unquote
 from django.db import models
 from django.db.models import Q, F
 from django.conf import settings
@@ -40,8 +39,19 @@ DIFFICULT = (
     ('expert', _('Expert')),
     ('cmaster', _('Candidate Master')),
     ('master', _('Master')),
-    ('gmaster', _('Grandmaster'))
+    ('gmaster', _('Grandmaster')),
+    ('target', _('Target'))
 )
+
+POINTS = {
+    'newbie': 1,
+    'amateur': 20,      # = 20 newbie
+    'expert': 400,      # = 20 amateur
+    'cmaster': 8000,    # = 20 expert
+    'master': 160000,   # = 20 cmaster
+    'gmaster': 3200000,  # = 20 master
+    'target': 100000000
+}
 
 
 class ProblemGroup(models.Model):
@@ -95,7 +105,7 @@ class Problem(models.Model):
         return reverse('education:problem_detail', kwargs={'problem': self.code})
         
     @classmethod
-    def get_visible_problems(cls, user):
+    def get_visible_problems(cls, user: Profile):
         if not user.is_authenticated:
             return cls.get_public_problems
         
@@ -120,7 +130,7 @@ class Problem(models.Model):
         return cls.objects.filter(is_public=True, is_organization_private=False).defer('description')
 
     @classmethod
-    def get_editable_problems(cls, user):
+    def get_editable_problems(cls, user: Profile):
         if not user.has_perm('education.edit_own_problem'):
             return cls.objects.none()
         if user.has_perm('education.edit_all_problem'):
@@ -138,7 +148,7 @@ class Problem(models.Model):
     def author_ids(self):
         return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
-    def is_accessible_by(self, user, skip_contest_problem_check=False):
+    def is_accessible_by(self, user: Profile, skip_contest_problem_check=False):
         # If we don't want to check if the user is in a contest containing that problem.
         if not skip_contest_problem_check and user.is_authenticated:
             # If user is currently in a contest containing that problem.
@@ -177,7 +187,7 @@ class Problem(models.Model):
 
         return False
 
-    def is_editable_by(self, user):
+    def is_editable_by(self, user: Profile):
         if not user.is_authenticated:
             return False
         if user.has_perm('education.edit_all_problem') or user.has_perm('education.edit_public_problem') and self.is_public:
@@ -208,6 +218,10 @@ class ProblemType(models.Model):
     group = models.ForeignKey(ProblemGroup, verbose_name=_("group"), related_name='problems', on_delete=models.CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_("problem"), related_name='problem_types', on_delete=models.CASCADE)
     level = models.CharField(_("level"), max_length=10, default='newbie', choices=DIFFICULT)
+
+    @property
+    def get_point(self):
+        return POINTS.get(self.level, 1)
 
     class Meta:
         unique_together = ('problem', 'group')

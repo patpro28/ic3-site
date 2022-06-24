@@ -156,7 +156,7 @@ class Contest(models.Model):
     class PrivateContest(Exception):
         pass
 
-    def access_check(self, user):
+    def access_check(self, user: Profile):
         if not user.is_authenticated:
             if not self.is_visible:
                 raise self.Inaccessible()
@@ -192,7 +192,7 @@ class Contest(models.Model):
                 return
             raise self.PrivateContest()
         
-    def is_accessible_by(self, user):
+    def is_accessible_by(self, user: Profile):
         try:
             self.access_check(user)
         except (self.Inaccessible, self.PrivateContest):
@@ -200,7 +200,7 @@ class Contest(models.Model):
         else:
             return True
         
-    def has_completed_contest(self, user):
+    def has_completed_contest(self, user: Profile):
         if user.is_authenticated:
             participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user).first()
             if participation and participation.ended:
@@ -216,12 +216,12 @@ class Contest(models.Model):
             return False
         return True
 
-    def is_in_contest(self, user):
+    def is_in_contest(self, user: Profile):
         if user.is_authenticated:
             return user and user.current_contest is not None and user.current_contest.contest == self
         return False
 
-    def can_see_own_scoreboard(self, user):
+    def can_see_own_scoreboard(self, user: Profile):
         if self.can_see_full_scoreboard(user):
             return True
         if not self.can_join:
@@ -230,7 +230,7 @@ class Contest(models.Model):
             return False
         return True
 
-    def can_see_full_scoreboard(self, user):
+    def can_see_full_scoreboard(self, user: Profile):
         if self.show_scoreboard:
             return True
         if not user.is_authenticated:
@@ -246,7 +246,7 @@ class Contest(models.Model):
         return False
 
     @classmethod
-    def get_visible_contests(cls, user):
+    def get_visible_contests(cls, user: Profile):
         if not user.is_authenticated:
             return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
                 .defer('description').distinct()
@@ -266,7 +266,7 @@ class Contest(models.Model):
             queryset = queryset.filter(q)
         return queryset.distinct()
 
-    def is_editable_by(self, user):
+    def is_editable_by(self, user: Profile):
         if user.has_perm('education.edit_all_contest'):
             return True
         
@@ -347,7 +347,7 @@ class ContestParticipation(models.Model):
         return contest.start_time if self.live or self.spectate else self.real_start
 
     def __str__(self) -> str:
-        fullname = self.user.fullname
+        fullname = self.user.fullname if self.user.fullname else self.user.username
         if self.spectate:
             return gettext('%(fullname)s spectating in %(contest)s' % {
                 'fullname': fullname, 
@@ -419,7 +419,7 @@ class ContestSolution(models.Model):
     def __str__(self):
         return _('Editorial for %s') % self.contest.name
 
-    def is_accessiable_by(self, user):
+    def is_accessiable_by(self, user: Profile):
         if self.is_public and self.publish_on < timezone.now():
             return True
         if self.contest.is_editable_by(user):

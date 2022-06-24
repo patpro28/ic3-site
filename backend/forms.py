@@ -25,9 +25,9 @@ class EditProfileForm(forms.ModelForm):
 
 class RegisterForm(forms.ModelForm):
   error_messages = {
-    'password_mismatch': _("The two password fields didn’t match."),
+    'password_mismatch': _("The two password fields didn\'t match."),
   }
-  fullname = forms.CharField(max_length=30, required=True, label=_('Fullname'))
+  # fullname = forms.CharField(max_length=30, required=True, label=_('Fullname'))
   username = forms.RegexField(regex=r'^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$', max_length=30, label=_('Username'),
                               error_messages={'invalid': _('A username must contain lower latinh letters, '
                                                              'numbers, min length = 8, max length = 30')})
@@ -46,7 +46,7 @@ class RegisterForm(forms.ModelForm):
 
   class Meta:
     model = Profile
-    fields = ['username', 'fullname', 'password1', 'password2']
+    fields = ['username', 'password1', 'password2']
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)

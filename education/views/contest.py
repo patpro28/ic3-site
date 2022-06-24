@@ -455,7 +455,7 @@ class ContestTaskView(LoginRequiredMixin, ContestMixin, TitleMixin, DetailView):
   def get_title(self):
       return "Contest %(contest)s by %(user)s" % {
         'contest': self.object.name,
-        'user': self.request.user.fullname
+        'user': self.request.user.fullname if self.request.user.fullname else self.request.user.username
       }
 
   def get_context_data(self, **kwargs):

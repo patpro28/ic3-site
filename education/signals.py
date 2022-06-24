@@ -23,14 +23,13 @@ def unlink_if_exists(file):
 
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
-  cache.delete_many([make_template_fragment_key('exam_html', (problem.problem.id, 'jax'))
+  cache.delete_many([make_template_fragment_key('problem_html', (problem.problem.id, 'jax'))
                     for problem in ContestProblem.objects.filter(contest=instance)])
   unlink_if_exists(get_pdf_path('%s.pdf' % (instance.key)))
 
 
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
-  cache.delete_many([make_template_fragment_key('exam_html', (instance.id, 'jax'))])
   cache.delete_many([make_template_fragment_key('problem_html', (instance.id, 'jax'))])
 
   for contest in ContestProblem.objects.filter(problem=instance):

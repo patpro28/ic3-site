@@ -59,7 +59,7 @@ def get_result_data(*args, **kwargs):
 
 class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     model = Submission
-    paginate_by = 20
+    paginate_by = 50
     show_problem = True
     title = _('All submissions')
     content_title = _('All submissions')

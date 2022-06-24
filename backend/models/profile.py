@@ -58,7 +58,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("is staff"), default=False)
     is_active = models.BooleanField(_("Active"), default=True)
     date_joined = models.DateTimeField(_("Date joined Emath"), default=now)
-    fullname = models.CharField(_("Fullname"), max_length=50, null=False)
+    fullname = models.CharField(_("Fullname"), max_length=50, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     display_rank = models.CharField(_("display rank"), max_length=10, default='user', choices=DISPLAY_RANK)
@@ -69,6 +69,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=settings.MATHOID_DEFAULT_TYPE,
                                    help_text=_('the rendering engine used to render math'))
+    # status = models.BooleanField(_("status"), default=False)
     objects = ProfileManager()
 
     #Contest
@@ -76,7 +77,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
                                         null=True, blank=True, related_name='+',on_delete=models.SET_NULL)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['fullname',]
 
     def __str__(self) -> str:
         return self.username

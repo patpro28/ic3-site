@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="{% static 'style.css' %}?v=123123" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/transition.min.css" integrity="sha512-akDIy9PFLHqt+/oOhrmqIr57bs4LvCdlUhHmZh5pzmaWG2G3lwzLB9ht56vvz18nKOuC0ItlSK9mPl6oQEAxaA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'style.css' %}?v=12123" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/toast.min.css" integrity="sha512-RdgbDqY+sqOZIrI/mvCIQdM90u25aigG4f1XzDSDJeOXTYIo6V6gEiSzULelTD4diwdg/f6JwJHizQ25rNbN9Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Login</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -17,6 +19,9 @@
       font-family: 'Poppins', sans-serif;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/transition.min.js" integrity="sha512-YKv9jhCJ4S5fNeKwyCHfwI2uLEhekfSOdunDd+xPYaiipsBvywP4ZIpXgyYUN884a/CnI4tNKMA9bs/YqdXU8Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/toast.min.js" integrity="sha512-r3EKTA05GOQyYSORYBT5yzjv2nRI+6K3gx2kGMUviQyWxW/FEnzrzw+DBt86XLWKqAcziPMIyly5BUbBZGmkhg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -125,20 +130,6 @@
                   </div>
                   <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
                     <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
-                      name="fullname" type="text" placeholder="Fullname" />
-                    <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
-                      <i class="m-auto fa-solid fa-id-card fa-lg"></i>
-                    </span>
-                    {% if form.fullname.errors %}
-                    <div class="flex flex-col items-start text-xs text-red-500">
-                      {% for error in form.fullname.errors %}
-                      <span>{{ error }}</span>
-                      {% endfor %}
-                    </div>
-                    {% endif %}
-                  </div>
-                  <div class="relative flex flex-col mx-auto mt-4 text-gray-400">
-                    <input class="w-full p-3 pl-10 text-sm font-medium border rounded-lg outline-none peer focus:ring-indigo-500 focus:ring-1 focus:border-indigo-500"
                       name="password1" type="password" placeholder="Password" />
                     <span class="absolute w-10 h-full pb-3 pt-2.5 left-px peer-focus:text-black">
                       <i class="m-auto fa-solid fa-lock fa-lg"></i>
@@ -184,6 +175,14 @@
     }
     {% if not login %}
     transform(-100);
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    $('body').toast({
+      class: '{{ message.tags|default:"success"}}',
+      message: '{{ message }}'
+    })
+    {% endfor %}
     {% endif %}
   </script>
 </body>

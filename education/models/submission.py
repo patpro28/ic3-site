@@ -21,7 +21,7 @@ RESULT_CLASS = {
 
 WRONG_LEVEL = (0.3, 0.5, 0.7, 0.9, 1)
 
-def get_result_html(result, index, point):
+def get_result_html(result: str, index: int, point: float):
     style = RESULT_CLASS.get(result, None)
     if style is None:
         return format_html('<td>???</td>')
@@ -70,7 +70,9 @@ class Submission(models.Model):
         return None
     
     def __str__(self) -> str:
-        return 'Submission %d of %s by %s' % (self.id, self.contest.name, self.user.user.fullname)
+        name = self.contest if self.contest is not None else self.problem
+        user = self.user.user if self.user is not None else self.profile
+        return 'Submission %d of %s by %s' % (self.id, name, user)
 
     def get_absolute_url(self):
         return reverse("submission_status", kwargs={"pk": self.pk})
