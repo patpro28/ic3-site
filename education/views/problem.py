@@ -1,3 +1,5 @@
+import json
+
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.db.models import Q, Count
 from django.urls import reverse
@@ -8,11 +10,13 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from backend.utils.diggpaginator import DiggPaginator
+from backend.templatetags.markdown import markdown
 from education.models import Problem, ProblemGroup
 from backend.models import Profile
 from backend.utils.views import QueryStringSortMixin, TitleMixin, generic_message
 from backend.utils.strings import safe_int_or_none, safe_float_or_none
 from education.models.problem import Answer, Level
+# from education.models.statistic import StatisticProblem
 from education.models.submission import Submission, SubmissionProblem
 
 class ProblemMixin(object):
@@ -139,7 +143,7 @@ class ProblemLevelList(QueryStringSortMixin, TitleMixin, ListView):
         
         queryset = queryset.filter(filter)
 
-        if not self.user.has_perm('education:see_organization_problem'):
+        if self.user is None or not self.user.has_perm('education:see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.user is not None:
                 filter |= Q(organizations__in=self.user.organizations.all())
@@ -247,6 +251,21 @@ def problemSubmit(request, *args, **kwargs):
         submissionProblem.output = ans
         submissionProblem.save()
         submission.judge()
+        # sp = StatisticProblem.objects.get_or_create(user=user, date=timezone.now().date())[0]
+        # sp.update_problem(submission)
         return HttpResponseRedirect(reverse('education:all_submissions'))
     else:
         raise Http404()
+
+
+# def getContent(request, *args, **kwargs):
+#     code = kwargs['problem']
+#     if code is None:
+#         raise Http404()
+#     problem = Problem.objects.get(code=code)
+
+#     context = json.dumps({
+#         'description': problem.description
+#     })
+
+#     return context
