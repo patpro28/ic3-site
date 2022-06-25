@@ -12,7 +12,7 @@ from martor.widgets import AdminMartorWidget
 
 from education.models import Problem, ProblemGroup, Answer, ProblemType
 from backend.utils.models import AlwaysChangedModelForm
-from education.models.problem import Level
+from education.models.problem import Level, DIFFICULT
 
 
 
@@ -128,6 +128,19 @@ class LevelFilter(admin.SimpleListFilter):
         return queryset.filter(level__id=self.value())
 
 
+class DifficultFilter(admin.SimpleListFilter):
+    title = _('difficult')
+    parameter_name = 'difficult'
+
+    def lookups(self, request, model_admin):
+        return DIFFICULT
+    
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        return queryset.filter(difficult=self.value())
+
+
 class ProblemAdmin(VersionAdmin):
     form = ProblemForm
     fieldsets = (
@@ -145,7 +158,7 @@ class ProblemAdmin(VersionAdmin):
     
     list_display = ['code', 'name', 'is_public', 'level', 'show_public']
     inlines = [ProblemTypeInline, AnswerInline, ]
-    list_filter = (TypesFilter, LevelFilter)
+    list_filter = (TypesFilter, LevelFilter, DifficultFilter)
     ordering = ('code',)
     search_fields = ('code', 'name')
     actions_on_top = True
