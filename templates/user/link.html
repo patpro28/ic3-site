@@ -1,1 +1,1 @@
-<a href="{% url 'user_page' user.username %}">{% if user.fullname %}{{ user.fullname }}{% else %}{{ user.username }}{% endif %}</a>
+<a href="{% url 'user_page' user.username %}" class="line-clamp-1">{% if user.fullname %}{{ user.fullname }}{% else %}{{ user.username }}{% endif %}</a>

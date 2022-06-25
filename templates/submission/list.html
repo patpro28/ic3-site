@@ -13,42 +13,42 @@
 {% if page_obj and page_obj.has_other_pages %}
     {% include 'list-page.html' %}
 {% endif %}
-<div class="grid grid-cols-[80px_120px_200px_auto_50px] gap-px">
-  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-1 text-xs font-bold bg-slate-400 md:text-sm rounded-tl-2xl">
+<div class="grid grid-cols-[50px_120px_auto_30px] md:grid-cols-[80px_120px_200px_auto_50px] gap-px auto-rows-fr">
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm rounded-tl-2xl">
       Result
   </div>
-  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-2 text-xs font-bold bg-slate-400 md:text-sm">
+  <div class="items-center justify-center hidden w-full h-10 text-xs font-bold md:flex bg-slate-400 md:text-sm">
       Time
   </div>
-  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-3 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
       Username
   </div>
 
-  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-4 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
-      Contest
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
+      Contest or Problem
   </div>
 
-  <div class="flex items-center justify-center w-full h-10 col-span-1 col-start-5 text-xs font-bold bg-slate-400 md:text-sm rounded-tr-2xl">
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm rounded-tr-2xl">
 
   </div>
   {% for submission in submissions %}
     {% include 'submission/row.html' %}
   {% endfor %}
-  <div class="w-full h-10 col-span-1 col-start-1 bg-slate-400 rounded-bl-2xl ">
+  <div class="w-full h-10 bg-slate-400 rounded-bl-2xl ">
         
   </div>
-  <div class="w-full h-10 col-span-1 col-start-2 bg-slate-400 ">
+  <div class="hidden w-full h-10 md:block bg-slate-400 ">
       
   </div>
-  <div class="w-full h-10 col-span-1 col-start-3 bg-slate-400 sm:h-10 ">
-      
-  </div>
-
-  <div class="w-full h-10 col-span-1 col-start-4 bg-slate-400 sm:h-10 ">
+  <div class="w-full h-10 bg-slate-400 sm:h-10 ">
       
   </div>
 
-  <div class="w-full h-10 col-span-1 col-start-5 bg-slate-400 rounded-br-2xl ">
+  <div class="w-full h-10 bg-slate-400 sm:h-10 ">
+      
+  </div>
+
+  <div class="w-full h-10 bg-slate-400 rounded-br-2xl ">
 
   </div>
 </div>

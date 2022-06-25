@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/transition.min.css" integrity="sha512-akDIy9PFLHqt+/oOhrmqIr57bs4LvCdlUhHmZh5pzmaWG2G3lwzLB9ht56vvz18nKOuC0ItlSK9mPl6oQEAxaA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'components/transition.min.css' %}"/>
   <link rel="stylesheet" href="{% static 'style.css' %}?v=12123" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/toast.min.css" integrity="sha512-RdgbDqY+sqOZIrI/mvCIQdM90u25aigG4f1XzDSDJeOXTYIo6V6gEiSzULelTD4diwdg/f6JwJHizQ25rNbN9Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'components/toast.min.css' %}" />
   <title>Login</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -26,9 +26,9 @@
 
 <body>
   <div
-    class="bg-no-repeat h-full bg-cover bg-center bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)]">
+    class="bg-no-repeat h-full bg-cover bg-center md:bg-[url(https://media.idownloadblog.com/wp-content/uploads/2021/10/Waves-wallpaper-Arthur1992aS-iDownloadBlog-V5-sample.png)]">
     <div class="w-full h-screen m-auto lg:grid lg:grid-cols-2">
-      <div class="grid w-full h-full grid-rows-3">
+      <div class="hidden w-full h-full grid-rows-3 lg:grid">
         <div class="">
           <a href="{% url 'education:home' %}" class="flex items-center p-2 pb-0 md:pt-8 md:pl-8 lg:mt-4 lg:pt-0">
             <img class="w-6 h-6 m-2 mb-0 md:h-10 md:w-10" src="{% static 'icons/emath.png' %}" alt="" />
@@ -47,9 +47,16 @@
           </div>
         </div>
       </div>
-
+      <div class="flex flex-col sticky md:hidden left-0 top-0 w-full max-h-16 transition-[max-height] duration-200 overflow-hidden z-50">
+        <div class="flex items-center justify-between p-2 bg-black">
+          <a class="flex items-center" href="/">
+            <img src="{% static 'icons/emath.png' %}" alt="logo" class="w-8 h-8">
+            <span class="ml-2 text-xl font-semibold text-white transition duration-400">Emath</span>
+          </a>
+        </div>
+      </div>
       <div class="flex flex-col m-auto md:h-auto">
-        <div class="relative py-10 m-auto overflow-hidden text-center bg-white rounded-md shadow-md min-h-fit w-96">
+        <div class="relative py-10 m-auto overflow-hidden text-center bg-white rounded-md lg:shadow-md min-h-fit w-96">
           <div class="">
             <img class="w-24 h-24 mx-auto mt-4 mb-2 rounded-full" src="{% static 'icons/user.png' %}"
               alt="" />

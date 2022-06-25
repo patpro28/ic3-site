@@ -19,7 +19,7 @@
 
 {% block content %}
 {% if page_obj and page_obj.has_other_pages %}
-<div class="flex items-center justify-between">
+<div class="flex flex-col items-start py-4 md:justify-between md:items-center md:flex-row">
   <div class="basis-1/2">
   {% include 'list-page.html' %}
   </div>
