@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.list-card::-webkit-scrollbar {
+  @apply w-2 h-2
+}
+
+.list-card::-webkit-scrollbar-track {
+  @apply bg-gray-500 rounded-full
+}
+
+.list-card::-webkit-scrollbar-thumb {
+  @apply bg-blue-500 rounded-full
+}
+
+.stroke-gray-500 {
+  stroke: #6b7280;
+}
+
+.stroke-amber-500 {
+  stroke: #f59e0b;
+}
+
+.stroke-yellow-500 {
+  stroke: #eab308;
+}
+
+.stroke-red-500 {
+  stroke: #ef4444;
+}
+
+.stroke-green-700 {
+  stroke: #15803d;
+}
+
+.stroke-blue-800 {
+  stroke: #1e40af;
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+.text-amber-500 {
+  --tw-text-opacity: 1;
+  color: rgb(245 158 11 / var(--tw-text-opacity));
+}
+
+.text-yellow-500 {
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+
+.text-green-700 {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity));
+}
+
+.text-blue-800 {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity));
+}
