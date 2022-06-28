@@ -1,5 +1,5 @@
 {% extends 'base.html' %} 
-{% load timedelta variable %}
+{% load timedelta variable markdown %}
 {% block content_title %} {% title %}
 {% endblock content_title %} {% block content_media %}
 <style>
@@ -38,7 +38,7 @@
         <span class="{{ result|lower }}">{{ result }}</span>
       </div>
       <div class="content">
-        {% if output and perms.education.view_output_submission %} <span class="font-bold text-indigo-500">User answer:</span> {{ output }} {% endif %}
+        {% if output and perms.education.view_output_submission %} <span class="font-bold text-indigo-500">User answer:</span> {% markdown output %} {% endif %}
       </div>
       {% endfor %}
     </div>
