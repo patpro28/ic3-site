@@ -524,41 +524,18 @@ class ContestTaskPdfView(ContestMixin, SingleObjectMixin, View):
   logger = logging.getLogger('education.problem.pdf')
 
   def get(self, request, *args, **kwargs):
-    if not HAS_PDF:
-      raise Http404()
+    # if not HAS_PDF:
+    #   raise Http404()
     
     contest = self.get_object()
 
     cache = os.path.join(settings.PDF_PROBLEM_CACHE, '%s.pdf' % (contest.key))
 
     if not os.path.exists(cache):
-      self.logger.info('Rendering: %s.pdf', contest.key)
-      with DefaultPdfMaker() as maker:
-        problem_name = contest.name 
-        contestProblem = list(ContestProblem.objects.filter(contest=contest).order_by('order'))
-        random.shuffle(contestProblem)
-        problems = []
-        for problem in contestProblem:
-          answer = get_answer_contest_problem(problem.problem)
-          problems.append((problem, answer))
-        maker.html = get_template('contest/raw.html').render({
-          'contest': contest,
-          'problems': problems,
-          'url': request.build_absolute_uri(),
-          'math_engine': maker.math_engine,
-        }).replace('"//', '"https://').replace("'//", "'https://")
-        maker.title = problem_name
-
-        assets = []
-        if maker.math_engine == 'jax':
-          assets.append('mathjax_config.js')
-        for file in assets:
-          maker.load(file, os.path.join(settings.RESOURCES, file))
-        maker.make()
-        if not maker.success:
-          self.logger.error('Failed to render PDF for %s', contest.key)
-          return HttpResponse(maker.log, status=500, content_type='text/plain')
-        shutil.move(maker.pdffile, cache)
+      from django_selenium_pdfmaker.modules import PDFMaker
+      pdfmaker = PDFMaker()
+      result = pdfmaker.get_pdf_from_html(path=settings.SITE_FULL_URL + '/contest/%s/raw' % (contest.key),
+                                          filename=contest.key, write=True)
     
     response = HttpResponse()
 
@@ -572,6 +549,23 @@ class ContestTaskPdfView(ContestMixin, SingleObjectMixin, View):
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=%s.pdf' % (contest.key)
     return response
+
+
+class ContestRawView(ContestMixin, DetailView):
+  template_name: str = 'contest/raw.html'
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    contestProblem = list(ContestProblem.objects.filter(contest=self.object).order_by('order'))
+    random.shuffle(contestProblem)
+    problems = []
+    for problem in contestProblem:
+      answer = get_answer_contest_problem(problem.problem)
+      problems.append((problem, answer))
+    context['problems'] = problems
+    context['math_engine'] = 'jax'
+    context['version'] = random.randint(1, 1000000000)
+    return context
 
 
 class ContestSolutionView(LoginRequiredMixin, ContestMixin, TitleMixin, DetailView):
