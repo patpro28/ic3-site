@@ -31,6 +31,7 @@ urlpatterns += [
         path('task/', contest.ContestTaskView.as_view(), name='contest_task'),
         path('pdf/', contest.ContestTaskPdfView.as_view(), name='contest_pdf'),
         path('editorial/', contest.ContestSolutionView.as_view(), name='contest_editorial'),
+        path('raw/', contest.ContestRawView.as_view(), name='raw_contest')
     ]))
 ]
 

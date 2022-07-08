@@ -2,7 +2,7 @@ from django.forms import HiddenInput, ModelForm, PasswordInput, CharField
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.db import models
 
 from reversion.admin import VersionAdmin
@@ -108,6 +108,17 @@ class ProfileAdmin(UserAdmin):
             if not request.user.is_staff:
                 fields += ('is_staff',)
         return fields
+    
+    def get_list_display(self, request):
+        if request.user.is_superuser and 'change_password' not in self.list_display:
+            self.list_display += ('change_password',)
+        if not request.user.is_superuser and 'change_password' in self.list_display:
+            self.list_display.remove('change_password')
+        return self.list_display
+
+    def change_password(self, obj):
+        return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',
+                            reverse('admin:auth_user_password_change', kwargs={'id':obj.pk}), gettext('Change password'))
 
     def show_public(self, obj):
         return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',

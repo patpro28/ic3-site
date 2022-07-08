@@ -12,6 +12,7 @@ from django.contrib.auth.views import (
     PasswordChangeView as BasePasswordChangeView
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from django.core.exceptions import PermissionDenied
@@ -132,10 +133,16 @@ class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):
 class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
     form_class = RegisterForm
     template_name = 'user/login_form.html'
-    success_url = '/accounts/login/'
+    success_url = '/'
     success_message = _('Your user registration was successful.')
     model = Profile
     title = _('Register')
+
+    def form_valid(self, form):
+        output = super().form_valid(form)
+        login(self.request, self.object)
+        return output
+
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -146,7 +153,7 @@ class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
 class LoginView(TitleMixin, BaseLoginView):
     template_name = 'user/login_form.html'
     title = _('Login')
-    success_url = '/user/'
+    success_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

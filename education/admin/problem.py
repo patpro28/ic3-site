@@ -8,7 +8,7 @@ from django.utils.html import format_html
 
 from semantic_admin.admin import SemanticTabularInline
 from semantic_admin import widgets
-from martor.widgets import AdminMartorWidget
+from backend.widgets.martor import AdminMartorWidget
 
 from education.models import Problem, ProblemGroup, Answer, ProblemType
 from backend.utils.models import AlwaysChangedModelForm

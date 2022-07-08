@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     'reversion',
     'compressor',
     'sortedm2m',
+    'django_selenium_pdfmaker',
     # 'channels',
 ]
 

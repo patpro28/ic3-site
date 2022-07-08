@@ -28,9 +28,9 @@ class RegisterForm(forms.ModelForm):
     'password_mismatch': _("The two password fields didn\'t match."),
   }
   # fullname = forms.CharField(max_length=30, required=True, label=_('Fullname'))
-  username = forms.RegexField(regex=r'^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$', max_length=30, label=_('Username'),
+  username = forms.RegexField(regex=r'^(?=.{4,30}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$', max_length=30, label=_('Username'),
                               error_messages={'invalid': _('A username must contain lower latinh letters, '
-                                                             'numbers, min length = 8, max length = 30')})
+                                                             'numbers, min length = 4, max length = 30')})
   password1 = forms.CharField(
       label=_("Password"),
       strip=False,

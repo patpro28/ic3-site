@@ -1,58 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static markdown %}
+<html lang="en" style="font-size: 12pt">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ contest.name }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" integrity="sha512-pbLYRiE96XJxmJgF8oWBfa9MdKwuXhlV7vgs2LLlapHLXceztfcta0bdeOgA4reIf0WH67ThWzA684JwkM3zfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'raw.css' %}?v={{ version }}">
+  <style>
+    @media all {
+      .page-break { display: none; }
+    }
+    @media print {
+      pre, blockquote, img {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+      }
+      .page-break	{ display: block; page-break-before: always; }
+    }
+    @page  
+    { 
+      size: auto;   /* auto is the initial value */ 
+
+      /* this affects the margin in the printer settings */ 
+      margin: 15mm 15mm 25mm 15mm;  
+    } 
+  </style>
 </head>
 <body>
-<div class="grid ui" id="task">
-  <div class="column">
-    <div class="ui row segment">
+  <div class="float-none p-4 mx-auto max-w-7xl">
+    <div class="flex flex-col gap-2">
       {% for problem, answers in problems %}
-      <div class="ui segments" id="{{ problem.id }}">
-        <div class="ui top attached secondary black inverted menu">
-          <div class="ui header item">Problem {{ forloop.counter }}</div>
+      <div class="flex items-baseline w-full gap-2" id="{{ problem.id }}">
+        <div class="text-lg font-bold text-blue-600">
+          Problem {{ forloop.counter }}:
         </div>
-        <div class="ui bottom attached segment">
-          <div style="font-size: 16px">
+        <div class="flex flex-col flex-1 gap-2">
+          <div class="prose !max-w-none w-full prose-p:my-1 prose-img:my-1 prose-p:text-black leading-4">
             {# cache 0 'exam_html' problem.problem.id MATH_ENGINE #} 
               {% with problem=problem.problem %}
-                {{ problem.description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+                {% markdown problem.description problem.markdown_style MATH_ENGINE %}
               {% endwith %}
             {# endcache #}
           </div>
-        </div>
-        <div class="ui segment">
-          <h3 class="ui header">Answer</h3>
-          <div class="grid ui stackable two column segment fields">
+          <div class="grid grid-cols-2 gap-1">
           {% for label, answer in answers %}
-            <div class="column field">
-              <div class="ui toggle checkbox">
-                <input 
-                  type="radio" 
-                  name="answer_{{ problem.id }}" 
-                  id="{{ problem.id }}_{{ forloop.counter }}_answer" 
-                  value="{{ answer }}"
-                  label={{ label }}
-                >
-                <label class='answer' for="{{ problem.id }}_{{ forloop.counter }}_answer">
-                  <strong>{{ label }}</strong>. {{ answer }}
-                </label>
-              </div>
+            <div class='answer' for="{{ problem.id }}_{{ forloop.counter }}_answer">
+              <strong>{{ label }}</strong>. {{ answer }}
             </div>
           {% endfor %}
           </div>
         </div>
       </div>
+      <div class="page-break"></div>
       {% endfor %}
     </div>
+    <div class="min-h-[95vh] border border-black page-break" style="page-break-before: always;">
+      
+    </div>
   </div>
-</div>
 </body>
-{% if math_engine == 'jax' %}
-    <script type="text/javascript" src="mathjax_config.js"></script>
+{% if math_engine == 'jax' %} 
+    <script type="text/javascript" src="{% static 'mathjax_config.js' %}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
     <script type="text/javascript">
         MathJax.Hub.Register.StartupHook("End", function () {
