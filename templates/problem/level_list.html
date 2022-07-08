@@ -35,7 +35,7 @@
     <tbody class="divide-y divide-slate-500">
       {% for problem in problems %}
       <tr class="[&>*]:p-2 {% cycle 'bg-inherit' 'bg-slate-100' %} divide-x divide-slate-500">
-        <td><a href="{% url 'education:problem_detail' problem.code  %}" class="font-bold text-blue-500 hover:text-blue-700">{{ problem.name }}</a></td>
+        <td><a href="{% url 'education:problem_detail' problem.code  %}" onmouseenter="preview('{{ problem.code }}')" class="font-bold text-blue-500 hover:text-blue-700">{{ problem.name }}</a></td>
         <td class="category">{{ problem.types.all|join:', '}}</td>
         <td class="text-center">{{ problem.difficult }}</td>
       </tr>
@@ -57,40 +57,24 @@
       <i class="p-1 text-yellow-400 fa-solid fa-magnifying-glass"></i>
       Preview
     </div>
-    <div class="min-h-[20rem] flex-1 shadow-md rounded-md prose"></div>
+    <div class="min-h-[20rem] flex-1 shadow-md rounded-md prose" id='preview'></div>
   </div>
 </div>
 {% endblock notification %}
 
 {% block extends_js %}
 <script>
-  $('.ui.search')
-    .search({
-      type          : 'category',
-      minCharacters : 2,
-      apiSettings   : {
-        url: '{% url "backend:select_problem" %}?term={query}&level={{ level.code }}',
-        onResponse: function(backendResponse) {
-          var response = {
-            results : {}
-          };
-          $.each(backendResponse.results, function(index, item) {
-            var maxResult = 8, level = item.level;
-            if (index >= maxResult) return false;
-            if (response.results[level] === undefined) {
-              response.results[level] = {
-                name    : level,
-                results : []
-              }
-            }
-            response.results[level].results.push({
-              title: item.code,
-              url: item.url,
-            });
-          });
-          return response;
-        }
+  let Preview = document.querySelector('#preview')
+  function preview(code) {
+    $.ajax({
+      type: 'GET',
+      url: `/problem/${code}/preview`,
+      cache: true,
+      success: function(data) {
+        Preview.innerHTML = data
       }
-    });
+    })
+  }
 </script>
+{% include 'mathjax-load.html' %}
 {% endblock extends_js %}

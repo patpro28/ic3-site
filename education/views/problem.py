@@ -258,14 +258,5 @@ def problemSubmit(request, *args, **kwargs):
         raise Http404()
 
 
-# def getContent(request, *args, **kwargs):
-#     code = kwargs['problem']
-#     if code is None:
-#         raise Http404()
-#     problem = Problem.objects.get(code=code)
-
-#     context = json.dumps({
-#         'description': problem.description
-#     })
-
-#     return context
+class PreviewProblem(ProblemMixin, DetailView):
+    template_name: str = 'problem/preview.html'

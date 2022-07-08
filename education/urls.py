@@ -17,6 +17,7 @@ urlpatterns = [
     path('problem/<slug:problem>/', include([
         path('', ProblemDetail.as_view(), name='problem_detail'),
         path('submit/', problem.problemSubmit, name='problem_submit'),
+        path('preview/', problem.PreviewProblem.as_view(), name='problem_preview')
     ])),
     path('practice/', ProblemPractice.as_view(), name="practice"),
 ]
