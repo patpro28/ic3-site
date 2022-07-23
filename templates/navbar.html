@@ -57,6 +57,15 @@
       </a>
       <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Contests</span>
     </li>
+    <li class="relative my-2 group">
+      <a href="/practice" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
+        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
+          post_add
+        </span>
+        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Practice</span>
+      </a>
+      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Practice</span>
+    </li>
     
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
     <li class="relative my-2 group">
@@ -142,6 +151,12 @@
       emoji_events
     </span>
     <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Contests</span>
+  </a>
+  <a href="/practice" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
+    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
+      post_add
+    </span>
+    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Practice</span>
   </a>
   {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
   <a href="{% url 'admin:index' %}" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
