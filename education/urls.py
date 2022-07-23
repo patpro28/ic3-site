@@ -19,7 +19,7 @@ urlpatterns = [
         path('submit/', problem.problemSubmit, name='problem_submit'),
         path('preview/', problem.PreviewProblem.as_view(), name='problem_preview')
     ])),
-    path('practice/', ProblemPractice.as_view(), name="practice"),
+    # path('practice/', ProblemPractice.as_view(), name="practice"),
 ]
 
 urlpatterns += [

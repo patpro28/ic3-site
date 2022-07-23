@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     'compressor',
     'sortedm2m',
     'django_selenium_pdfmaker',
+    'practice',
     # 'channels',
 ]
 

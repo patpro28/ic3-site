@@ -17,11 +17,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/accordion.min.js" integrity="sha512-QHden+jR94AVti4Gt2HcaEbLGDzdgTtSPg82N21vfCCp2gNLcYcPPuG7S77bQzSts4ujSQeg9orK7bbC1GPdlg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock content_js %}
 {% block content %}
-<div class="flex flex-col w-full space-y-4">
-  <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 [&>*]:py-3 [&>*]:px-4 w-full rounded-lg [&>*]:font-bold bg-white [&>*]:shadow-lg divide-x">
-    <div class="text-center text-white bg-blue-500 rounded-lg">Emath</div>
-    <a href="#" class="text-center text-gray-600 rounded-lg bg-slate-300">Toán</a>
-  </div>
+<div class="flex flex-col w-full py-4">
   <div class="fluid ui styled accordion">
     {% for item in levels %}
     <div class="title">

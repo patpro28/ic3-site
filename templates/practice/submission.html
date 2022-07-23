@@ -1,0 +1,59 @@
+{% extends 'practice/base_practice.html' %}
+{% load variable static %}
+{% block content_media %}
+<link rel="stylesheet" href="{% static 'submission/rank.css' %}">
+{% endblock content_media %}
+
+{% block content_title %}
+{% title %}
+{% endblock content_title %}
+
+{% block body %}
+<div class="w-full">
+{% if page_obj and page_obj.has_other_pages %}
+    {% include 'list-page.html' %}
+{% endif %}
+<div class="grid grid-cols-[50px_120px_auto_30px] md:grid-cols-[80px_120px_200px_auto_50px] gap-px auto-rows-fr">
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm rounded-tl-2xl">
+      Result
+  </div>
+  <div class="items-center justify-center hidden w-full h-10 text-xs font-bold md:flex bg-slate-400 md:text-sm">
+      Time
+  </div>
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
+      Username
+  </div>
+
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm sm:h-10">
+      Level
+  </div>
+
+  <div class="flex items-center justify-center w-full h-10 text-xs font-bold bg-slate-400 md:text-sm rounded-tr-2xl">
+
+  </div>
+  {% for submission in submissions %}
+    {% include 'practice/row.html' %}
+  {% endfor %}
+  <div class="w-full h-10 bg-slate-400 rounded-bl-2xl ">
+        
+  </div>
+  <div class="hidden w-full h-10 md:block bg-slate-400 ">
+      
+  </div>
+  <div class="w-full h-10 bg-slate-400 sm:h-10 ">
+      
+  </div>
+
+  <div class="w-full h-10 bg-slate-400 sm:h-10 ">
+      
+  </div>
+
+  <div class="w-full h-10 bg-slate-400 rounded-br-2xl ">
+
+  </div>
+</div>
+{% if page_obj and page_obj.has_other_pages %}
+    {% include 'list-page.html' %}
+{% endif %}
+</div>
+{% endblock body %}

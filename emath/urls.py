@@ -70,6 +70,7 @@ urlpatterns = [
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('', include('education.urls')),
     path('backend/', include('backend.urls')),
+    path('practice/', include('practice.urls')),
 ]
 
 

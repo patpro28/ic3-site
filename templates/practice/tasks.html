@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% load contest timedelta variable %}
+
+{% block content_title %}
+{% title %}
+{% endblock content_title %}
+
+{% block content_media %}
+<style>
+  .answer {
+    font-size: 18px !important;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/segment.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/form.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/message.min.css" />
+{% endblock content_media %}
+
+{% block content_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/form.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".time-remaining").each(function () {
+      count_down($(this));
+    });
+  })
+</script>
+{% endblock content_js %}
+
+{% block content %}
+<div class="ui segment">
+  <form action="" method="post" class="flex flex-col justify-between ui form" id="task_form" autocomplete="off">
+    {% csrf_token %}
+    <input type="hidden" id="refreshed" value="no">
+    <input type="hidden" name="contest" value="{{ contest.id }}">
+    <input type="hidden" name="submission" value="{{ submission.id }}">
+    <div class="w-full overflow-hidden">
+      <div class="relative flex transition duration-300 ease-in-out" id="list-problem">
+        {% for problem, answers in problems %}
+          {% with index=forloop.counter last=forloop.last %}
+          {% include 'contest/task_detail.html' %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="flex justify-between w-full mt-auto">
+      <div id="prev" class="px-4 py-2 font-bold text-white rounded-md bg-slate-500">Prev</div>
+      <div id="next" class="px-4 py-2 rounded-md font-bold text-white {% if problems|length > 1 %}cursor-pointer bg-blue-500 hover:bg-blue-700 {% else %}bg-slate-500{% endif %}">Next</div>
+    </div>
+    <input type="submit" value="Submit" class="w-full py-3 mt-4 text-white bg-blue-500 rounded-md lg:hidden" id="submit_form">
+    <div class="ui error message"></div>
+  </form>
+</div>
+{% endblock content %}
+
+{% block extends_info %}
+<div class="flex flex-col w-full p-4 mt-4 space-y-6 ui segment">
+  <div class="px-4 py-2 text-white bg-black rounded-lg max-w-max">List of problems</div>
+  <div class="grid gap-3 py-5 border-b md-grid-col-sm-2 lg:grid-cols-3 xl:grid-cols-4 border-slate-500">
+    {% for item in problems %}
+      <div class="flex items-center justify-between px-4 py-2 font-bold text-white bg-gray-500 rounded-md cursor-pointer" id="answer_problem_{{ forloop.counter }}" onClick="changeProblem({{ forloop.counter }})">
+        <div>{{ forloop.counter }}</div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="w-full">
+    <button class="w-full py-2 font-bold text-center text-white bg-blue-500 rounded-md hover:bg-blue-700" onClick="submitForm()">Submit</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extends_js %}
+<script type="text/javascript">
+  const submit = document.querySelector('#submit_form')
+  $(".ui.form")
+    .form({
+      fields: {
+        {% for problem, answers in problems %}
+        answer_{{ problem.id }}: {
+          identifier: 'answer_{{ problem.id }}',
+          rules: [
+            {
+              {% if problem.problem.answer_type == 'mc' %}
+              type: 'checked',
+              prompt: 'Please select one answer for Problem {{ forloop.counter }}'
+              {% elif problem.problem.answer_type == 'fill' %}
+              type: 'empty',
+              prompt: 'Please fill answer for Problem {{ forloop.counter }}'
+              {% endif %}
+            }
+          ]
+        },
+        {% endfor %}
+      }
+    });
+  onload = function() {
+    var e = document.getElementById("refreshed");
+    if(e.value=="no") e.value="yes";
+    else{
+      e.value="no";
+      location.reload();
+    }
+  }
+  {% for problem, answers in problems %}
+    {% if problem.problem.answer_type == 'mc' %}
+    $('input[type=radio][name=answer_{{ problem.id }}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ forloop.counter }}')
+      answer_problem.classList.add('bg-green-500')
+      answer_problem.classList.remove('bg-gray-500')
+      answer_problem.innerHTML = `<div>{{ forloop.counter }}</div>\n<div class='pl-5 border-l-2 border-white'>${this.getAttribute('label')}</div>`
+    })
+    {% elif problem.problem.answer_type == 'fill' %}
+    $('input[type=text][name=answer_{{ problem.id }}]').change(function() {
+      let answer_problem = document.querySelector('#answer_problem_{{ forloop.counter }}')
+      let answer = this.value
+      if (answer.trim().length == 0) {
+        answer_problem.classList.remove('bg-green-500')
+        answer_problem.classList.add('bg-gray-500')
+        answer_problem.innerHTML = `<div>{{ forloop.counter }}</div>`
+      } else {
+        answer_problem.classList.add('bg-green-500')
+        answer_problem.classList.remove('bg-gray-500')
+        answer_problem.innerHTML = `<div>{{ forloop.counter }}</div><span class="material-icons">
+          check_circle
+          </span>`
+      }
+    })
+    {% endif %}
+  {% endfor %}
+  function submitForm() {
+    submit.click()  
+  }
+</script>
+{% include 'contest/task_js.html' %}
+{% include 'mathjax-load.html' %}
+{% endblock extends_js %}

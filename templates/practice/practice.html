@@ -1,0 +1,18 @@
+{% extends 'practice/base_practice.html' %}
+
+{% block content_media %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/components/form.min.css" />
+{% endblock content_media %}
+
+{% block body %}
+<form action="" class="ui form" method=post>
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="field">
+    {{ field }}
+  </div>
+  <input type="submit" class="w-full p-3 text-white bg-blue-500 rounded-md cursor-pointer hover:bg-blue-600" value="Practice">
+  {% endfor %}
+  
+</form>
+{% endblock body %}

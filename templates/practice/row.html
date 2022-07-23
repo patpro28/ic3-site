@@ -1,0 +1,32 @@
+{% load timedelta profile %}
+<div class="flex items-center justify-center w-full font-semibold bg-white result ">
+  {{ submission.result_class }}
+</div>
+<div class="items-center justify-center hidden w-full bg-white md:flex time">
+  {% if submission.is_contest %}
+  {{ submission.time_excute|timedelta:'simple' }}
+  {% else %}
+  --------
+  {% endif %}
+</div>
+<div class="flex items-center justify-center w-full text-xs bg-white user sm:text-sm">
+  {% if submission.is_contest %}
+  {% link_user submission.user.user %}
+  {% else %}
+  {% link_user submission.profile %}
+  {% endif %}
+</div>
+
+<div class="flex items-center justify-center w-full py-2 pl-1 text-xs font-bold bg-white md:pl-6 line-clamp-1 contest sm:text-sm md:text-base">
+  {{ submission.contest }}
+</div>
+
+{% if submission.is_contest %}
+<a href="#" class="bg-white " >
+  <div class="flex items-center justify-center w-full detail">
+      <i class='bx bx-window-open'></i>
+  </div>
+</a>
+{% else %}
+<div class="bg-white "></div>
+{% endif %}
