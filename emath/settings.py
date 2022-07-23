@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-=)!t4(@as1ijb(bmnsu*jlwnch3!t)-#mkd%r1&a%jm=4u2l5u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['45.124.95.162', 'e.tmath.vn', 'localhost', 'tmathcoding.vn']
+ALLOWED_HOSTS = ['*']
 SSL = 0
 
 EMATH_EMAIL_THROTTLING = (10, 60)
@@ -216,8 +216,7 @@ EVENT_DAEMON_SUBMISSION_KEY = '6Sdmkx^%pk@GsifDfXcwX*Y7LRF%RGT8vmFpSxFBT$fwS7trc
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en'
-TIME_ZONE = 'UTC'
-DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 USE_L10N = True
