@@ -2,7 +2,6 @@ statics
 media
 node_modules
 *desired*
-0*.py
 *.out
 
 # Byte-compiled / optimized / DLL files
