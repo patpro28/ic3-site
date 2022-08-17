@@ -1,9 +1,14 @@
+import os
 from django.urls import reverse, reverse_lazy
 from reversion.admin import VersionAdmin
 from adminsortable2.admin import SortableInlineAdminMixin
 
 from django import forms
+from django.urls import path
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.contrib import admin
+from django.conf import settings
 from django.db.models import Q
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.utils.html import format_html
@@ -86,7 +91,7 @@ class ContestAdmin(SemanticModelAdmin):
       (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'summary')}),
       (_('Scheduling'), {'fields': ('start_time', 'end_time', )}),
   )
-  list_display = ['key', 'name', 'is_visible', 'show_public']
+  list_display = ['key', 'name', 'is_visible', 'show_public', 'show_word']
   inlines = [ContestProblemInline, ContestSolutionInline]
   ordering = ('key',)
   search_fields = ('key', 'name',)
@@ -131,9 +136,67 @@ class ContestAdmin(SemanticModelAdmin):
     ).distinct()
     return form
 
+  def get_urls(self):
+    return [
+      path('<int:id>/word/', self.export_word, name="contest_word"),
+    ] + super().get_urls()
+
+  def export_word(self, request, id):
+    from education.signals import unlink_if_exists
+    from education.views.contest import get_answer_contest_problem
+    import pandoc
+    import io
+
+    contest = get_object_or_404(Contest, id=id)
+    problems = [e.problem for e in ContestProblem.objects.select_related('problem').filter(contest=contest)]
+    file = os.path.join(settings.WORD_CONTEST_CACHE, "contest_{}.docx".format(contest.key))
+    if os.path.exists(file):
+      unlink_if_exists(file)
+    md = "# {}\r\n\r\n".format(contest.name)
+    for index, problem in enumerate(problems):
+      md += "**Problem %s**: " % (index + 1) + str(problem.description) + "\r\n\r\n"
+      if problem.answer_type == 'mc':
+        answers = get_answer_contest_problem(problem)
+        max_length = 0
+        for index, item in answers:
+          max_length = max(max_length, len(item))
+        if max_length > 30:
+          for index, item in answers:
+            md += '\t' + index + ". " + item + "\r\n"
+        else:
+          md += "+----------------------------------+-----------------------------------+\r\n"
+          i = 0
+          for index, item in answers:
+            i += 1
+            s = " **%s**. %s" % (index, item)
+            while len(s) < 34:
+              s += ' '
+            md += '\x7c' + s
+            if i % 2 == 0:
+              md += "\x7c\r\n+----------------------------------+-----------------------------------+\r\n"
+          if i % 2 == 1:
+            md += "\x7c\r\n+----------------------------------+-----------------------------------+\r\n"
+      md += "\r\n"
+      
+    md = md.replace('~', '$')
+    md = md.replace('](/', '](%s/' % settings.SITE_FULL_URL)
+    doc = pandoc.read(source=md, format='markdown')
+    pandoc.write(doc=doc, format='docx', file=file)
+    # pandoc.write(doc=doc, format='markdown', file="/tmp/%s.md" % (contest.key))
+    f = io.open(file, mode='rb')
+    response = HttpResponse(
+      f.read(),
+      content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    )
+    response['Content-Disposition'] = 'attachment; filename="contest_%s.docx"' % (contest.key)
+    return response
+
   def show_public(self, obj):
     return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',
                         obj.get_absolute_url(), gettext('View on site'))
+  def show_word(self, obj):
+    return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',
+                        reverse('admin:contest_word', kwargs={'id': obj.id,}), gettext('Export word'))
 
 
 class ContestParticipationAdmin(SemanticModelAdmin):
