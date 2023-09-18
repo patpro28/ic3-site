@@ -9,8 +9,7 @@ class Theory(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    theory = models.ForeignKey(Theory, related_name='courses', verbose_name='theory', on_delete=models.SET_NULL, null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
     is_public = models.BooleanField(default=False)
     is_locked = models.BooleanField(default=True)
     logo = models.ImageField(upload_to='courses/logos/', null=True, blank=True)

@@ -3,6 +3,7 @@ from reversion import revisions
 from .problem import *
 from .contest import *
 from .submission import *
+from .course import *
 
 revisions.register(Problem)
 revisions.register(ProblemGroup)
