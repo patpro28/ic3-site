@@ -8,6 +8,7 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 from django.core.exceptions import ValidationError
 
 from backend.models import Profile, Organization
+from backend.models.profile import User
 
 def disallowed_characters_validator(text):
     common_disallowed_characters = set(text) & settings.PROBLEM_STATEMENT_DISALLOWED_CHARACTERS
@@ -52,6 +53,20 @@ POINTS = {
     'gmaster': 3200000,  # = 20 master
     'target': 100000000
 }
+
+class Category(models.Model):
+    name = models.CharField(_('name'), max_length=50, unique=True,
+                            help_text=_('Unique name for search the category'))
+    description = models.TextField(_("description"))
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
 
 
 class ProblemGroup(models.Model):
@@ -105,21 +120,21 @@ class Problem(models.Model):
         return reverse('education:problem_detail', kwargs={'problem': self.code})
         
     @classmethod
-    def get_visible_problems(cls, user: Profile):
+    def get_visible_problems(cls, user: User):
         if not user.is_authenticated:
             return cls.get_public_problems
-        
+        profile = user.profile
         queryset = cls.objects.defer('description')
         if not (user.has_perm('education.view_private_problem') or user.has_perm('education.edit_all_problem')):
             q = Q(is_public=True)
             if not (user.has_perm('education.see_organization_problem') or user.has_perm('education.edit_public_problem')):
                 q &= (
                     Q(is_organization_private=False) or
-                    Q(is_organization_private=True, organizations__in=user.organizations.all())
+                    Q(is_organization_private=True, organizations__in=profile.organizations.all())
                 )
             if user.has_perm('education.edit_own_problem'):
-                q |= Q(is_organization_private=True, organizations__in=user.admin_of.all())
-            q |= Q(authors=user)
+                q |= Q(is_organization_private=True, organizations__in=profile.admin_of.all())
+            q |= Q(authors=profile)
             queryset = queryset.filter(q)
 
         return queryset
@@ -130,14 +145,14 @@ class Problem(models.Model):
         return cls.objects.filter(is_public=True, is_organization_private=False).defer('description')
 
     @classmethod
-    def get_editable_problems(cls, user: Profile):
+    def get_editable_problems(cls, user: User):
         if not user.has_perm('education.edit_own_problem'):
             return cls.objects.none()
         if user.has_perm('education.edit_all_problem'):
             return cls.objects.all()
         
-        q = Q(authors=user)
-        q |= Q(is_organization_private=True, organizations__in=user.admin_of.all())
+        q = Q(authors=user.profile)
+        q |= Q(is_organization_private=True, organizations__in=user.profile.admin_of.all())
 
         if user.has_perm('education.edit_public_problem'):
             q |= Q(is_public=True)
@@ -148,11 +163,11 @@ class Problem(models.Model):
     def author_ids(self):
         return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
-    def is_accessible_by(self, user: Profile, skip_contest_problem_check=False):
+    def is_accessible_by(self, user: User, skip_contest_problem_check=False):
         # If we don't want to check if the user is in a contest containing that problem.
         if not skip_contest_problem_check and user.is_authenticated:
             # If user is currently in a contest containing that problem.
-            current = user.current_contest_id
+            current = user.profile.current_contest_id
             if current is not None:
                 from education.models import ContestProblem
                 if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
@@ -170,7 +185,7 @@ class Problem(models.Model):
 
             # If the user is in the organization.
             if user.is_authenticated and \
-                    self.organizations.filter(id__in=user.organizations.all()):
+                    self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
         if not user.is_authenticated:
@@ -182,19 +197,19 @@ class Problem(models.Model):
 
         # If the user can edit the problem.
         # We are using self.editor_ids to take advantage of caching.
-        if self.is_editable_by(user) or user.id in self.author_ids:
+        if self.is_editable_by(user) or user.profile.id in self.author_ids:
             return True
 
         return False
 
-    def is_editable_by(self, user: Profile):
+    def is_editable_by(self, user: User):
         if not user.is_authenticated:
             return False
         if user.has_perm('education.edit_all_problem') or user.has_perm('education.edit_public_problem') and self.is_public:
             return True
         return user.has_perm('education.edit_own_problem') and \
-            (user.id in self.author_ids or
-                self.is_organization_private and self.organizations.filter(admins=user).exists())
+            (user.profile.id in self.author_ids or
+                self.is_organization_private and self.organizations.filter(admins=user.profile).exists())
 
     @property
     def markdown_style(self):

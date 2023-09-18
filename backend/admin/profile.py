@@ -7,47 +7,43 @@ from django.db import models
 
 from reversion.admin import VersionAdmin
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.hashers import make_password
+# from django.contrib.auth.admin import UserAdmin
+# from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from backend.widgets.martor import AdminMartorWidget
-from semantic_admin.widgets import SemanticSelectMultiple, SemanticDateTimeInput \
 
 from backend.models import Profile
 
 
 class ProfileForm(ModelForm):
-    password = ReadOnlyPasswordHashField()
     class Meta:
         widgets = {
             'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('self_preview')}),
-            'groups': SemanticSelectMultiple(),
-            # 'last_login': SemanticDateTimeInput()
         }
 
 
-class ProfileAddForm(ModelForm):
-    password1 = CharField(label=_('Password'), widget=PasswordInput)
-    password2 = CharField(label=_('Password confirmation'), widget=PasswordInput)
+# class ProfileAddForm(ModelForm):
+#     password1 = CharField(label=_('Password'), widget=PasswordInput)
+#     password2 = CharField(label=_('Password confirmation'), widget=PasswordInput)
 
-    class Meta:
-        model = Profile
-        fields = ('username', 'fullname')
+#     class Meta:
+#         model = Profile
+#         fields = ('username', 'fullname')
     
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
-            raise ValidationError(_("Passwords don't match"))
-        return password2 
+#     def clean_password2(self):
+#         password1 = self.cleaned_data.get('password1')
+#         password2 = self.cleaned_data.get('password2')
+#         if password1 and password2 and password1 != password2:
+#             raise ValidationError(_("Passwords don't match"))
+#         return password2 
     
-    def save(self, commit=False):
-        profile = super().save(commit=False)
-        profile.set_password(self.cleaned_data['password1'])
-        if commit:
-            profile.save()
-        return profile
+#     def save(self, commit=False):
+#         profile = super().save(commit=False)
+#         profile.set_password(self.cleaned_data['password1'])
+#         if commit:
+#             profile.save()
+#         return profile
 
 
 class TimezoneFilter(admin.SimpleListFilter):
@@ -63,62 +59,48 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(UserAdmin):
+class ProfileAdmin(admin.ModelAdmin):
     form = ProfileForm
-    add_form = ProfileAddForm
     fieldsets = (
         (None, {
             "fields": (
-                'username', 'password', 'fullname', 'display_rank',
+                'user', 'display_rank',
             ),
         }),
         (_('Personal info'), {
             "fields": (
-                'email', 'about','organizations', 'timezone', 'last_login',
-            ),
-        }),
-        (_('Permission'), {
-            "fields": (
-                'is_active', 'is_staff', 'is_superuser', 'groups'
+                'about','organizations', 'timezone',
             ),
         })
     )
-    add_fieldsets = (
-        (None, {
-            'fields': (
-                'username', 'fullname', 'password1', 'password2'
-            ),
-        }),
-    )
-    readonly_fields = ('last_login', )
-    list_display = ('username', 'timezone', 'date_joined', 'last_login', 'show_public')
-    ordering = ('username',)
-    search_fields = ('username',)
+    
+    readonly_fields = ('user', )
+    list_display = ('username', 'timezone', 'show_public')
+    ordering = ('user__username',)
     list_filter = (TimezoneFilter, )
-    filter_horizontal = ['user_permissions']
     actions_on_top = True
     actions_on_bottom = True
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
-        if obj is not None:
-            fields += ('username', 'password')
-        if not request.user.is_superuser:
-            fields += ('is_superuser', 'groups')
-            if not request.user.is_staff:
-                fields += ('is_staff',)
+        # if obj is not None:
+        #     fields += ('username', 'password')
+        # if not request.user.is_superuser:
+        #     fields += ('is_superuser', 'groups')
+        #     if not request.user.is_staff:
+        #         fields += ('is_staff',)
         return fields
     
     def get_list_display(self, request):
-        if request.user.is_superuser and 'change_password' not in self.list_display:
-            self.list_display += ('change_password',)
-        if not request.user.is_superuser and 'change_password' in self.list_display:
-            self.list_display.remove('change_password')
+        # if request.user.is_superuser and 'change_password' not in self.list_display:
+        #     self.list_display += ('change_password',)
+        # if not request.user.is_superuser and 'change_password' in self.list_display:
+        #     self.list_display.remove('change_password')
         return self.list_display
 
-    def change_password(self, obj):
-        return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',
-                            reverse('admin:auth_user_password_change', kwargs={'id':obj.pk}), gettext('Change password'))
+    # def change_password(self, obj):
+    #     return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',
+    #                         reverse('admin:auth_user_password_change', kwargs={'id':obj.pk}), gettext('Change password'))
 
     def show_public(self, obj):
         return format_html('<a class="ui blue button" href="{0}" style="white-space:nowrap;">{1}</a>',

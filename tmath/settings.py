@@ -79,7 +79,7 @@ SEMANTIC_CALENDAR_OPTIONS = {
 # Application definition
 
 INSTALLED_APPS = [
-    "semantic_admin",
+    "grappelli",
     'django.contrib.admin',
     'django.forms',
     'backend',
@@ -99,8 +99,6 @@ INSTALLED_APPS = [
     # 'django_jinja',
     'reversion',
     'compressor',
-    'sortedm2m',
-    'django_selenium_pdfmaker',
     'practice',
     # 'channels',
 ]
@@ -114,11 +112,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'backend.middleware.EmathLoginMiddleware',
     'backend.middleware.ContestMiddleware',
     'backend.middleware.TimezoneMiddleware',
 ]
 
-ROOT_URLCONF = 'emath.urls'
+ROOT_URLCONF = 'tmath.urls'
 
 TEMPLATES = [
     {
@@ -145,7 +144,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'emath.wsgi.application'
+WSGI_APPLICATION = 'tmath.wsgi.application'
 # ASGI_APPLICATION = 'emath.asgi.application'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
@@ -160,7 +159,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'backend.Profile'
+AUTH_USER_MODEL = 'backend.User'
 # USER_FIELDS = ['username', 'fullname', 'password']
 
 # Password validation

@@ -3,7 +3,6 @@ from reversion.admin import VersionAdmin
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from semantic_admin.widgets import SemanticSelect
 from backend.widgets.martor import AdminMartorWidget
 
 class BlogPostForm(ModelForm):
@@ -15,7 +14,6 @@ class BlogPostForm(ModelForm):
 
     class Meta:
         widgets = {
-            'author': SemanticSelect(),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
         }
 

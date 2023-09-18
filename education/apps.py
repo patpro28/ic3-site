@@ -1,4 +1,3 @@
-from MySQLdb import DatabaseError
 from django.apps import AppConfig
 
 

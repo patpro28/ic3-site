@@ -1,0 +1,27 @@
+{% load variable markdown %}
+
+{% extends "base.html" %}
+
+{% block content_title %}
+{% title %}
+{% endblock content_title %}
+
+{% block content %}
+<div class="flex flex-col gap-8">
+  <div class="p-8 text-lg font-bold prose max-w-none">
+    {% cache 3600 'course_html' course.id MATH_ENGINE %} 
+      {% markdown description problem.markdown_style MATH_ENGINE %} 
+    {% endcache %}
+  </div>
+  <table class="table w-full border">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="">Name</th>
+        <th>User</th>
+        <th></th>
+      </tr>
+    </thead>
+  </table>
+</div>
+{% endblock %}

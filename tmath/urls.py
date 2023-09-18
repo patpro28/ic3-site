@@ -64,6 +64,7 @@ organization_patterns = [
 
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('martor/', include('martor.urls')),
     path("select2/", include("django_select2.urls")),

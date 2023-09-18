@@ -1,21 +1,16 @@
-django>=4.0,<4.1
+django>=3.2,<4.0
 django-mptt
 jsonfield
 django_redis
 django-statici18n
 django_select2
-django-admin-sortable2
-celery
 django-compressor
-django-sortedm2m==3.1.1
 django-reversion
 martor @ git+https://github.com/patpro28/martor.git
 ua_parser
-django-semantic-admin @ git+https://github.com/patpro28/semantic-admin.git
+django-grappelli
 lxml
 ansi2html
-mistune==0.8.4
-mysqlclient
-websocket-client
 bleach==4.1.0
 pygments
+markupsafe

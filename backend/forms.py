@@ -8,18 +8,15 @@ from backend.models.organization import Organization
 from backend.widgets.martor import MartorWidget
 from backend.widgets.select2 import UserMultipleWidget
 from backend.widgets.fields import SelectMultiple
-from semantic_admin.widgets import SemanticTextInput, SemanticSelectMultiple
 
 
 class EditProfileForm(forms.ModelForm):
 
   class Meta:
     model = Profile
-    fields = ["fullname", 'email', 'about', 'is_active', 'is_staff', 'is_superuser', 'groups']
+    fields = ['about']
     widgets = {
-      'fullname': SemanticTextInput,
       'about': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('markdown_preview')}),
-      'groups': SelectMultiple
     }
 
 

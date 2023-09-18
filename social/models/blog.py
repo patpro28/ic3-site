@@ -18,7 +18,7 @@ class Blog(models.Model):
         return False
     if user.has_perm('social.edit_all_post'):
         return True
-    return user.has_perm('social.change_blogpost') and self.authors.filter(id=user.id).exists()
+    return user.has_perm('social.change_blogpost') and self.authors.filter(id=user.profile.id).exists()
 
   class Meta:
     permissions = (

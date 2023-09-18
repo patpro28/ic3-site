@@ -66,7 +66,7 @@ class UserSearchSelectView(BaseListView):
     return JsonResponse({
       'results': [
         {
-          'user': user.username,
+          'user': user.user.username,
           'id': user.pk,
           'gravatar_url': gravatar(user, self.gravatar_size, self.gravatar_default),
           'display_rank': user.display_rank

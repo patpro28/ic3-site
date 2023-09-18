@@ -40,7 +40,7 @@ def filter_submissions_by_visible_contests(queryset, user):
 
 def submission_related(queryset):
     return queryset.select_related('user__user', 'contest') \
-        .only('id', 'user__user__username', 'user__user__display_rank', 'contest__name',
+        .only('id', 'user__user__user__username', 'user__user__display_rank', 'contest__name',
               'contest__key', 'date', 'time',
               'points', 'result', 'contest') \
         .prefetch_related('contest__authors', 'contest__curators')
@@ -78,11 +78,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
 
     @cached_property
     def in_contest(self):
-        return self.request.user.is_authenticated and self.request.user.current_contest is not None
+        return self.request.user.is_authenticated and self.request.user.profile.current_contest is not None
     
     @cached_property
     def contest(self):
-        return self.request.user.current_contest.contest
+        return self.request.profile.current_contest.contest
 
     def _get_queryset(self):
         queryset = Submission.objects.all()
@@ -98,7 +98,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                           Q(curators=self.request.user) |
                                                           Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
                                                           Q(end_time__lt=timezone.now())).distinct()
-                queryset = queryset.filter(Q(user__user=self.request.user) |
+                queryset = queryset.filter(Q(user__user=self.request.profile) |
                                            Q(contest__in=contest_queryset) |
                                            Q(contest__isnull=True))
         return queryset
@@ -203,7 +203,7 @@ class UserMixin(object):
     def get(self, request, *args, **kwargs):
         if 'user' not in kwargs:
             raise ImproperlyConfigured('Must pass a user')
-        self.profile = get_object_or_404(Profile, username=kwargs['user'])
+        self.profile = get_object_or_404(Profile, user__username=kwargs['user'])
         self.username = kwargs['user']
         return super(UserMixin, self).get(request, *args, **kwargs)
 
@@ -219,7 +219,7 @@ class ConditionalUserTabMixin(object):
             context["tab"] = 'my_submissions_tab'
         else:
             context['tab'] = 'user_submissions_tab'
-            context['tab_user'] = self.profile.user.username
+            context['tab_user'] = self.profile.username
         return context
     
 

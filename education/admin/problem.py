@@ -6,8 +6,6 @@ from django import forms
 from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.html import format_html
 
-from semantic_admin.admin import SemanticTabularInline
-from semantic_admin import widgets
 from backend.widgets.martor import AdminMartorWidget
 
 from education.models import Problem, ProblemGroup, Answer, ProblemType
@@ -82,7 +80,7 @@ class AnswerInline(admin.TabularInline):
         return extra
 
 
-class ProblemTypeInline(SemanticTabularInline):
+class ProblemTypeInline(admin.TabularInline):
     model = ProblemType
     fields = ('group', 'level')
     extra = 0
@@ -91,12 +89,7 @@ class ProblemTypeInline(SemanticTabularInline):
 class ProblemForm(forms.ModelForm):
     class Meta:
         widgets = {
-            'authors': widgets.SemanticSelectMultiple,
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')}),
-            'organizations': widgets.SemanticSelectMultiple,
-            'types': widgets.SemanticSelectMultiple,
-            'level': widgets.SemanticSelect,
-            'answer_type': widgets.SemanticSelect,
         }
 
 

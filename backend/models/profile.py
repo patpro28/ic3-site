@@ -1,51 +1,34 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db import models
-from django.utils.functional import cached_property
-from django.utils.http import urlencode
-from django.urls import reverse
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import ASCIIUsernameValidator
+from django.db import models
+from django.urls import reverse
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 
-from sortedm2m.fields import SortedManyToManyField
+from .choices import MATH_ENGINES_CHOICES, TIMEZONE
 
-from .choices import TIMEZONE, MATH_ENGINES_CHOICES
 
-from backend.utils.unicode import utf8bytes
+class User(AbstractUser):
+    username_validator = ASCIIUsernameValidator()
 
-class ProfileManager(BaseUserManager):
+    username = models.CharField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_(
+            "Required. 150 ASCII characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
+        validators=[username_validator],
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+    )
 
-    def create_user(self, username, fullname, password=None):
-        if not username:
-            raise ValueError('Username cant empty!')
-        if not fullname:
-            raise ValueError('Fullname cant empty!')
-        user = self.model(
-            username=username,
-            fullname=fullname,
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, username, fullname, password=None):
-        if not username:
-            raise ValueError('Username cant empty!')
-        if not fullname:
-            raise ValueError('Fullname cant empty!')
-        user = self.create_user(
-            username=username,
-            fullname=fullname,
-            password=password
-        )
-        user.is_staff = True
-        user.is_superuser = True
-        user.display_rank = 'admin'
-        user.save(using=self._db)
-        return user
+    REQUIRED_FIELDS = []
 
     
-class Profile(AbstractBaseUser, PermissionsMixin):
+class Profile(models.Model):
 
     DISPLAY_RANK = (
         ('user', _('Normal User')),
@@ -53,30 +36,27 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         ('admin', _('Admin'))
     )
 
-    username = models.CharField(_("Username"), max_length=30, unique=True)
-    email = models.EmailField(_("Email"), max_length=254, blank=True)
-    is_staff = models.BooleanField(_("is staff"), default=False)
-    is_active = models.BooleanField(_("Active"), default=True)
-    date_joined = models.DateTimeField(_("Date joined Emath"), default=now)
-    fullname = models.CharField(_("Fullname"), max_length=50, blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_("user"), on_delete=models.CASCADE, related_name='profile')
+
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     display_rank = models.CharField(_("display rank"), max_length=10, default='user', choices=DISPLAY_RANK)
     about = models.TextField(_("self-description"), null=True, blank=True)
     point = models.FloatField(_("point"), default=0.0)
-    organizations = SortedManyToManyField('backend.Organization', verbose_name=_('organization'), blank=True,
+    organizations = models.ManyToManyField('backend.Organization', verbose_name=_('organization'), blank=True,
                                             related_name='members', related_query_name='member')
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=settings.MATHOID_DEFAULT_TYPE,
                                    help_text=_('the rendering engine used to render math'))
     # status = models.BooleanField(_("status"), default=False)
-    objects = ProfileManager()
-
     #Contest
     current_contest = models.ForeignKey("education.ContestParticipation", verbose_name=_("current contest"), 
                                         null=True, blank=True, related_name='+',on_delete=models.SET_NULL)
 
-    USERNAME_FIELD = 'username'
+
+    @property
+    def username(self):
+        return self.user.username
 
     def __str__(self) -> str:
         return self.username
@@ -84,6 +64,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     @cached_property
     def css_class(self):
         return 'newbie'
+    
+    @property
+    def fullname(self):
+        return self.user.get_full_name() or self.username
 
     def get_absolute_url(self):
         return reverse("user_page", kwargs={"user": self.username})
@@ -107,4 +91,4 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     update_contest.alters_data = True
 
     class Meta:
-        ordering = ['username']
+        ordering = ['user__username']

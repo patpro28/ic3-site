@@ -1,235 +1,59 @@
 {% load static gravatar profile %}
-<div id="sidebar" class="hidden md:block min-w-max fixed left-0 top-0 h-full w-20 bg-slate-900 py-1.5 px-4 z-50 transition-[width] duration-400 ease-in-out">
-  <div class="relative flex items-center justify-between h-16" id='logo-details'>
-    <a href="/" id="logo_link" class="items-center hidden m-1 space-x-2 transition opacity-0 duration-400">
-      <img src="{% static 'icons/emath.png' %}" alt="logo" class="w-8 h-8">
-      <span class="text-xl font-semibold text-white transition duration-400">Emath</span>
+<div id="sidebar" class="fixed left-0 top-0 h-screen whitespace-nowrap min-w-[20rem] bg-blue-200 p-2 z-50">
+  <div class="relative flex items-center justify-between" id='logo-details'>
+    <a href="/" id="logo_link" class="flex items-center">
+      <div class="flex flex-col items-center justify-center w-16 h-16">
+        <img src="{% static 'icons/emath.png' %}" alt="logo" class="w-8 h-8">
+      </div>
+      <span class="text-xl font-semibold text-purple-500 transition duration-400">Tmath Edu</span>
     </a>
-    <div class="mx-auto" id="menu">
-      <span class="material-icons sm:w-12 sm:h-12 sm:text-2xl text-center text-lg transition-all duration-400 ease-in-out cursor-pointer text-white leading-9 sm:leading-[3rem] px-2 sm:px-3" id="btn">
-        menu
-      </span>
+    <div class="flex flex-col items-center justify-center w-16 h-16" id=btn>
+      <i class="text-2xl fa-solid fa-bars"></i>
     </div>
   </div>
-  <ul class="h-full mt-5 nav-list">
-    <li class="relative my-2 group">
-      <a href="/problems" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          menu_book
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Problems</span>
+  <ul class="flex flex-col">
+    <div>
+      <div class="flex items-center">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-book-open"></i>
+        </div>
+        <span class="text-2xl font-semibold">Problems</span>
+      </div>
+    </div>
+    <div>
+      <div class="flex items-center">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-users"></i>
+        </div>
+        <span class="text-2xl font-semibold">Users</span>
+      </div>
+    </div>
+    <div>
+      <div class="flex items-center">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-earth"></i>
+        </div>
+        <span class="text-2xl font-semibold">Organizations</span>
+      </div>
+    </div>
+    <div>
+      <a class="flex items-center" href="#">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-trophy"></i>
+        </div>
+        <span class="text-2xl font-semibold">Contests</span>
       </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Problems</span>
-    </li>
-    <li class="relative my-2 group">
-      <a href="/submissions" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          checklist
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Submissions</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Submissions</span>
-    </li>
-    <li class="relative my-2 group">
-      <a href="/users" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          people
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Users</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Users</span>
-    </li>
-    <li class="relative my-2 group">
-      <a href="/organizations" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          public
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Organizations</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Organizations</span>
-    </li>
-    <li class="relative my-2 group">
-      <a href="/contests" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          emoji_events
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Contests</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Contests</span>
-    </li>
-    <li class="relative my-2 group">
-      <a href="/practice" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          post_add
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Practice</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Practice</span>
-    </li>
+    </div>
     
     {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
-    <li class="relative my-2 group">
-      <a href="{% url 'admin:index' %}" class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white ">
-        <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-          settings
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Admin</span>
-      </a>
-      <span class="absolute hidden md:block -top-5 left-20 z-10 bg-white opacity-0 shadow-lg shadow-slate-500 rounded font-normal transition pointer-events-none whitespace-nowrap py-1.5 px-3.5 group-hover:opacity-100 group-hover:-translate-y-1/2 group-hover:top-1/2 group-hover:duration-400 group-hover:pointer-events-auto group-hover:ease-in-out">Admin</span>
-    </li>
-    {% endif %}
-    {% if request.user.is_authenticated %}
-    <li class="fixed h-16 w-20 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-400 ease-in-out overflow-hidden">
-      <div class="flex items-center flex-nowrap">
-        <img 
-        class="h-11 w-11 rounded-md mr-2.5 object-cover"
-        {% if request.user.email %}
-        src="{% gravatar request.user size=40 %}"
-        {% else %}
-        src={% static 'user/image/avatar-none.png' %}
-        {% endif %} alt="profileImg">
-        <div class="font-normal text-white whitespace-nowrap">
-          {% link_user user %}
+    <div>
+      <a href="{% url 'admin:index' %}" class="flex items-center" href="#">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-gear"></i>
         </div>
-      </div>
-      <a href="{% url 'logout' %}" class="flex items-center w-full h-full no-underline transition-all ease-in-out rounded-sm duration-400 bg-slate-900">
-        <span id="log_out" class="material-icons absolute top-1/2 right-0 -translate-y-1/2 bg-slate-900 w-full h-16 leading-[4rem] transition-all duration-400 ease-in-out hover:bg-white hover:text-slate-900 text-center text-white">
-          logout
-        </span>
+        <span class="text-2xl font-semibold">Settings</span>
       </a>
-    </li>
-    {% else %}
-    <li class="fixed h-16 sm:w-20 w-16 left-0 my-2 -bottom-2 py-2.5 px-3.5 bg-slate-900 transition-all duration-400 ease-in-out overflow-hidden">
-      <a class="flex items-center w-full h-full no-underline transition ease-in-out duration-400 group rounded-xl bg-slate-900 hover:bg-white" href="{% url 'login' %}">
-        <span class="material-icons material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center sm:px-4 leading-9 sm:leading-[3rem] px-3 sm:text-white">
-          lock_open
-        </span>
-        <span class="hidden font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
-      </a>
-    </li>
+    </div>
     {% endif %}
   </ul>
 </div>
-<div id="navbar" class="flex flex-col sticky md:hidden left-0 top-0 w-full max-h-16 transition-[max-height] duration-200 overflow-hidden z-50">
-  <div class="flex items-center justify-between p-2 bg-black">
-    <a class="flex items-center" href="/">
-      <img src="{% static 'icons/emath.png' %}" alt="logo" class="w-8 h-8">
-      <span class="ml-2 text-xl font-semibold text-white transition duration-400">Emath</span>
-    </a>
-    <div class="flex flex-col justify-center p-2" id="mobileMenu">
-      <span class="text-white cursor-pointer material-icons">
-        menu
-      </span>
-    </div>
-  </div>
-  <a href="/problems" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      menu_book
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Problems</span>
-  </a>
-  <a href="/submissions" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      checklist
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Submissions</span>
-  </a>
-  <a href="/users" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      people
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Users</span>
-  </a>
-  <a href="/organizations" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      public
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Organizations</span>
-  </a>
-  <a href="/contests" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      emoji_events
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Contests</span>
-  </a>
-  <a href="/practice" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      post_add
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Practice</span>
-  </a>
-  {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
-  <a href="{% url 'admin:index' %}" class="items-center hidden w-full h-full no-underline transition ease-in-out duration-400 group bg-slate-900 hover:bg-white ">
-    <span class="material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center leading-9 sm:leading-[3rem] px-3 sm:px-4 text-white">
-      settings
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Admin</span>
-  </a>
-  {% endif %}
-  {% if request.user.is_authenticated %}
-  <a href="{% url 'logout' %}" class="items-center hidden w-full h-full no-underline transition-all ease-in-out md:flex duration-400 bg-slate-900">
-    <span class="px-3 text-sm leading-9 text-center text-white transition-all ease-in-out material-icons sm:text-xl bg-slate-900 sm:w-12 sm:h-12 duration-400 sm:px-4 hover:bg-white hover:text-slate-900">
-      logout
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Logout</span>
-  </a>
-  {% else %}
-  <a class="items-center hidden w-full h-full no-underline transition ease-in-out bg-blue-600 md:flex duration-400 group hover:bg-white" href="{% url 'login' %}">
-    <span class="material-icons material-icons text-sm sm:text-xl group-hover:text-black sm:w-12 sm:h-12 text-center sm:px-4 leading-9 sm:leading-[3rem] px-3 text-white">
-      lock_open
-    </span>
-    <span class="font-normal text-white transition duration-400 pointer-event-none whitespace-nowrap group-hover:text-black">Sign In/Sign Up</span>
-  </a>
-  {% endif %}
-</div>
-
-<script>
-  let sidebar = document.querySelector("#sidebar");
-  let closeBtn = document.querySelector("#btn");
-  let menu = document.querySelector("#menu");
-  let link_names = document.querySelectorAll('.nav-list li');
-  let logo_details = document.querySelectorAll('#logo-details .opacity-0')
-  let logo_link = document.querySelector('#logo_link')
-  {% if request.user.is_authenticated %}
-  let log_out = document.querySelector('#log_out')
-  {% endif %}
-  let menuBtn = document.querySelector('#mobileMenu')
-  let mobileMenu = document.querySelector('#navbar')
-  menuBtn.addEventListener('click', function() {
-    items = mobileMenu.querySelectorAll(':scope > a')
-    items.forEach(function(item) {
-      item.classList.toggle('hidden')
-      item.classList.toggle('flex')
-    })
-    mobileMenu.classList.toggle('max-h-16')
-    mobileMenu.classList.toggle('max-h-80')
-  })
-
-  closeBtn.addEventListener("click", () => {
-    sidebar.classList.toggle('w-20')
-    sidebar.classList.toggle('w-60')
-    closeBtn.classList.toggle('text-center')
-    closeBtn.classList.toggle('text-right')
-    closeBtn.classList.toggle('right-0')
-    logo_link.classList.toggle('hidden')
-    logo_link.classList.toggle('flex')
-    menu.classList.toggle('mx-auto')
-    menu.classList.toggle('ml-auto')
-    {% if request.user.is_authenticated %}
-    log_out.classList.toggle('w-full')
-    log_out.classList.toggle('w-16')
-    {% endif %}
-    logo_details.forEach(function(item) {
-      item.classList.toggle('opacity-0')
-      item.classList.toggle('opacity-100')
-    })
-    for (i = 0; i < link_names.length {% if request.user.is_authenticated %} -1 {% endif %}; ++i) {
-      var y = link_names[i].querySelectorAll('a span')
-      y[1].classList.toggle('hidden')
-    }
-    for (i = 0; i < link_names.length - 1; ++i) 
-      link_names[i].querySelector(':scope > span').classList.toggle('md:block')
-    link_names[link_names.length - 1].classList.toggle('sm:w-20')
-    link_names[link_names.length - 1].classList.toggle('sm:w-60')
-  });
-</script>

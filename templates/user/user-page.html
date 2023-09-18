@@ -3,11 +3,6 @@
 
 {% block content_media %}
   <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <style>
-    #container1 {
-      width: calc(100% - 5rem);
-    }
-  </style>
 {% endblock content_media %}
 
 {% block content_title %}
@@ -20,8 +15,8 @@
 {% endblock content_js %}
 
 {% block full_content %}
-<div class="grid grid-cols-5 ml-auto max-w-screen-2xl bg-stone-200" id='container1'>
-  <div class="sticky top-0 flex h-screen col-span-4 p-8 bg-white rounded-r-3xl">
+<div class="grid w-full grid-cols-5 ml-80 bg-stone-200" id='container1'>
+  <div class="flex h-screen col-span-4 p-8 bg-white rounded-r-3xl">
     <div class="sticky top-0 left-0 flex flex-col pr-8 border-r border-gray-500 basis-1/3">
       <div class="flex flex-col items-center my-8">
         <div class="relative">
@@ -57,10 +52,10 @@
           <span><i class="fa-solid fa-lock-open"></i></span>
           <span class="">Change password</span>
         </a>
-        <a href="{% url 'admin:backend_profile_change' user.id %}" class="hover:bg-gray-300 line-clamp-1">
+        {% comment %} <a href="{% url 'admin:backend_profile_change' user.id %}" class="hover:bg-gray-300 line-clamp-1">
           <span><i class="fa-solid fa-cog"></i></span>
           <span class="">Admin profile</span>
-        </a>
+        </a> {% endcomment %}
       </div>
     </div>
     <div class="flex flex-col justify-between w-full pl-8 overflow-hidden">
@@ -163,174 +158,11 @@
           </div>
         </div>
       </div>
-      <div class="p-2 m-0.5 bg-gray-100 rounded-md shadow-md shadow-gray-600">
-        <canvas id="rate-chart" class="w-full"></canvas>
-      </div>
-    </div>
-  </div>
-  <div class="col-span-1 px-4 my-8 ml-4">
-    <div class="sticky p-2 text-lg font-bold text-white bg-gray-500 rounded-md top-8">Your activity</div>
-    <div class="overflow-y-auto">
-      <div class="flex flex-col mt-6 space-y-2">
-        <div class="mb-4">Oct 20, 2021</div>
-        <div class="flex">
-          <div class="pr-4 font-bold">10:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-green-500">
-            <div class="font-bold text-blue-500">Submission</div>
-            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
-            <div class="font-bold text-blue-500">Join contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-red-500">
-            <div class="font-bold text-blue-500">Leave contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col mt-6 space-y-2">
-        <div class="mb-4">Oct 20, 2021</div>
-        <div class="flex">
-          <div class="pr-4 font-bold">10:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-green-500">
-            <div class="font-bold text-blue-500">Submission</div>
-            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
-            <div class="font-bold text-blue-500">Join contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-red-500">
-            <div class="font-bold text-blue-500">Leave contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col mt-6 space-y-2">
-        <div class="mb-4">Oct 20, 2021</div>
-        <div class="flex">
-          <div class="pr-4 font-bold">10:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-green-500">
-            <div class="font-bold text-blue-500">Submission</div>
-            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
-            <div class="font-bold text-blue-500">Join contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-red-500">
-            <div class="font-bold text-blue-500">Leave contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col mt-6 space-y-2">
-        <div class="mb-4">Oct 20, 2021</div>
-        <div class="flex">
-          <div class="pr-4 font-bold">10:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-green-500">
-            <div class="font-bold text-blue-500">Submission</div>
-            <div class="line-clamp-1">So nguyen to lon nhat asd ada ádasd </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-blue-500">
-            <div class="font-bold text-blue-500">Join contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="pr-4 font-bold">12:00</div>
-          <div class="flex flex-col pl-4 border-l-4 border-red-500">
-            <div class="font-bold text-blue-500">Leave contest</div>
-            <div class="line-clamp-1">Luyen tap tong hop </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 {% endblock %}
 
 {% block extends_js %}
-<script>
-  let card = document.querySelectorAll('.card')
-    window.addEventListener('load', function () {
-      card.forEach(item => {
-        let number = item.querySelector('.number')
-        let num = parseInt(number.innerHTML)
-        let count = 0
-        let time = 2000 / num
-        setInterval(() => {
-          if (count == num) {
-            clearInterval()
-          } else {
-            count++
-            number.innerHTML = count + '%'
-          }
-        }, time)
-        let circle = item.querySelectorAll('circle')[1]
-        circle.style.strokeDashoffset = 224 - 224 * (num / 100)
-      })
-    })
-  var rating_history = [];
-  $.each(rating_history, function (index, item) {
-    item.x = item.timestamp;
-    // alert(item.x);
-    item.y = item.rating;
-  });
-  const data = {
-    datasets: [{
-      label: 'Problem',
-      backgroundColor: 'rgb(0, 0, 0, 0)',
-      borderColor: 'rgb(168, 85, 85)',
-      pointBackgroundColor: '#FFF',
-      pointHoverBackgroundColor: 'rgb(168, 85, 85)',
-      pointRadius: 4,
-      pointHoverRadius: 4,
-      showLine: true,
-      data: rating_history,
-    }]
-  };
-  const config = {
-    type: 'scatter',
-    data,
-    options: {
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            unit: 'month'
-          }
-        },
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  };
 
-  const ctx = $('#rate-chart');
-  const chart = new Chart(ctx, config);
-</script>
 {% endblock extends_js %}

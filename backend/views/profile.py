@@ -25,13 +25,13 @@ from backend.forms import EditProfileForm, RegisterForm, LoginForm
 
 class UserMixin(object):
     model = Profile
-    slug_field = 'username'
+    slug_field = 'user__username'
     slug_url_kwarg = 'user'
     context_object_name = 'user'
 
     @cached_property
     def can_edit(self):
-        if self.object == self.request.user or self.request.user.is_superuser:
+        if self.object.user == self.request.user or self.request.user.is_superuser:
             return True
         return False
     
@@ -47,7 +47,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def get_object(self, queryset = None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            return self.request.user
+            return self.request.user.profile
         return super(UserPage, self).get_object(queryset)
 
     def dispatch(self, request, *args, **kwargs):
@@ -61,12 +61,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
                                    self.kwargs.get(self.slug_url_kwarg, None)) 
     
     def get_title(self):
-        return (_('My account') if self.request.user == self.object else 
-                _('User %s') % self.object.username)
+        return (_('My account') if self.request.profile == self.object else 
+                _('User %s') % self.object.user.username)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if not self.object.is_authenticated:
+        if not self.request.user.is_authenticated:
             raise Http404()
         return context
     
@@ -77,12 +77,12 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     context_object_name = 'users'
     template_name = 'user/list.html'
     paginate_by = 50
-    all_sorts = frozenset(('username'))
+    all_sorts = frozenset(('user__username'))
     default_desc = all_sorts
-    default_sort = 'username'
+    default_sort = 'user__username'
 
     def get_queryset(self):
-        return Profile.objects.order_by(self.order).only('display_rank', 'username')
+        return Profile.objects.order_by(self.order).only('display_rank', 'user__username')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,7 +107,7 @@ class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):
 
     def get_object(self, queryset=None):
         user = super().get_object(queryset)
-        if not self.request.user.is_superuser and self.request.user != user:
+        if not self.request.user.is_superuser and self.request.profile != user:
             raise PermissionDenied()
         return user
 
@@ -132,7 +132,7 @@ class EditProfile(LoginRequiredMixin, TitleMixin, UserMixin, UpdateView):
 
 class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
     form_class = RegisterForm
-    template_name = 'user/login_form.html'
+    template_name = 'user/register.html'
     success_url = '/'
     success_message = _('Your user registration was successful.')
     model = Profile
@@ -146,7 +146,7 @@ class RegistrationView(TitleMixin, CreateView, SuccessMessageMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return HttpResponseRedirect(request.user.get_absolute_url())
+            return HttpResponseRedirect(request.profile.get_absolute_url())
         return super().dispatch(request, *args, **kwargs)
 
 

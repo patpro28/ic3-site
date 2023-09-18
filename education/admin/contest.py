@@ -1,7 +1,6 @@
 import os
 from django.urls import reverse, reverse_lazy
 from reversion.admin import VersionAdmin
-from adminsortable2.admin import SortableInlineAdminMixin
 
 from django import forms
 from django.urls import path
@@ -13,8 +12,6 @@ from django.db.models import Q
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.utils.html import format_html
 
-from semantic_admin import widgets
-from semantic_admin.admin import SemanticTabularInline, SemanticModelAdmin, SemanticStackedInline
 from backend.models.profile import Profile
 
 from backend.widgets.martor import AdminMartorWidget, MartorWidget
@@ -22,9 +19,12 @@ from backend.widgets.martor import AdminMartorWidget, MartorWidget
 from education.models import ContestProblem
 from education.models.contest import Contest, ContestParticipation, ContestSolution
 
-class ContestProblemInline(SemanticTabularInline, SortableInlineAdminMixin):
+from grappelli.forms import GrappelliSortableHiddenMixin
+
+class ContestProblemInline(GrappelliSortableHiddenMixin, admin.TabularInline):
   model = ContestProblem
   fields = ('problem', 'points', 'order')
+  sortable_field_name = 'order'
 
 
 class ContestSolutionForm(forms.ModelForm):
@@ -35,7 +35,7 @@ class ContestSolutionForm(forms.ModelForm):
       'content': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')})
     }
 
-class ContestSolutionInline(SemanticStackedInline):
+class ContestSolutionInline(admin.StackedInline):
   model = ContestSolution
   fields = ('authors', 'is_public', 'publish_on', 'is_full_markup', 'content')
   extra = 0
@@ -56,20 +56,11 @@ class ContestAdminForm(forms.ModelForm):
 
   class Meta:
     widgets = {
-      'authors': widgets.SemanticSelectMultiple,
-      'curators': widgets.SemanticSelectMultiple,
-      'organizations': widgets.SemanticSelectMultiple,
-      'banned_users': widgets.SemanticSelectMultiple,
-      'scoreboard_visibility': widgets.SemanticSelect,
-      'start_time': widgets.SemanticDateTimeInput,
-      'end_time': widgets.SemanticDateTimeInput,
-      'private_contestants': widgets.SemanticSelectMultiple,
-      'view_contest_scoreboard': widgets.SemanticSelectMultiple,
       'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('description_preview')})
     }
 
 
-class ContestAdmin(SemanticModelAdmin):
+class ContestAdmin(admin.ModelAdmin):
   form = ContestAdminForm
   fieldsets = (
       (None, {
@@ -129,11 +120,11 @@ class ContestAdmin(SemanticModelAdmin):
     form = super().get_form(request, obj, **kwargs)
 
     perms = ('edit_own_contest', 'edit_all_contest')
-    form.base_fields['curators'].queryset = Profile.objects.filter(
-      Q(is_superuser=True) |
-      Q(groups__permissions__codename__in=perms) |
-      Q(user_permissions__codename__in=perms)
-    ).distinct()
+    # form.base_fields['curators'].queryset = Profile.objects.filter(
+    #   Q(user__is_superuser=True) |
+    #   Q(user__groups__permissions__codename__in=perms) |
+    #   Q(user__user_permissions__codename__in=perms)
+    # ).distinct()
     return form
 
   def get_urls(self):
@@ -199,7 +190,7 @@ class ContestAdmin(SemanticModelAdmin):
                         reverse('admin:contest_word', kwargs={'id': obj.id,}), gettext('Export word'))
 
 
-class ContestParticipationAdmin(SemanticModelAdmin):
+class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'real_start', 'virtual', 'is_disqualified')
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime', 'tiebreaker')
     actions = ['recalculate_results']

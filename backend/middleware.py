@@ -10,9 +10,11 @@ class EmathLoginMiddleware(object):
     
     def __call__(self, request):
         if request.user.is_authenticated:
-            profile = request.profile = request.user
+            request.profile = request.user.profile
         else:
-            profile = None
+            request.profile = None
+        
+        return self.get_response(request)
 
 
 class ContestMiddleware(object):
@@ -20,8 +22,8 @@ class ContestMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        profile = request.user
         if request.user.is_authenticated:
+            profile = request.user.profile
             profile.update_contest()
             request.participation = profile.current_contest
             request.in_contest = request.participation is not None
@@ -38,7 +40,7 @@ class TimezoneMiddleware(object):
     def get_timezone(self, request):
         tzname = settings.DEFAULT_USER_TIME_ZONE
         if request.user.is_authenticated:
-            tzname = request.user.timezone
+            tzname = request.user.profile.timezone
         return pytz.timezone(tzname)
 
     def __call__(self, request):

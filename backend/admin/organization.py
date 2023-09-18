@@ -3,13 +3,11 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from reversion.admin import VersionAdmin
 
-from semantic_admin.widgets import SemanticSelectMultiple
 from backend.widgets.martor import AdminMartorWidget
 
 class OrganizationForm(ModelForm):
     class Meta:
         widgets = {
-            'admins': SemanticSelectMultiple(),
             'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('self_preview')})
         }
 

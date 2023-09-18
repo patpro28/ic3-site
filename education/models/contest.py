@@ -7,7 +7,7 @@ from django.utils.functional import cached_property
 from django.utils import timezone
 from django.db.models import Q, F
 
-from backend.models import Profile, Organization
+from backend.models import Profile, Organization, User
 from .problem import Problem
 from education import contest_format
 
@@ -156,7 +156,7 @@ class Contest(models.Model):
     class PrivateContest(Exception):
         pass
 
-    def access_check(self, user: Profile):
+    def access_check(self, user: User):
         if not user.is_authenticated:
             if not self.is_visible:
                 raise self.Inaccessible()
@@ -164,10 +164,12 @@ class Contest(models.Model):
                 raise self.PrivateContest()
             return
         
+        profile = user.profile
+
         if user.has_perm('education.see_private_contest') or user.has_perm('education.edit_all_contest'):
             return
         
-        if user.id in self.editor_ids:
+        if profile.id in self.editor_ids:
             return
         
         if not self.is_visible:
@@ -176,11 +178,11 @@ class Contest(models.Model):
         if not self.is_private and not self.is_organization_private:
             return
 
-        if self.view_contest_scoreboard.filter(id=user.id).exists():
+        if self.view_contest_scoreboard.filter(id=profile.id).exists():
             return
 
-        in_org = self.organizations.filter(id__in=user.organizations.all()).exists()
-        in_users = self.private_contestants.filter(id=user.id).exists()
+        in_org = self.organizations.filter(id__in=profile.organizations.all()).exists()
+        in_users = self.private_contestants.filter(id=profile.id).exists()
 
         if self.is_private and not self.is_organization_private:
             if in_users:
@@ -192,7 +194,7 @@ class Contest(models.Model):
                 return
             raise self.PrivateContest()
         
-    def is_accessible_by(self, user: Profile):
+    def is_accessible_by(self, user: User):
         try:
             self.access_check(user)
         except (self.Inaccessible, self.PrivateContest):
@@ -200,9 +202,9 @@ class Contest(models.Model):
         else:
             return True
         
-    def has_completed_contest(self, user: Profile):
+    def has_completed_contest(self, user: User):
         if user.is_authenticated:
-            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user).first()
+            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user.profile).first()
             if participation and participation.ended:
                 return True
         return False
@@ -216,12 +218,12 @@ class Contest(models.Model):
             return False
         return True
 
-    def is_in_contest(self, user: Profile):
+    def is_in_contest(self, user: User):
         if user.is_authenticated:
-            return user and user.current_contest is not None and user.current_contest.contest == self
+            return user and user.profile.current_contest is not None and user.profile.current_contest.contest == self
         return False
 
-    def can_see_own_scoreboard(self, user: Profile):
+    def can_see_own_scoreboard(self, user: User):
         if self.can_see_full_scoreboard(user):
             return True
         if not self.can_join:
@@ -230,7 +232,7 @@ class Contest(models.Model):
             return False
         return True
 
-    def can_see_full_scoreboard(self, user: Profile):
+    def can_see_full_scoreboard(self, user: User):
         if self.show_scoreboard:
             return True
         if not user.is_authenticated:
@@ -239,38 +241,39 @@ class Contest(models.Model):
             return True
         if user.id in self.editor_ids:
             return True
-        if self.view_contest_scoreboard.filter(id=user.id).exists():
+        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_contest(user):
             return True
         return False
 
     @classmethod
-    def get_visible_contests(cls, user: Profile):
+    def get_visible_contests(cls, user: User):
         if not user.is_authenticated:
             return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
                 .defer('description').distinct()
         queryset = cls.objects.defer('description')
+        profile = user.profile
         if not (user.has_perm('education.see_private_contest') or user.has_perm('education.edit_all_contest')):
             q = Q(is_visible=True)
             q &= (
-                Q(view_contest_scoreboard=user) |
+                Q(view_contest_scoreboard=profile) |
                 Q(is_organization_private=False, is_private=False) |
-                Q(is_organization_private=False, is_private=True, private_contestants=user) |
-                Q(is_organization_private=True, is_private=False, organizations__in=user.organizations.all()) |
-                Q(is_organization_private=True, is_private=True, organizations__in=user.organizations.all(),
-                  private_contestants=user)
+                Q(is_organization_private=False, is_private=True, private_contestants=profile) |
+                Q(is_organization_private=True, is_private=False, organizations__in=profile.organizations.all()) |
+                Q(is_organization_private=True, is_private=True, organizations__in=profile.organizations.all(),
+                  private_contestants=profile)
             )
-            q |= Q(authors=user)
-            q |= Q(curators=user)
+            q |= Q(authors=profile)
+            q |= Q(curators=profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
-    def is_editable_by(self, user: Profile):
+    def is_editable_by(self, user: User):
         if user.has_perm('education.edit_all_contest'):
             return True
         
-        if user.has_perm('education.edit_own_contest') and user.id in self.editor_ids:
+        if user.has_perm('education.edit_own_contest') and user.profile.id in self.editor_ids:
             return True
         
         return False

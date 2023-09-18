@@ -4,7 +4,7 @@ from education.views.problem import ProblemDetail, ProblemList, ProblemLevelList
 from education.views import submission, contest, problem
 
 from .views import *
-from emath.urls import paged_list_view
+from tmath.urls import paged_list_view
 
 from social.views import PostList
 

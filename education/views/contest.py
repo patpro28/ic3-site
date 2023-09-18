@@ -70,7 +70,7 @@ class ContestMixin(object):
   def is_editor(self):
     if not self.request.user.is_authenticated:
       return False
-    return self.request.user.id in self.object.editor_ids
+    return self.request.profile.id in self.object.editor_ids
 
   @cached_property
   def can_edit(self):
