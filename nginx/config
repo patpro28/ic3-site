@@ -1,6 +1,6 @@
 server {
     listen       80;
-    listen [::]:80 default_server;    
+    listen [::]:80;    
     # listen       443 ssl default_server;
     
     # ssl_certificate /home/tupa/emath/nginx/emath.crt;
@@ -14,7 +14,7 @@ server {
     # if you disable the default nginx server declared.
     client_max_body_size 0;        
    
-    server_name tmathcoding.vn;
+    server_name ic3.tmath.vn;
     
     add_header X-UA-Compatible "IE=Edge,chrome=1";
     add_header X-Content-Type-Options nosniff;
@@ -25,11 +25,11 @@ server {
     error_page 502 504 /502.html;
 
     location ~ ^/502\.html$|^/logo\.png$|^/robots\.txt$ {
-        root /home/tupa/emath;
+        root /home/ubuntu/ic3;
     }
 
     location @icons {
-        root /home/tupa/emath/statics/icons;
+        root /home/ubuntu/ic3/static/icons;
         error_page 403 = @uwsgi;
         error_page 404 = @uwsgi;
     }
@@ -37,7 +37,7 @@ server {
     location @uwsgi {
         uwsgi_read_timeout 600;
         # Change this path if you did so in uwsgi.ini
-        uwsgi_pass unix:///tmp/dmoj-site.sock;
+        uwsgi_pass unix:///tmp/ic3-site.sock;
         include uwsgi_params;
         uwsgi_param SERVER_SOFTWARE nginx/$nginx_version;
     }
@@ -45,13 +45,13 @@ server {
     location /static {
         gzip_static on;
         expires max;
-        alias /home/tupa/emath/statics;
+        alias /home/ubuntu/ic3/static;
         # Comment out root, and use the following if it doesn't end in /static.
         #alias <STATIC_ROOT>;
     }
 
     location /media {
-        root /home/tupa/emath/;
+        root /home/ubuntu/ic3/;
     }
 
     # Uncomment if you are using PDFs and want to serve it faster.
@@ -74,18 +74,18 @@ server {
     #}
 
     # Uncomment these sections if you are using the event server.
-    location /event/ {
-        proxy_pass http://127.0.0.1:15100/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_read_timeout 86400;
-    }
+    # location /event/ {
+    #     proxy_pass http://127.0.0.1:15100/;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_read_timeout 86400;
+    # }
 
-    location /channels/ {
-        proxy_read_timeout          120;
-        proxy_pass http://127.0.0.1:15102;
-    }
+    # location /channels/ {
+    #     proxy_read_timeout          120;
+    #     proxy_pass http://127.0.0.1:15102;
+    # }
 }
 
 # server {

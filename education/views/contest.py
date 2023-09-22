@@ -153,7 +153,7 @@ class ContestList(QueryStringSortMixin, TitleMixin, ContestListMixin, DiggPagina
           present.append(contest)
       
       if self.request.user.is_authenticated:
-        for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user, contest_id__in=present) \
+        for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile, contest_id__in=present) \
                               .select_related('contest') \
                               .prefetch_related('contest__authors', 'contest__curators') \
                               .annotate(key=F('contest__key')):

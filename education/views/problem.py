@@ -58,7 +58,7 @@ class ProblemList(TitleMixin, ListView):
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user
+        return self.request.profile
 
     def get_queryset(self):
         filter = Q(is_public=True)

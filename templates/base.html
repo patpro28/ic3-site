@@ -97,7 +97,7 @@
   <body class="w-full bg-stone-100">
     {% include 'navbar.html' %}
     {% block full_content %}
-    <div class="bg-gray-50 ml-80" id='container'>
+    <div class="bg-gray-50 ml-64" id='container'>
         <div class="sticky top-0 flex items-center justify-between h-20 px-8 bg-white border-b">
             <div class="relative">
               <input type="search" name="" id="" placeholder="Search..." class="p-2 pl-10 focus:outline-blue-500/75 bg-gray-200/75 rounded-xl w-96">
@@ -110,11 +110,11 @@
                 <i class="text-2xl fa fa-solid fa-bell"></i>
               </div>
               {% if request.user.is_authenticated %}
-              <a class="flex items-center gap-2" id="user">
+              <a class="flex items-center gap-2" id="user" href="{% url 'user_page' %}">
                 <img src="https://play-lh.googleusercontent.com/8c19_EUNQyGj5EiKUwJrD-uNDzmeANJpFk7w0TLoQQmI3HgtlF-03bXCjdCQnh9XRx8" alt="" class="w-8 h-8 rounded-full">
                 <div class="flex flex-col items-start">
-                  <span class="font-bold whitespace-nowrap">Pham Anh Tu</span>
-                  <span class="text-sm text-gray-500">User</span>
+                  <span class="font-bold whitespace-nowrap">{{ request.profile.fullname }}</span>
+                  <span class="text-sm text-gray-500">{{ request.profile.display_rank }}</span>
                 </div>
               </a>
               {% else %}

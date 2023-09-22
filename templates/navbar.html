@@ -1,5 +1,5 @@
 {% load static gravatar profile %}
-<div id="sidebar" class="fixed left-0 top-0 h-screen whitespace-nowrap min-w-[20rem] bg-blue-200 p-2 z-50">
+<div id="sidebar" class="fixed left-0 top-0 h-screen whitespace-nowrap min-w-[16rem] bg-blue-200 p-2 z-50">
   <div class="relative flex items-center justify-between" id='logo-details'>
     <a href="/" id="logo_link" class="flex items-center">
       <div class="flex flex-col items-center justify-center w-16 h-16">
@@ -13,31 +13,31 @@
   </div>
   <ul class="flex flex-col">
     <div>
-      <div class="flex items-center">
+      <a class="flex items-center" href="{% url 'education:problem_list' %}">
         <div class="flex flex-col items-center justify-center w-16 h-16">
           <i class="text-xl fa-solid fa-book-open"></i>
         </div>
         <span class="text-2xl font-semibold">Problems</span>
-      </div>
+      </a>
     </div>
     <div>
-      <div class="flex items-center">
+      <a class="flex items-center" href="{% url 'user_list' %}">
         <div class="flex flex-col items-center justify-center w-16 h-16">
           <i class="text-xl fa-solid fa-users"></i>
         </div>
         <span class="text-2xl font-semibold">Users</span>
-      </div>
+      </a>
     </div>
     <div>
-      <div class="flex items-center">
+      <a class="flex items-center" href="{% url 'organization_list' %}">
         <div class="flex flex-col items-center justify-center w-16 h-16">
           <i class="text-xl fa-solid fa-earth"></i>
         </div>
         <span class="text-2xl font-semibold">Organizations</span>
-      </div>
+      </a>
     </div>
     <div>
-      <a class="flex items-center" href="#">
+      <a class="flex items-center" href="{% url 'education:contest_list' %}">
         <div class="flex flex-col items-center justify-center w-16 h-16">
           <i class="text-xl fa-solid fa-trophy"></i>
         </div>
@@ -52,6 +52,16 @@
           <i class="text-xl fa-solid fa-gear"></i>
         </div>
         <span class="text-2xl font-semibold">Settings</span>
+      </a>
+    </div>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <div class="fixed bottom-0 p-2">
+      <a href="{% url 'logout' %}" class="flex items-center">
+        <div class="flex flex-col items-center justify-center w-16 h-16">
+          <i class="text-xl fa-solid fa-right-from-bracket"></i>
+        </div>
+        <span class="text-2xl font-semibold">Logout</span>
       </a>
     </div>
     {% endif %}
